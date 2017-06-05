@@ -15,7 +15,7 @@
         	$usuario = $this->db->get_where("admin", array('user'=> $user , 'password' => md5($password)))->row();
 
         	if ($usuario) {
-                $data_user = array("tipo" => "admin", "user" => $usuario->user, "correo" => $usuario->email); 
+                $data_user = array("tipo" => "admin", "user" => $usuario->user, "correo" => $usuario->correo, "persona" => $usuario->persona);
                 $this->session->set_userdata($data_user);
                 return true;
             }
