@@ -2,8 +2,7 @@
 <div class='container'>
     <div class="row">
                 <div class="col-md-12">
-                    <h1>Crear Producto</h1>
-                    <h4>informacion del producto </h4>
+                    <h1>Productos</h1>
                     <?php echo $output; ?>
                 </div>
     </div>

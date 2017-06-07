@@ -22,12 +22,7 @@
 	    <!-- grocerycrud -->
 	    <?php foreach($css_files as $file): ?>
 	        <link rel="stylesheet" type="text/css" href="<?php echo $file; ?>" />
-	    <?php endforeach; ?>
-		<?php foreach($js_files as $file): ?>
-    		<script src="<?php echo $file; ?>"></script>
-	   <?php endforeach; ?>
-	    <!-- grocerycrud -->
-		
+	    <?php endforeach; ?>		
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
