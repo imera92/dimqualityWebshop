@@ -44,7 +44,7 @@ class Usuario extends CI_Controller {
         $insert = $this->ShopUser->insert($userData);
         if($insert){
           $this->session->set_userdata('success_msg', 'Your registration was successfully. Please login to your account.'); 
-          redirect('user/login');
+          // redirect('user/login');
         }else{
           $data['error_msg'] = 'Some problems occured, please try again.';
         }

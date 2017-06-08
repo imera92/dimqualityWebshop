@@ -7,7 +7,7 @@
     </div>
     <div class="row">
       <div class="container form-group">
-        <form action="registrarUsuario" method="POST">
+        <form action="<?php echo base_url('usuario/registrarUsuario') ?>" method="POST">
           <div class="container">
             <h4>Formulario de Registro</h4>
             <div class="form-group col-md-6">

@@ -16,9 +16,9 @@ class Web extends CI_Controller {
     $titulo = "Dimquality::Admin - Usuarios";
     $dataHeader['titlePage'] = $titulo;
 
-    $this->load->view('admin/header', $dataHeader);
+    $this->load->view('web/header', $dataHeader);
     $this->load->view('web/crearUsuario');
-    $this->load->view('admin/footer');
+    $this->load->view('web/footer');
   }
 
 }
