@@ -13,16 +13,6 @@ class Usuario extends CI_Controller {
         date_default_timezone_set("America/Guayaquil");
 	}
 
-  public function index()
-  {
-      $titulo = "Dimquality::Admin - Usuarios";
-      $dataHeader['titlePage'] = $titulo;
-      
-      $this->load->view('admin/header', $dataHeader);
-      $this->load->view('crearUsuario');
-      $this->load->view('admin/footer');
-  }
-
   public function registrarUsuario(){
     $data = array();
     $userData = array();
