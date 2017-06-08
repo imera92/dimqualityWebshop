@@ -18,29 +18,57 @@ class Producto extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function crear()
-	{
-		if (!empty($_POST)){
-            $nombre=$this->input->post('nombre');
-            $codigo=$this->input->post('codigo');
-            $modelo=$this->input->post('modelo');
-            $precio=$this->input->post('precio');
-            $marca=$this->input->post('marca');
-            $ruta=$this->input->post('ruta');
-            $descripcion=$this->input->post('descripcion');
-            if($nombre &&  $codigo && $modelo && $precio && $marca && $ruta && $descripcion ){
-                $this->load->model('producto');
-                $data =array(
-                    'nombre'=> $nombre,
-                    'codigo'=> $codigo,
-                    'modelo'=> $modelo,
-                    'precio'=> $precio,
-                    'marca'=> $marca,
-                    'ruta'=> $ruta,
-                    'descripcion'=> $descripcion
-                );
-            }
+        public function __construct()
+    	{
+		parent::__construct();
+		$this->load->helper('url');
+        $this->load->database();
+        $this->load->library('grocery_CRUD');
+        $this->load->model('SecurityUser');
+        date_default_timezone_set("America/Guayaquil");
+	    }
+
+       
+        public function product() {
+    	    if ($this->securityCheckAdmin()) {
+    		    $titulo = "Dimquality::Admin - Inicio";
+    		    $dataHeader['titlePage'] = $titulo;
+				$crud=new grocery_CRUD();
+				
+				$crud->columns('nombre','marca','modelo','codigo','imagen');
+				$crud->set_table('producto');
+				$crud->required_fields('nombre','marca','modelo','codigo','imagen');
+				$crud->unset_export();
+				$crud->unset_print();
+				$crud->set_language("spanish");
+				$output=$crud->render();
+				$dataHeader['css_files']=$output->css_files;
+				$dataFooter['js_files']=$output->js_files;
+				$this->load->view('admin/header', $dataHeader);
+    			$this->load->view('admin/lat-menu');
+    			$this->load->view('admin/crearProducto',(array)$output);
+    			$this->load->view('admin/footer', $dataFooter);
+    	    } else {
+    		    redirect("admin/login");
+    	    }
+         }
+
+         function securityCheckAdmin() {
+            $securityUser = new SecurityUser();
+            $usuario = $this->session->userdata('user');
+            if($usuario == ""){
+                return false;
+            }else{
+                if ($this->session->userdata('tipo') == "admin") {
+                    return true;
+                }else{
+                    $securityUser->logout();
+                    return false;
+                }
+             }
         }
-        $this->load->view('crearProducto');
-	}
+
+
+	
+
 }

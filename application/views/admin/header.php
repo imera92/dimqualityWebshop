@@ -15,14 +15,16 @@
 	<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php if($this->router->method == "login"): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif($this->router->method == "index" || $this->router->method=="product"): ?>
+		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
+		<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<!-- <link href="<?php //echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css"> -->
 	<?php if (isset($css_files)): ?>
 	    <!-- grocerycrud -->
 	    <?php foreach($css_files as $file): ?>
 	        <link rel="stylesheet" type="text/css" href="<?php echo $file; ?>" />
-	    <?php endforeach; ?>
-	    <!-- grocerycrud -->
+	    <?php endforeach; ?>		
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
@@ -37,6 +39,7 @@
             return urlTmp;
         }
     </script>
+	
 </head>
 <body>
 	<!-- <div id="wrapper"> -->
