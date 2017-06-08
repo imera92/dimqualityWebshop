@@ -1,0 +1,33 @@
+		<div id="footer" class="row pt-40 pb-40">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-0 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1">
+						<span class="bold-text">¡SIGUENOS!</span>
+						<div class="row">
+							<div class="col-md-4">
+								<a href=""><img class="img-responsive" src="http://icons.iconarchive.com/icons/limav/flat-gradient-social/256/Twitter-icon.png"></a>
+							</div>
+							<div class="col-md-4">
+								<a href=""><img class="img-responsive" src="https://facebookbrand.com/wp-content/themes/fb-branding/prj-fb-branding/assets/images/fb-art.png"></a>
+							</div>
+						</div>						
+					</div>
+					<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 mt-xs-20">
+						<span class="bold-text">INFORMACION ADICIONAL</span>
+						<br>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <script src="<?php //echo base_url('public/js/jquery-3.2.1.min.js'); ?>"></script> -->
+	<script  src="http://code.jquery.com/jquery-1.11.1.min.js"  integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE=" crossorigin="anonymous"></script>
+    <script src="<?php echo base_url('public/js/bootstrap.min.js'); ?>"></script>
+	<?php if (isset($js_files)): ?>
+			<?php foreach($js_files as $file): ?>
+    			<script src="<?php echo $file; ?>"></script>
+			<?php endforeach; ?>
+	<?php endif; ?>
+</body>
+</html>
