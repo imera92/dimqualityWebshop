@@ -29,29 +29,7 @@ class Producto extends CI_Controller {
 	    }
 
        
-        public function product() {
-    	    if ($this->securityCheckAdmin()) {
-    		    $titulo = "Dimquality::Admin - Inicio";
-    		    $dataHeader['titlePage'] = $titulo;
-				$crud=new grocery_CRUD();
-				
-				$crud->columns('nombre','marca','modelo','codigo','imagen');
-				$crud->set_table('producto');
-				$crud->required_fields('nombre','marca','modelo','codigo','imagen');
-				$crud->unset_export();
-				$crud->unset_print();
-				$crud->set_language("spanish");
-				$output=$crud->render();
-				$dataHeader['css_files']=$output->css_files;
-				$dataFooter['js_files']=$output->js_files;
-				$this->load->view('admin/header', $dataHeader);
-    			$this->load->view('admin/lat-menu');
-    			$this->load->view('admin/crearProducto',(array)$output);
-    			$this->load->view('admin/footer', $dataFooter);
-    	    } else {
-    		    redirect("admin/login");
-    	    }
-         }
+        
 
          function securityCheckAdmin() {
             $securityUser = new SecurityUser();

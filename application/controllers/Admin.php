@@ -65,6 +65,41 @@ class Admin extends CI_Controller {
         }
     }
 
+    public function productos() {
+        if ($this->securityCheckAdmin()) {
+            $titulo = "Productos";
+
+            $crud=new grocery_CRUD();
+            $crud->set_subject($titulo);
+            $crud->set_table('producto');
+            $crud->columns('codigo','categoria','imagen','costo','pvp','descripcion','stock','estado');
+            $crud->required_fields('codigo','categoria','imagen','costo','pvp','descripcion','stock','estado');
+            $crud->field_type('localizacion', 'dropdown', array(
+                '0' => 'Inactivo',
+                '1' => 'Activo'
+            ));
+            $crud->display_as('codigo', 'Código');
+            $crud->display_as('categoria', 'Categoría');
+            $crud->display_as('pvp', 'PVP');
+            $crud->display_as('descripcion', 'Descripción');
+            $crud->unset_export();
+            $crud->unset_print();
+            $crud->set_language("spanish");
+            $output=$crud->render();
+
+            $dataHeader['titlePage'] = 'Dimquality::Admin - Productos';
+            $dataHeader['titleCRUD'] = $titulo;
+            $dataHeader['css_files']=$output->css_files;
+            $dataFooter['js_files']=$output->js_files;
+            $this->load->view('admin/header', $dataHeader);
+            $this->load->view('admin/lat-menu');
+            $this->load->view('admin/blank',(array)$output);
+            $this->load->view('admin/footer-gc', $dataFooter);
+        } else {
+            redirect("admin/login");
+        }
+     }
+
     public function actualizarCatalogo() {
         if ($this->securityCheckAdmin()) {
             $titulo = "Dimquality::Admin - Actualizar Catalogo";
