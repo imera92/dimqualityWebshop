@@ -80,87 +80,146 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function do_upload() {
-        $this->load->library('upload', $config);
+    public function subirExcel() {
+        // RECORDAR: ES NECESARIO QUE LOS VALORES SUPERIORES A 999 NO TENGAN SEPARADOR DE MILES
+        if ($this->securityCheckAdmin()) {
 
-        $config['upload_path'] = './assets/uploads/';
-        $config['allowed_types'] = 'xlsx';
-        $config['max_size'] = 100;
+            $config['upload_path'] = './assets/uploads/';
+            $config['allowed_types'] = 'xlsx';
+            $config['max_size'] = 200;
+            $this->load->library('upload', $config);
 
-        if ( ! $this->upload->do_upload('userfile')) {
-            $error = array('error' => $this->upload->display_errors());
-            $this->load->view('admin/catalogo', $error);
+            if ( ! $this->upload->do_upload('userfile')) {
+                $titulo = "Dimquality::Admin - Actualizar Catalogo";
+                $dataHeader['titlePage'] = $titulo;
+
+                $this->load->view('admin/header', $dataHeader);
+                $this->load->view('admin/lat-menu');
+                $error = array('error' => $this->upload->display_errors());
+                $this->load->view('admin/catalogo', $error);
+                $this->load->view('admin/footer');
+            } else {
+                $this->load->library('phpexcel');
+                $this->load->library('PHPExcel/iofactory');
+                $this->load->library('PHPExcel/autoloader');
+                $this->load->helper("file");
+                
+                $fileName = $this->upload->data()['file_name'];
+                $filePath = FCPATH."assets\uploads\\".$fileName;
+                $excelReader = IOFactory::createReaderForFile($filePath);
+
+                $excelReader->setReadDataOnly();
+                $excelObj = $excelReader->load($filePath);
+                // Establecer la hoja activa del documento por su nombre
+                $excelObj->setActiveSheetIndexByName('Hoja1');
+                // Crear un arreglo asociativo con las filas y columnas del documento y su contenido
+                $return = $excelObj->getActiveSheet()->toArray(null, true,true,true);
+                
+                // Eliminamos las celdas vacias
+                foreach ($return as $key1 => $row) {
+                    foreach ($row as $key2 => $col) {
+                        if ($col === null) {
+                            unset($return[$key1][$key2]);
+                        }
+                    }
+                }
+
+                // Eliminamos las celdas con contenido basura
+                foreach ($return as $key1 => $row) {
+                    foreach ($row as $key2 => $col) {
+                        if ($col === 'PRECIOS INCLUYEN IVA' || $col === 'DIMQUALITY' || $col === 'GENERAL' || $col === 'PRECIO CON TARJETA DE CREDITO' || $col === 'PRECIO EFECTIVO' || $col === 'PRECIO NEGOCIO' || $col === 'INV. GYE' || $col === 'INV. TOTAL' || $col === 'MODELOS ' || $col === 'CARACTERÍSTICAS ') {
+                            unset($return[$key1][$key2]);
+                        }
+                    }
+                }
+
+                // Eliminamos las filas en las que todas las celdas estan vacias
+                foreach ($return as $key1 => $row) {
+                    if (Admin::checkEmptyAsocArray($return[$key1])) {
+                        unset($return[$key1]);
+                    }
+                }
+
+                // Obtenemos todas las marcas de la DB y las guardamos en un array
+                $this->db->select('nombre');
+                $this->db->from('marca');
+                $result = $this->db->get()->result_array();
+
+                // Validamos que hayan marcas existentes en la DB, caso contrario mostramos mensaje de error
+                if (empty($result)) {
+                    unlink($filePath);
+
+                    $titulo = "Dimquality::Admin - Actualizar Catalogo";
+                    $dataHeader['titlePage'] = $titulo;
+                    $this->load->view('admin/header', $dataHeader);
+                    $this->load->view('admin/lat-menu');
+                    $this->load->view('admin/catalogo', array('success' => 0, 'message' => 'Error. No existen marcas existentes en la base de datos.'));
+                    $this->load->view('admin/footer');
+                } else {
+                    foreach ($result as $index => $row) {
+                        $marcasArray[] = $row['nombre'];
+                    }
+                    foreach ($return as $key1 => $row) {
+                        // Empezamos a validar los datos del archivo
+                        if (in_array($return[$key1]['A'], $marcasArray)) {
+                            $marca = $return[$key1]['A'];
+                        }elseif (in_array($return[$key1]['A'], array('LAVADORAS', 'SECADORAS DE ROPA', 'REFRIGERADORAS', 'AIRES ACONDICIONADOS', 'MICROONDAS', 'AUDIO', 'TELEVISORES', 'TABLETS'))) {
+                            $categoria = $return[$key1]['A'];
+                        }else{
+                            $code = current($return[$key1]);
+                            $desc = next($return[$key1]);
+                            // Hay que preguntar si vamos a guardar el precio con tarjeta de credito o no
+                            next($return[$key1]);
+                            $pvp = next($return[$key1]);
+                            $cost = next($return[$key1]);
+                            $stock = next($return[$key1]);
+                            $existingProduct = $this->db->get_where('producto', array('codigo' => $code))->result_array();
+                            if (empty($existingProduct)) {
+                                $datosProducto = array(
+                                    'nombre' => '',
+                                    'marca' => $marca,
+                                    'categoria' => $categoria,
+                                    'codigo' => $code,
+                                    'imagen' => '',
+                                    'modelo' => '',
+                                    'costo' => $cost,
+                                    'pvp' => $pvp,
+                                    'descripcion' => $desc,
+                                    'estado' => 1,
+                                    'stock' => $stock
+                                );
+                                $this->db->insert('producto', $datosProducto);
+                            } else {
+                                $datosProducto = array(
+                                    'nombre' => '',
+                                    'marca' => $marca,
+                                    'categoria' => $categoria,
+                                    'imagen' => '',
+                                    'modelo' => '',
+                                    'costo' => $cost,
+                                    'pvp' => $pvp,
+                                    'descripcion' => $desc,
+                                    'estado' => 1,
+                                    'stock' => $stock
+                                );
+                                $this->db->set($datosProducto);
+                                $this->db->where('codigo', $code);
+                                $this->db->update('producto');
+                            }
+                        }
+                    }
+                    // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra
+                    unlink($filePath);
+                    $titulo = "Dimquality::Admin - Actualizar Catalogo";
+                    $dataHeader['titlePage'] = $titulo;
+                    $this->load->view('admin/header', $dataHeader);
+                    $this->load->view('admin/lat-menu');
+                    $this->load->view('admin/catalogo', array('success' => 1));
+                    $this->load->view('admin/footer');
+                }
+            }
         } else {
-            $data = array('upload_data' => $this->upload->data());
-            $this->load->view('admin/catalogo', $data);
-        }
-    }
-
-    public function excelReader()
-    {
-        $this->load->library('phpexcel');
-        $this->load->library('PHPExcel/iofactory');
-        $this->load->library('PHPExcel/autoloader');
-
-        $fileName = FCPATH."assets\uploads\sample.xlsx";
-        $excelReader = IOFactory::createReaderForFile($fileName);
-
-        $excelReader->setReadDataOnly();
-        $excelObj = $excelReader->load($fileName);
-        // Establecer la hoja activa del documento por su nombre
-        $excelObj->setActiveSheetIndexByName('Hoja1');
-        // Crear un arreglo asociativo con las filas y columnas del documento y su contenido
-        $return = $excelObj->getActiveSheet()->toArray(null, true,true,true);
-        
-        // Eliminamos las celdas vacias
-        foreach ($return as $key1 => $row) {
-            foreach ($row as $key2 => $col) {
-                if ($col === null) {
-                    unset($return[$key1][$key2]);
-                }
-            }
-        }
-        // Eliminamos las celdas con contenido basura
-        foreach ($return as $key1 => $row) {
-            foreach ($row as $key2 => $col) {
-                if ($col === 'PRECIOS INCLUYEN IVA' || $col === 'DIMQUALITY' || $col === 'GENERAL' || $col === 'PRECIO CON TARJETA DE CREDITO' || $col === 'PRECIO EFECTIVO' || $col === 'PRECIO NEGOCIO' || $col === 'INV. GYE' || $col === 'INV. TOTAL' || $col === 'MODELOS ' || $col === 'CARACTERÍSTICAS ') {
-                    unset($return[$key1][$key2]);
-                }
-            }
-        }
-        // Eliminamos las filas en las que todas las celdas estan vacias
-        foreach ($return as $key1 => $row) {
-            if (Admin::checkEmptyAsocArray($return[$key1])) {
-                unset($return[$key1]);
-            }
-        }
-
-        // header('Content-Type: application/json');
-        // echo json_encode($return);
-
-        foreach ($return as $key1 => $row) {
-            if ($return[$key1]['A'] === 'LG') {
-                $marca = $return[$key1]['A'];
-            }elseif (in_array($return[$key1]['A'], array('LAVADORAS', 'SECADORAS DE ROPA', 'REFRIGERADORAS', 'AIRES ACONDICIONADOS', 'MICROONDAS', 'AUDIO', 'TELEVISORES', 'TABLETS'))) {
-                $categoria = $return[$key1]['A'];
-            }else{
-                $code = current($return[$key1]);
-                $desc = next($return[$key1]);
-                // Hay que preguntar si vamos a guardar el precio con tarjeta de credito o no
-                next($return[$key1]);
-                $pvp = next($return[$key1]);
-                $cost = next($return[$key1]);
-                $stock = next($return[$key1]);
-                $existingProduct = $this->db->get_where('producto', array('codigo' => $code))->result_array();
-                if (empty($existingProduct)) {
-                    $datosProducto = array(
-                        'nombre' => '',
-                        'marca' => $marca
-                        // Continuara...
-                    );
-                    $this->db->insert('producto', $datosProducto);
-                }
-            }
+            redirect("admin/login");
         }
     }
 
