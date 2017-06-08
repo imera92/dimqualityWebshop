@@ -17,18 +17,9 @@ class Usuario extends CI_Controller {
   {
       $titulo = "Dimquality::Admin - Usuarios";
       $dataHeader['titlePage'] = $titulo;
-      $crud=new grocery_CRUD();
-      $crud->set_table('usuario');
-      $crud->columns('nombre','email');
-      $crud->required_fields('nombre');
-      $crud->unset_export();
-      $crud->unset_print();
-      $crud->set_language("spanish");
-      $output = $crud->render();
-      $dataHeader['css_files']=$output->css_files;
-      $dataHeader['js_files']=$output->js_files;
+      
       $this->load->view('admin/header', $dataHeader);
-      $this->load->view('crearUsuario',(array)$output);
+      $this->load->view('crearUsuario');
       $this->load->view('admin/footer');
   }
 
