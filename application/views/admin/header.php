@@ -11,6 +11,8 @@
 	<link href="<?php echo base_url('public/css/custom-bootstrap-margin-padding.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php if($this->router->method == "login"): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif($this->router->method == "index" || $this->router->method=="product"): ?>
@@ -22,12 +24,7 @@
 	    <!-- grocerycrud -->
 	    <?php foreach($css_files as $file): ?>
 	        <link rel="stylesheet" type="text/css" href="<?php echo $file; ?>" />
-	    <?php endforeach; ?>
-		<?php foreach($js_files as $file): ?>
-    		<script src="<?php echo $file; ?>"></script>
-	   <?php endforeach; ?>
-	    <!-- grocerycrud -->
-		
+	    <?php endforeach; ?>		
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';

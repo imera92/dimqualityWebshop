@@ -13,10 +13,10 @@
 	            <div id="collapse1" class="panel-collapse collapse">
 	                <ul class="sidebar-subnav list-group">
 	                    <li>
-	                    	<a href="#"><i class="fa fa-plus" aria-hidden="true"></i> Crear Producto</a>
+	                    	<a href="/dimqualityWebshop/index.php/producto/product"><i class="fa fa-plus" aria-hidden="true"></i> Crear Producto</a>
 	                    </li>
 	                    <li>
-	                    	<a href="#"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Actualizar Catálogo</a>
+	                    	<a href="<?php echo base_url('admin/actualizarCatalogo'); ?>"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Actualizar Catálogo</a>
 	                    </li>
 	                </ul>
                 </div>
