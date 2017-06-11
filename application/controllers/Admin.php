@@ -100,6 +100,8 @@ class Admin extends CI_Controller {
         }
      }
 
+  
+
     public function actualizarCatalogo() {
         if ($this->securityCheckAdmin()) {
             $titulo = "Dimquality::Admin - Actualizar Catalogo";

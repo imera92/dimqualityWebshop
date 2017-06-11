@@ -14,9 +14,9 @@
             <!-- Dependent Dropdown -->            
         <?php endif ?>
     <?php else: ?>
-        <!-- jQuery -->	       
-        
+      
     <?php endif ?>
-    
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script type="text/javascript" src= "<?php echo base_url('public/js/validacion.js'); ?>"></script> 
     </body>
 </html>
