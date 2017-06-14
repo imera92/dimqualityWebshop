@@ -1,21 +1,20 @@
 $(document).ready(function(){
    $('#cancel-button').addClass("btn-danger");
    $('#form-button-save').addClass("btn-success");
+   $('.form-field-box').addClass("form-group");
+   $(".form-input-box input").addClass("form-control");
    $('#save-and-go-back-button').addClass("btn-info");
    $('.box-content').addClass('container'); 
-   $(".form-input-box input").keyup(function(key){
-        $(this).css({'background-color':'#FDD', 'border-color': '#900'});
+   $(".form-input-box input").keypress(function(tecla){
         if( $(this).attr("id")=='field-costo' || $(this).attr("id")=='field-pvp '|| $(this).attr("id")=='field-codigo'){
-             if( !isNaN($(this).val()) && $(this).val()!=""){
-                 $(this).css({'background-color':'#ABEBC6  ', 'border-color': '#00b300  '});
+             if( tecla.charCode < 48 || tecla.charCode > 57){
+               return false;
              }
         }else{
-             if( $(this).val().match(/^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ_\s]+$/)
-                ){
-                    console.log('cdcd'); 
-                     $(this).css({'background-color':'#ABEBC6', 'border-color': '#00b300 '});
-                 }
-        }      
+             console.log("entre");
+             if((tecla.charCode < 97 || tecla.charCode > 122) && (tecla.charCode < 65 || tecla.charCode > 90) && (tecla.charCode != 45)) return false;
+             
+        }    
    });   
    
     

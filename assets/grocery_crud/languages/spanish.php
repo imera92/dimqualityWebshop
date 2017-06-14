@@ -33,7 +33,8 @@
 	$lang['form_or']				= 'o';
 	$lang['form_save'] 				= 'Guardar';
 	$lang['form_insert_loading'] 	= 'Cargando, guardando los datos...';
-
+   
+	
 	$lang['form_upload_a_file'] 	= 'Subir un archivo';
 	$lang['form_upload_delete'] 	= 'eliminar';
 	$lang['form_button_clear'] 		= 'Resetear';
@@ -42,6 +43,7 @@
 	$lang['delete_error_message'] 	= 'Sus datos no han sido eliminados de la base de datos.';
 
 	/* Javascript messages */
+	$lang['required']       = "El  campo %s es requerido."; 
 	$lang['alert_add_form']			= 'Los datos que intenta añadir no se han guardado.\\n¿Esta seguro que quiere volver a la lista?';
 	$lang['alert_edit_form']		= 'Los datos que intenta actualizar no se han guardado.\\n¿Esta seguro que quiere volver a la lista?';
 	$lang['alert_delete']			= '¿Esta seguro que quiere eliminar este registro?';
@@ -70,6 +72,8 @@
 	$lang['error_max_file_size'] 		= "El archivo excede el tamaño {max_file_size} que fue especificado.";
 	$lang['error_min_file_size'] 		= "No puede subir un archivo vacío.";
 
+   /* required */
+    
 	/* Added in version 1.3.1 */
 	$lang['list_export'] 	= "Exportar";
 	$lang['list_print'] 	= "Imprimir";
