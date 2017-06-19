@@ -55,15 +55,18 @@
 	</div>
 <div><br><br>
 	<h3> Datos de la entrega </h2>
-	<input type="radio" name="local" value="1">Retiro en Local </input>
-	<input type="radio" name="domicilio" value="1">Entrega a Domicilio </input>
-
+	<form action="">
+	<input type="radio" name="entrega" value="retiro" checked="checked">Retiro en Local 
+	<input type="radio" name="entrega" value=domicilio">Entrega a Domicilio
+	</form>
 </div>
 
 <div><br><br>
 	<h3> Forma de Pago </h2>
-	<input type="radio" name="deposito" value="1">Deposito </input>
-	<input type="radio" name="transferencia" value="1">Transferencia </input>
+	<form>
+	<input type="radio" name="pago" value="Deposito" checked="checked">Deposito 
+	<input type="radio" name="pago" value="Transferencia">Transferencia
+	<form>
 </div>
 
 <div> <br><br>
