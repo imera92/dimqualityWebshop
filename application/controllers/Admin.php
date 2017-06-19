@@ -84,6 +84,7 @@ class Admin extends CI_Controller {
             $crud->display_as('descripcion', 'Descripción');
             $crud->unset_export();
             $crud->unset_print();
+            $crud->unset_texteditor('descripcion','full_text');
             $crud->set_language("spanish");
             $output=$crud->render();
 
@@ -99,6 +100,8 @@ class Admin extends CI_Controller {
             redirect("admin/login");
         }
      }
+
+  
 
     public function actualizarCatalogo() {
         if ($this->securityCheckAdmin()) {
