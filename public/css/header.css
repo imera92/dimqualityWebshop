@@ -54,7 +54,12 @@ a[class~="menubar-link-social"]:hover{
     -webkit-transform: translate3d(0,0,0);
     -o-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
+	margin-bottom:5vh; 
 }
+.input-group{
+	padding-top: 3vh;
+}
+	
 .navbar-scrolled{
 	min-height: 0;
 	max-height: 40px;
@@ -101,9 +106,7 @@ a[class~="menubar-link-social"]:hover{
 .nav-link-scrolled{
 	padding: 10px 12.5px !important;
 }
-.dropdown-menu {
-	background-color: #e94951;
-}
+
 .dropdown-menu>li>a {
 	color: #fff;
 	transition: 0.2s;
@@ -120,6 +123,7 @@ a[class~="menubar-link-social"]:hover{
 	-moz-transition: 0.2s;
 	-o-transition: 0.2s;
 }
+
 /*
  * 3 -> RESPONSIVE
  * ============================================
@@ -183,8 +187,7 @@ a[class~="menubar-link-social"]:hover{
 	.navbar .navbar-nav {
 		width: 100%;
 	}
-	.navbar-nav .open .dropdown-menu {
-	    background-color: #e94951;
+	 .dropdown-menu {
         text-align: center;
 	}
 }

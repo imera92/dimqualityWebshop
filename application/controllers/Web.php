@@ -42,4 +42,10 @@ class Web extends CI_Controller {
     $this->load->view('web/carrito');
     $this->load->view('web/footer');
   }
+
+  public function indexCatalogo(){
+     $this->load->view('web/header');
+     $this->load->view('web/indexUser');
+     $this->load->view('web/footer');
+  }
 }
