@@ -58,7 +58,7 @@
 									<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 			  							<li><a href="#">Registrarte</a></li>
-			 							<li><a href="#">Iniciar Sesion</a></li>
+			 							<li><a href="<?php echo base_url('login'); ?>">Iniciar Sesion</a></li>
 									</ul>
 								</li>
 								<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
