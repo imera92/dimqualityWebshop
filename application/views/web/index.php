@@ -1,26 +1,3 @@
-        <div id="header" class="row mt-40">
-            <div class="col-sm-4 col-md-2">
-                <img src="<?php echo base_url('public/img/logo2.png'); ?>" class="img-responsive">
-            </div>
-            <div class="col-sm-4 col-md-5 col-md-offset-1">
-                <div class="input-group">
-                    <input type="text" name="search" value="" placeholder="Search" class="form-control input-lg">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-search"></i></button>  
-                    </span>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-3 col-md-offset-1">
-                <div class="row">
-                    <div class="col-sm-1 col-md-3">
-                        <img src="<?php echo base_url('public/img/phone.png'); ?>" class="img-responsive">
-                    </div>
-                    <div class="col-md-5">
-                        <h4>CONTACTENOS: 04)292-2763</h4>
-                    </div>                    
-                </div>
-            </div>
-        </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">  
             <ul class="nav navbar-nav">
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Desktops</a>
