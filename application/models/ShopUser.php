@@ -12,11 +12,19 @@
             $this->userTbl = 'usuario';
         }
 
-        function login_admin($user, $password){
-        	$usuario = $this->db->get_where("admin", array('user'=> $user , 'password' => md5($password)))->row();
+        function login_user($user, $password){
+        	$usuario = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
 
         	if ($usuario) {
-                $data_user = array("tipo" => "admin", "user" => $usuario->user, "correo" => $usuario->correo, "persona" => $usuario->persona);
+                $data_user = array(
+                    "user" => $usuario->user,
+                    "nombre" => $usuario->nombre,
+                    "apellido" => $usuario->nombre,
+                    "correo" => $usuario->email,
+                    "cedula" => $usuario->cedula,
+                    "direccion" => $usuario->direccion,
+                    "telefono" => $usuario->telefono
+                );
                 $this->session->set_userdata($data_user);
                 return true;
             }
