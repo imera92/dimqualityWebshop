@@ -124,7 +124,7 @@ class Usuario extends CI_Controller {
   }
 
   private function securityCheck() {
-    $securityUser = new SecurityUser();
+    $securityUser = new ShopUser();
     $usuario = $this->session->userdata('user');
     if($usuario == ""){
       return false;
