@@ -72,7 +72,7 @@
 										</ul>
 									<?php endif; ?>
 								</li>
-								<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
+								<li><a href="<?php echo base_url('carrito'); ?>"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
 							</ul>
 						</div>
 					</div>
