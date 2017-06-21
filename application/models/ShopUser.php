@@ -9,7 +9,6 @@
             parent::__construct();
             $this->load->database();
             $this->load->library('session');
-            $this->userTbl = 'usuario';
         }
 
         function login_user($user, $password){
