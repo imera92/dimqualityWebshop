@@ -22,6 +22,8 @@
 		<link href="<?php echo base_url('public/css/crearUsuario.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'carrito'): ?>
 		<link href="<?php echo base_url('public/css/carrito.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'getProducto'): ?>
+		<link href="<?php echo base_url('public/css/producto.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
