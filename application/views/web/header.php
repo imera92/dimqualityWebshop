@@ -55,7 +55,7 @@
 								<li><a href="<?php echo base_url(); ?>">INICIO</a></li>
 								<li><a href="#">SERVICIO TECNICO</a></li>
 								<li class="dropdown">
-									<?php if (is_null($this->session->userdata())): ?>
+									<?php if (!is_null($this->session->user)): ?>
 										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><?php echo $this->session->user; ?><span class="caret"></span></a>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 				 							<li><a href="<?php echo base_url('logout'); ?>">Cerrar Sesión</a></li>
