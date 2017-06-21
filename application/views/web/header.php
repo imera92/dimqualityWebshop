@@ -52,7 +52,7 @@
 					    </div>
 						<div class="collapse navbar-collapse" id="menubar-collapse">
 							<ul class="nav navbar-nav">
-								<li><a href="#">INICIO</a></li>
+								<li><a href="<?php echo base_url(); ?>">INICIO</a></li>
 								<li><a href="#">SERVICIO TECNICO</a></li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
