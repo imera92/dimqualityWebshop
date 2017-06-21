@@ -14,12 +14,39 @@ class Usuario extends CI_Controller {
 	}
 
   public function login () {
-    $titulo = 'Dimquality - Login';
-    $dataHeader['titlePage'] = $titulo;
+    if($this->securityCheck()) {
+      redirect("web/index");
+    } else {
+      $titulo = 'Dimquality - Login';
+      $dataHeader['titlePage'] = $titulo;
 
-    $this->load->view('web/header', $dataHeader);
-    $this->load->view('web/login');
-    $this->load->view('web/footer');
+      $this->load->view('web/header', $dataHeader);
+      $this->load->view('web/login');
+      $this->load->view('web/footer');
+    }
+  }
+
+  public function auth() {
+    $user = $this->input->post("user");
+    $password = $this->input->post("password");
+
+    $securityUser = new ShopUser();   
+
+    if($securityUser->login_user($user, $password)){
+      redirect("web/index");
+    }else{
+      redirect("web/login");
+    }
+  }
+
+  public function logout() {
+    if($this->securityCheck()){
+      $securityUser = new ShopUser();
+      $securityUser->logout();
+      redirect("web/index");
+    }else{
+      redirect("web/login");
+    }
   }
 
   public function crearUsuario(){
@@ -93,6 +120,16 @@ class Usuario extends CI_Controller {
       return FALSE;
     } else {
       return TRUE;
+    }
+  }
+
+  private function securityCheck() {
+    $securityUser = new SecurityUser();
+    $usuario = $this->session->userdata('user');
+    if($usuario == ""){
+      return false;
+    }else{
+      return true;
     }
   }
 }
