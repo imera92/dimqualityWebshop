@@ -1,3 +1,10 @@
 .bold-text{
 	font-weight: bold;
 }
+hr {
+    border-top: 2px solid #e6e6e6;
+}
+hr[class~="secondary-separator"] {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
