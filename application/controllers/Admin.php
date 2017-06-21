@@ -78,6 +78,7 @@ class Admin extends CI_Controller {
                 '0' => 'Inactivo',
                 '1' => 'Activo'
             ));
+            $crud->set_field_upload('imagen', 'assets/uploads/images/productos');
             $crud->display_as('codigo', 'Código');
             $crud->display_as('categoria', 'Categoría');
             $crud->display_as('pvp', 'PVP');
