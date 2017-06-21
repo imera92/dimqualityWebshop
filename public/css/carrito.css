@@ -1,0 +1,44 @@
+a[class='btn-remove']:link, a[class='btn-remove']:visited {
+	position: relative;
+	top: 30%;
+	font-size: 30px;
+	color: #000;
+	transition: 0.15s;
+	-webkit-transition: 0.15s;
+	-moz-transition: 0.15s;
+	-o-transition: 0.15s;
+}
+a[class='btn-remove']:hover, a[class='btn-remove']:active {
+	font-size: 30px;
+	color: #ff0000;
+	transition: 0.15s;
+	-webkit-transition: 0.15s;
+	-moz-transition: 0.15s;
+	-o-transition: 0.15s;
+}
+.subtotal {
+	color: #78C258;
+	font-weight: bold;
+}
+.grantotal-label {
+	font-size: 20px;
+}
+.grantotal {
+	color: #337ab7;
+	font-weight: bold;
+	font-size: 20px;
+}
+.table-parent {
+	display: table;
+}
+.table-child {
+    display: table-cell;
+    vertical-align: middle;
+}
+.row-eq-height {
+	/*Flex no funcion en IE 9 y anteriores*/
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+}
