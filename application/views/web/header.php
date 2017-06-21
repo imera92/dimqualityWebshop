@@ -14,7 +14,9 @@
 	<link href="<?php echo base_url('public/css/header.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/footer.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css">
-	<?php if ($this->router->method == 'login'): ?>
+	<?php if ($this->router->method == 'index'): ?>
+		<link href="<?php echo base_url('public/css/index.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'login'): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'crearUsuario'): ?>
 		<link href="<?php echo base_url('public/css/crearUsuario.css'); ?>" rel="stylesheet" type="text/css">
@@ -36,35 +38,33 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<div id="header">
-			<div id="navbar" class="row">
-				<div class="col-xs-12 pl-0 pr-0">
-					<nav class="navbar navbar-default mb-0">
-						<div class="container-fluid">
-							<div class="navbar-header">
-						      	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menubar-collapse" aria-expanded="false">
-						        	<span class="sr-only">Toggle navigation</span>
-						        	<span class="icon-bar"></span>
-						        	<span class="icon-bar"></span>
-						        	<span class="icon-bar"></span>
-						    	</button>
-						    </div>
-							<div class="collapse navbar-collapse" id="menubar-collapse">
-								<ul class="nav navbar-nav">
-									<li><a href="#">INICIO</a></li>
-									<li><a href="#">SERVICIO TECNICO</a></li>
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
-										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-				  							<li><a href="#">Registrarte</a></li>
-				 							<li><a href="#">Iniciar Sesion</a></li>
-										</ul>
-									</li>
-									<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
-								</ul>
-							</div>
+		<div id="navbar" class="row">
+			<div class="col-xs-12 pl-0 pr-0">
+				<nav class="navbar navbar-default mb-0">
+					<div class="container-fluid">
+						<div class="navbar-header">
+					      	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menubar-collapse" aria-expanded="false">
+					        	<span class="sr-only">Toggle navigation</span>
+					        	<span class="icon-bar"></span>
+					        	<span class="icon-bar"></span>
+					        	<span class="icon-bar"></span>
+					    	</button>
+					    </div>
+						<div class="collapse navbar-collapse" id="menubar-collapse">
+							<ul class="nav navbar-nav">
+								<li><a href="#">INICIO</a></li>
+								<li><a href="#">SERVICIO TECNICO</a></li>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			  							<li><a href="#">Registrarte</a></li>
+			 							<li><a href="#">Iniciar Sesion</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
+							</ul>
 						</div>
-					</nav>
-				</div>
+					</div>
+				</nav>
 			</div>
 		</div>
