@@ -18,33 +18,43 @@
 						</div>
 					</div>
 					<hr class="mt-5">
-					<div class="row row-eq-height mt-20 mb-20">
-						<div class="col-md-1 text-center">
-							<a href="#" class="btn-remove"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+					<?php foreach ($productosCarrito as $index => $producto): ?>
+						<div class="row row-eq-height mt-20 mb-20">
+							<div class="col-md-1 text-center">
+								<a href="#" class="btn-remove"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+							</div>
+							<div class="col-md-2">
+								<img class="img-responsive" src="<?php echo base_url('assets/uploads/images/productos/' . $producto['imagen']); ?>">
+							</div>
+							<div class="col-md-3">
+								<a href="<?php echo base_url('producto/getProducto/' . $producto['id']); ?>"><?php echo $producto['descripcion']; ?></a>
+							</div>
+							<div class="col-md-2 text-center">
+								<?php echo $producto['pvp'];?>
+							</div>
+							<div class="col-md-2">
+								<input type="number" step="1" value="<?php echo $producto['cantidad'] ?>" min="0">
+							</div>
+							<div class="col-md-2 text-center subtotal">
+								<?php echo ($producto['cantidad'] * $producto['pvp']) ?>
+							</div>
 						</div>
-						<div class="col-md-2">
-							<img class="img-responsive" src="http://via.placeholder.com/600x600">
+					<?php endforeach; ?>
+					<hr>
+					<div class="row row-eq-height mt-20">
+						<div class="col-md-2 col-md-offset-8 text-center bold-text grantotal-label">
+							Subtotal
 						</div>
-						<div class="col-md-3">
-							<a href="#">Procesador Intel Core i7-950 3.06GHz 8 MB Cache Socket LGA1366</a>
-						</div>
-						<div class="col-md-2 text-center">
-							$ 100
-						</div>
-						<div class="col-md-2">
-							<input type="number" step="1" value="1" min="0">
-						</div>
-						<div class="col-md-2 text-center subtotal">
-							$ 100
+						<div class="col-md-2 text-center grantotal">
+							<?php echo $subtotal ?>
 						</div>
 					</div>
-					<hr>
 					<div class="row row-eq-height mt-20">
 						<div class="col-md-2 col-md-offset-8 text-center bold-text grantotal-label">
 							Total
 						</div>
 						<div class="col-md-2 text-center grantotal">
-							$ 100
+							<?php echo round($subtotal * 1.14, 2) ?>
 						</div>
 					</div>
 				</div>

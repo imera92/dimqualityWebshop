@@ -27,18 +27,20 @@ class Producto extends CI_Controller {
 
 	// Tratamos de obtener del producto asociado al id enviado
 	$result = $this->db->get_where('producto', array('id' => $codProducto))->result_array();
-	$producto = $result[0];
+	if (!empty($result)) {
+		$producto = $result[0];		
+	}
 
 	// Validamos que no se solicite un producto inexistente
 	if (($codProducto > $idUltimoProducto) || ($codProducto < 0) || empty($producto)) {
-	  $dataBody['mensaje'] = 'Error. Utilice un código de producto válido.';
-  } else {
+	  $dataBody['mensaje'] = 'No hay productos para mostrar. Utilice un código de producto válido.';
+	} else {
 	  $dataBody['producto'] = $producto;
-  }
+	}
 
-  $this->load->view('web/header', $dataHeader);
-  $this->load->view('web/producto', $dataBody);
-  $this->load->view('web/footer');
+	$this->load->view('web/header', $dataHeader);
+	$this->load->view('web/producto', $dataBody);
+	$this->load->view('web/footer');
 }
 
 }

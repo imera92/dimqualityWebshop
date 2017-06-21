@@ -38,11 +38,35 @@ class Web extends CI_Controller {
     $productos = $this->db->get_where('productocarrito', array('carrito' => $carrito[0]['id']))->result_array();
     print_r($productos);
     die();
+    */
+    $carritoSesion = $this->session->carrito;
+    $productosCarrito = array();
+    foreach ($carritoSesion['productos'] as $index => $producto) {
+      $productoId = $producto['id'];
+      $productoCantidad = $producto['cantidad'];
+      $productoPvp = $producto['pvp'];
 
-    $dataBody['productosCarrito'] = $productos;*/
+      $this->db->select('descripcion, imagen');
+      $this->db->from('producto');
+      $this->db->where('id', $productoId);
+      $productoDB = $this->db->get()->row();
+
+      $productoDescripcion = $productoDB->descripcion;
+      $productoImagen = $productoDB->imagen;
+      array_push($productosCarrito, array(
+        'id' => $productoId,
+        'cantidad' => $productoCantidad,
+        'pvp' => $productoPvp,
+        'descripcion' => $productoDescripcion,
+        'imagen' => $productoImagen
+      ));
+    }
+
+    $dataBody['subtotal'] = $carritoSesion['subtotal'];
+    $dataBody['productosCarrito'] = $productosCarrito;
 
     $this->load->view('web/header', $dataHeader);
-    $this->load->view('web/carrito');
+    $this->load->view('web/carrito', $dataBody);
     $this->load->view('web/footer');
   }
   
