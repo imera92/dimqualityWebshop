@@ -14,13 +14,15 @@ class Web extends CI_Controller {
 
   public function index() {
     $titulo = "Dimquality - Lo mejor en Tecnología y Electrodomésticos";
+    $destacado=1;
     $dataHeader['titlePage'] = $titulo;
-
+    $this->db->where('destacado',$destacado);
+    $query=$this->db->get('producto');
+    $dataBody['resultados']=$query->result();
     $this->load->view('web/header', $dataHeader);
-    $this->load->view('web/index');
+    $this->load->view('web/index', $dataBody);
     $this->load->view('web/footer');
   }
-
   public function carrito()
   {
     $titulo = "Dimquality::Admin - Shopping Cart";

@@ -1,0 +1,13 @@
+.categorias{
+    border-style: solid;
+    border-radius: 1rem;
+    background-color:#00BFFF;
+    border-color:white;
+}
+ li a{
+    color:white;
+}
+.boton{
+    background-color: #D3D3D3;
+}
+
