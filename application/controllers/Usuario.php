@@ -22,7 +22,7 @@ class Usuario extends CI_Controller {
     $this->load->view('web/footer');
   }
 
-  public function registrarUsuario(){
+  public function crearUsuario(){
     $data = array();
     $userData = array();
     if($this->input->post('submit')){
@@ -59,13 +59,14 @@ class Usuario extends CI_Controller {
         }
       }
     }
+
     $data['user'] = $userData;
-        //load the view    
-    $titulo = "Dimquality::Admin - Usuarios";
+    $titulo = "Dimquality - Crear cuenta nueva";
     $dataHeader['titlePage'] = $titulo;
-    $this->load->view('admin/header', $dataHeader);
-    $this->load->view('crearUsuario', $data);
-    $this->load->view('admin/footer');
+
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/crearUsuario', $data);
+    $this->load->view('web/footer');
   }
 
   /*
@@ -95,5 +96,3 @@ class Usuario extends CI_Controller {
     }
   }
 }
-
- 
