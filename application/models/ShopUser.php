@@ -15,15 +15,32 @@
         function login_user($user, $password){
         	$usuario = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
 
+            $result = $this->db->get_where("carrito", array('usuario'=> $usuario->id))->result_array();
+            $carritoUsuario = array("subtotal" => 0, "productos" => array());
+            if (!empty($result)) {
+                $carritoId = $result[0]["id"];
+                $carritoUsuario["subtotal"] = $result[0]["subtotal"];
+                $result = $this->db->get_where("productocarrito", array('carrito'=> $carritoId))->result_array();
+                foreach ($result as $row => $value) {
+                    $result2 = $this->db->get_where("producto", array('id'=> $value['producto']))->result_array();
+                    $pvpProducto = $result2[0]['pvp'];
+
+                    $productoCarrito = array('id' => $value['producto'], 'cantidad' => $value['cantidad'], 'pvp' => $pvpProducto);
+                    array_push($carritoUsuario['productos'], $productoCarrito);
+                }
+            }
+
         	if ($usuario) {
                 $data_user = array(
+                    "id" => $usuario->id,
                     "user" => $usuario->user,
                     "nombre" => $usuario->nombre,
                     "apellido" => $usuario->nombre,
                     "correo" => $usuario->email,
                     "cedula" => $usuario->cedula,
                     "direccion" => $usuario->direccion,
-                    "telefono" => $usuario->telefono
+                    "telefono" => $usuario->telefono,
+                    "carrito" => $carritoUsuario
                 );
                 $this->session->set_userdata($data_user);
                 return true;
