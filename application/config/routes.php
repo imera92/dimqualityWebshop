@@ -53,5 +53,6 @@ $route['default_controller'] = 'web/index';
 $route['login'] = 'usuario/login';
 $route['logout'] = 'usuario/logout';
 $route['registro'] = 'usuario/crearUsuario';
+$route['carrito'] = 'web/carrito';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
