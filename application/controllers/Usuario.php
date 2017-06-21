@@ -30,12 +30,13 @@ class Usuario extends CI_Controller {
     $user = $this->input->post("user");
     $password = $this->input->post("password");
 
-    $securityUser = new ShopUser();   
+    $securityUser = new ShopUser();
+    $securityUser->login_user($user, $password);
 
-    if($securityUser->login_user($user, $password)){
+    if($this->session->userdata('user') != ""){
       redirect("web/index");
     }else{
-      redirect("web/login");
+      redirect("usuario/login");
     }
   }
 
@@ -45,7 +46,7 @@ class Usuario extends CI_Controller {
       $securityUser->logout();
       redirect("web/index");
     }else{
-      redirect("web/login");
+      redirect("usuario/login");
     }
   }
 
@@ -80,7 +81,7 @@ class Usuario extends CI_Controller {
         $insert = $this->ShopUser->insert($userData);
         if($insert){
           $this->session->set_userdata('success_msg', 'Your registration was successfully. Please login to your account.'); 
-          redirect('web/index');
+          redirect('usuario/login');
         }else{
           $data['error_msg'] = 'Some problems occured, please try again.';
         }
