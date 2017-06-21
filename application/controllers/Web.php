@@ -12,13 +12,12 @@ class Web extends CI_Controller {
       date_default_timezone_set("America/Guayaquil");
 	}
 
-  public function crearUsuario()
-  {
-    $titulo = "Dimquality::Admin - Usuarios";
+  public function index() {
+    $titulo = "Dimquality - Lo mejor en Tecnología y Electrodomésticos";
     $dataHeader['titlePage'] = $titulo;
 
     $this->load->view('web/header', $dataHeader);
-    $this->load->view('web/crearUsuario');
+    $this->load->view('web/index');
     $this->load->view('web/footer');
   }
 
@@ -43,9 +42,4 @@ class Web extends CI_Controller {
     $this->load->view('web/footer');
   }
 
-  public function indexCatalogo(){
-     $this->load->view('web/header');
-     $this->load->view('web/indexUser');
-     $this->load->view('web/footer');
-  }
 }
