@@ -1,65 +1,6 @@
-/**
- * 1 -> Links de redes sociales
- * 2 -> Barra de navegacion
- * 3 -> Responsive
- * ===============================================
- */
-
-/*
- * 1 -> LINKS DE REDES SOCIALES
- * ============================================
- */
-.menubar-text{
-	padding-top: 5%;
-	color: #e52d35;
-	-webkit-transition: all ease 0.5s;
-	-moz-transition: all ease 0.5s;
-	-o-transition: all ease 0.5s;
-	transition: all ease 0.5s;
+body {
+	font-family: 'Roboto', sans-serif;
 }
-.menubar-text-scrolled{
-	padding-top: 2%;
-	color: #e52d35;
-	-webkit-transition: all ease 0.5s;
-	-moz-transition: all ease 0.5s;
-	-o-transition: all ease 0.5s;
-	transition: all ease 0.5s;
-}
-a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
-	color: #e52d35;
-	font-size: 18px;
-	transition: 0.25s;
-	-webkit-transition: 0.25s;
-	-moz-transition: 0.25s;
-	-o-transition: 0.25s;
-}
-a[class~="menubar-link-social"]:hover{
-	text-decoration: none;
-	color: #666666;
-	transition: 0.25s;
-	-webkit-transition: 0.25s;
-	-moz-transition: 0.25s;
-	-o-transition: 0.25s;
-}
-/*
- * 2 -> BARRA DE NAVEGACION
- * ============================================
- */
-#header {
-	background-color: #FFF;
-    /*position: fixed;*/
-    right: 0;
-    left: 0;
-    z-index: 1030;
-    -webkit-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-	margin-bottom:5vh; 
-}
-.input-group{
-	padding-top: 3vh;
-}
-	
 .navbar-scrolled{
 	min-height: 0;
 	max-height: 40px;
@@ -77,18 +18,18 @@ a[class~="menubar-link-social"]:hover{
 	-moz-transition: 0.2s;
 	-o-transition: 0.2s;
 }
-/*.navbar-default .navbar-nav>li>a:focus, */.navbar-default .navbar-nav>li>a:hover {
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
     color: #337ab7;
-    background-color: #FFF;
-    font-weight: bold;
+    background-color: #d9d9d9;
+    /*font-weight: bold;*/
     transition: 0.2s;
 	-webkit-transition: 0.2s;
 	-moz-transition: 0.2s;
 	-o-transition: 0.2s;
 }
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-    color: #e52d35;
-    background-color: #FFF;
+.navbar-default .navbar-nav>.open>a:link, .navbar-default .navbar-nav>.open>a:visited, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #33cc33;
+    background-color: #d9d9d9;
 }
 .navbar .navbar-nav {
 	display: inline-block;
@@ -103,10 +44,9 @@ a[class~="menubar-link-social"]:hover{
     display: block;
     padding: 15px 12.5px;
 }
-.nav-link-scrolled{
-	padding: 10px 12.5px !important;
+.dropdown-menu {
+	background-color: #595959;
 }
-
 .dropdown-menu>li>a {
 	color: #fff;
 	transition: 0.2s;
@@ -116,52 +56,24 @@ a[class~="menubar-link-social"]:hover{
 }
 .dropdown-menu>li>a:hover {
 	background-color: #FFF;
-    color: #e52d35;
+    color: #337ab7;
     font-weight: bold;
 	transition: 0.2s;
 	-webkit-transition: 0.2s;
 	-moz-transition: 0.2s;
 	-o-transition: 0.2s;
 }
-
 /*
  * 3 -> RESPONSIVE
  * ============================================
  */
  @media (min-width:1200px) {
- 	.menubar-text{
- 		font-size: 16px;
- 	}
- 	.menubar-text-scrolled{
- 		font-size: 16px;
- 	}
- 	a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
- 		font-size: 23px;
- 	}
+
  }
  @media (max-width:1199px) {
- 	.menubar-text{
- 		font-size: 13px;
- 	}
- 	.menubar-text-scrolled{
- 		font-size: 13px;
- 	}
- 
- 	a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
- 		font-size: 20px;
- 	}
+
  }
 @media (max-width:991px) {
-	.menubar-text{
-		padding-top: 4.5%;
-		font-size: 12px;
-	}
-	.menubar-text-scrolled{
- 		font-size: 12px;
- 	}
-	a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
-		font-size: 14px;
-	}
  	.navbar-default .navbar-nav>li>a {
  		font-size: 12px;
  		margin: 0 2.5px;
@@ -171,12 +83,6 @@ a[class~="menubar-link-social"]:hover{
  	}
 }
 @media (max-width:767px) {
-	.menubar-text{
-		font-size: 12px;
-	}
-	a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
-		font-size: 18px;
-	}
 	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
 		color: #FFF;
 	}
@@ -192,10 +98,5 @@ a[class~="menubar-link-social"]:hover{
 	}
 }
 @media (max-width:479px) {
-	.menubar-text{
-		font-size: 12px;
-	}
-	a[class~="menubar-link-social"]:link, a[class~="menubar-link-social"]:visited{
-		font-size: 18px;
-	}
+	
 }

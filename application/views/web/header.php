@@ -31,6 +31,7 @@
 	
 </head>
 <body>
+	<div class="container-fluid">
 		<div id="header">
 			<div id="navbar" class="row">
 				<div class="col-xs-12 pl-0 pr-0">
@@ -48,13 +49,14 @@
 								<ul class="nav navbar-nav">
 									<li><a href="#">INICIO</a></li>
 									<li><a href="#">SERVICIO TECNICO</a></li>
-          							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
-              							<ul class="dropdown-menu">
-                  							<li>Registrarte</li>
-                 							<li>Iniciar Sesion</li>
-              							</ul>
-          							</li>
-          							<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
+									<li class="dropdown">
+										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				  							<li><a href="#">Registrarte</a></li>
+				 							<li><a href="#">Iniciar Sesion</a></li>
+										</ul>
+									</li>
+									<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
 								</ul>
 							</div>
 						</div>
