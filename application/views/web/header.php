@@ -63,7 +63,7 @@
 									<?php else: ?>
 										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"></span></a>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-				  							<li><a href="#">Registrarte</a></li>
+				  							<li><a href="<?php echo base_url('registro') ?>">Registrarte</a></li>
 				 							<li><a href="<?php echo base_url('login'); ?>">Iniciar Sesión</a></li>
 										</ul>
 									<?php endif; ?>
