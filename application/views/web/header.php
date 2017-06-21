@@ -14,7 +14,9 @@
 	<link href="<?php echo base_url('public/css/header.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/footer.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css">
-	<!-- <link href="<?php //echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css"> -->
+	<?php if ($this->router->method == 'login'): ?>
+		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
+	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
 

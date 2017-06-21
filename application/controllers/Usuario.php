@@ -13,6 +13,15 @@ class Usuario extends CI_Controller {
         date_default_timezone_set("America/Guayaquil");
 	}
 
+  public function login () {
+    $titulo = 'Dimquality - Login';
+    $dataHeader['titlePage'] = $titulo;
+
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/login');
+    $this->load->view('web/footer');
+  }
+
   public function registrarUsuario(){
     $data = array();
     $userData = array();
@@ -59,34 +68,32 @@ class Usuario extends CI_Controller {
     $this->load->view('admin/footer');
   }
 
-    /*
-     * Existing email check during validation
-     */
-    public function email_check($str){
-      $con['returnType'] = 'count';
-      $con['conditions'] = array('email'=>$str);
-      $checkEmail = $this->ShopUser->getRows($con);
-      if($checkEmail > 0){
-        $this->form_validation->set_message('email_check', 'El correo ya está registrado.');
-        return FALSE;
-      } else {
-        return TRUE;
-      }
+  /*
+   * Existing email check during validation
+   */
+  public function email_check($str){
+    $con['returnType'] = 'count';
+    $con['conditions'] = array('email'=>$str);
+    $checkEmail = $this->ShopUser->getRows($con);
+    if($checkEmail > 0){
+      $this->form_validation->set_message('email_check', 'El correo ya está registrado.');
+      return FALSE;
+    } else {
+      return TRUE;
     }
-
-    public function cedula_check($str){
-      $con['returnType'] = 'count';
-      $con['conditions'] = array('cedula'=>$str);
-      $checkEmail = $this->ShopUser->getRows($con);
-      if($checkEmail > 0){
-        $this->form_validation->set_message('cedula_check', 'La cédula ya está registrado.');
-        return FALSE;
-      } else {
-        return TRUE;
-      }
-    }
-
-
   }
+
+  public function cedula_check($str){
+    $con['returnType'] = 'count';
+    $con['conditions'] = array('cedula'=>$str);
+    $checkEmail = $this->ShopUser->getRows($con);
+    if($checkEmail > 0){
+      $this->form_validation->set_message('cedula_check', 'La cédula ya está registrado.');
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+  }
+}
 
  
