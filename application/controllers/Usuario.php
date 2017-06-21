@@ -33,7 +33,7 @@ class Usuario extends CI_Controller {
       $this->form_validation->set_rules('clave', 'password', 'required');
       $this->form_validation->set_rules('conf_clave', 'confirmar clave', 'required|matches[clave]');
       $this->form_validation->set_rules('cedula', 'Cédula', 'required|callback_cedula_check');
-      $this->form_validation->set_rules('pais', 'País');
+      // $this->form_validation->set_rules('pais', 'País');
       $this->form_validation->set_rules('direccion', 'Direccion');
       $this->form_validation->set_rules('telefono', 'Teléfono');
 
@@ -44,7 +44,7 @@ class Usuario extends CI_Controller {
         'email' => strip_tags($this->input->post('correo')),
         'password' => md5($this->input->post('password')),        
         'cedula' => strip_tags($this->input->post('cedula')),
-        'pais' => strip_tags($this->input->post('pais')),
+        // 'pais' => strip_tags($this->input->post('pais')),
         'direccion' => strip_tags($this->input->post('direccion')),
         'telefono' => strip_tags($this->input->post('telefono'))
         );
@@ -53,7 +53,7 @@ class Usuario extends CI_Controller {
         $insert = $this->ShopUser->insert($userData);
         if($insert){
           $this->session->set_userdata('success_msg', 'Your registration was successfully. Please login to your account.'); 
-          // redirect('user/login');
+          redirect('web/index');
         }else{
           $data['error_msg'] = 'Some problems occured, please try again.';
         }

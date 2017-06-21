@@ -16,7 +16,7 @@
 	<link href="<?php echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css">
 	<?php if ($this->router->method == 'login'): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif ($this->router->method == 'registrarUsuario'): ?>
+	<?php elseif ($this->router->method == 'crearUsuario'): ?>
 		<link href="<?php echo base_url('public/css/crearUsuario.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
