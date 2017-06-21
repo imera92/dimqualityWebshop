@@ -55,11 +55,18 @@
 								<li><a href="<?php echo base_url(); ?>">INICIO</a></li>
 								<li><a href="#">SERVICIO TECNICO</a></li>
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"</span></a>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-			  							<li><a href="#">Registrarte</a></li>
-			 							<li><a href="<?php echo base_url('login'); ?>">Iniciar Sesion</a></li>
-									</ul>
+									<?php if (is_null($this->session->userdata())): ?>
+										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><?php echo $this->session->user; ?><span class="caret"></span></a>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				 							<li><a href="<?php echo base_url('logout'); ?>">Cerrar Sesión</a></li>
+										</ul>
+									<?php else: ?>
+										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>CUENTA<span class="caret"></span></a>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				  							<li><a href="#">Registrarte</a></li>
+				 							<li><a href="<?php echo base_url('login'); ?>">Iniciar Sesión</a></li>
+										</ul>
+									<?php endif; ?>
 								</li>
 								<li><a href="#"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
 							</ul>
