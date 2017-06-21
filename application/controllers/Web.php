@@ -41,5 +41,13 @@ class Web extends CI_Controller {
     $this->load->view('web/carrito');
     $this->load->view('web/footer');
   }
+  
+  public function comprarProductos(){
+    $titulo = "Dimquality::WebShop - Comprar Productos";
+    $dataHeader['titlePage'] = $titulo;
 
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/comprarProductos');
+    $this->load->view('web/footer');
+  }
 }
