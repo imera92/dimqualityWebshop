@@ -128,8 +128,31 @@
                                 <div class="thumbnail">
                                     <img src="<?php echo base_url('public/img/prueba.jpg'); ?>">
                                     <div class=caption>
-                                        <h3><?php echo $row->nombre;?></h3>
+                                        <h3 style="color:#00BFFF"><?php echo $row->nombre;?></h3>
                                         <p><?php echo $row->descripcion;?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                 </div>
+        </div>   
+        <div class="row mb-40">
+             <div class="productos_Nuevos">
+                    <div class="section-title center">
+                        <h2>Productos <strong>Nuevos</strong></h2>
+                        <div class="line">
+                         <hr>
+                        </div>
+                    </div>
+                    <div id="team" class="owl-carousel owl-theme row">
+                        <?php foreach($Nuevos as $nuevo): ?>
+                            <div class="item col-md-3">
+                                <div class="thumbnail">
+                                    <img src="<?php echo base_url('public/img/prueba.jpg'); ?>">
+                                    <div class=caption>
+                                        <h3 style="color:#00BFFF"><?php echo $nuevo->nombre;?></h3>
+                                        <p><?php echo $nuevo->descripcion;?></p>
                                     </div>
                                 </div>
                             </div>

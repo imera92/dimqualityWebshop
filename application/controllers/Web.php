@@ -18,7 +18,9 @@ class Web extends CI_Controller {
     $dataHeader['titlePage'] = $titulo;
     $this->db->where('destacado',$destacado);
     $query=$this->db->get('producto');
+    $query2 = $this->db->query("SELECT * FROM producto where fechaCreacion BETWEEN '2017-06-15' AND '2017-06-21';");
     $dataBody['resultados']=$query->result();
+    $dataBody['Nuevos']=$query2->result();
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/index', $dataBody);
     $this->load->view('web/footer');
