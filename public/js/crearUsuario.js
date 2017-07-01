@@ -1,5 +1,5 @@
 $('#userForm').validate({
-    debug: true,
+    debug: false,
     rules:{
         conf_clave: {
             equalTo: '#clave'
