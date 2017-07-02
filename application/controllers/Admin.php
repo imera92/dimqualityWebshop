@@ -123,7 +123,7 @@ class Admin extends CI_Controller {
         // RECORDAR: ES NECESARIO QUE LOS VALORES SUPERIORES A 999 NO TENGAN SEPARADOR DE MILES
         if ($this->securityCheckAdmin()) {
 
-            $config['upload_path'] = './assets/uploads/';
+            $config['upload_path'] = './assets/uploads/excel';
             $config['allowed_types'] = 'xlsx';
             $config['max_size'] = 200;
             $this->load->library('upload', $config);
@@ -144,13 +144,17 @@ class Admin extends CI_Controller {
                 $this->load->helper("file");
                 
                 $fileName = $this->upload->data()['file_name'];
-                $filePath = FCPATH."assets\uploads\\".$fileName;
+                $path = FCPATH."assets\uploads\\excel";
+                $filePath = FCPATH."assets\uploads\\excel\\".$fileName;
                 $excelReader = IOFactory::createReaderForFile($filePath);
 
                 $excelReader->setReadDataOnly();
                 $excelObj = $excelReader->load($filePath);
+
                 // Establecer la hoja activa del documento por su nombre
-                $excelObj->setActiveSheetIndexByName('Hoja1');
+                // $excelObj->setActiveSheetIndexByName('Hoja1');
+                $excelObj->setActiveSheetIndex(0);
+
                 // Crear un arreglo asociativo con las filas y columnas del documento y su contenido
                 $return = $excelObj->getActiveSheet()->toArray(null, true,true,true);
                 
@@ -186,18 +190,28 @@ class Admin extends CI_Controller {
 
                 // Validamos que hayan marcas existentes en la DB, caso contrario mostramos mensaje de error
                 if (empty($result)) {
-                    unlink($filePath);
+                    delete_files($path);
 
                     $titulo = "Dimquality::Admin - Actualizar Catalogo";
                     $dataHeader['titlePage'] = $titulo;
                     $this->load->view('admin/header', $dataHeader);
                     $this->load->view('admin/lat-menu');
-                    $this->load->view('admin/catalogo', array('success' => 0, 'message' => 'Error. No existen marcas existentes en la base de datos.'));
+                    $this->load->view('admin/catalogo', array('success' => 0, 'message' => 'Error. No hay marcas existentes en la base de datos.'));
                     $this->load->view('admin/footer');
                 } else {
                     foreach ($result as $index => $row) {
                         $marcasArray[] = $row['nombre'];
                     }
+
+                    /*header('Content-type: application/json');
+                    echo json_encode($return);
+                    die();*/
+
+
+                    // Inicializamos las variables para evitar errores durance el proceso
+                    $marca = '';
+                    $categoria = '';
+                    
                     foreach ($return as $key1 => $row) {
                         // Empezamos a validar los datos del archivo
                         if (in_array($return[$key1]['A'], $marcasArray)) {
@@ -205,50 +219,52 @@ class Admin extends CI_Controller {
                         }elseif (in_array($return[$key1]['A'], array('LAVADORAS', 'SECADORAS DE ROPA', 'REFRIGERADORAS', 'AIRES ACONDICIONADOS', 'MICROONDAS', 'AUDIO', 'TELEVISORES', 'TABLETS'))) {
                             $categoria = $return[$key1]['A'];
                         }else{
-                            $code = current($return[$key1]);
-                            $desc = next($return[$key1]);
+                            $codigoProducto = current($return[$key1]);
+                            $nombreProducto = next($return[$key1]);
+
                             // Hay que preguntar si vamos a guardar el precio con tarjeta de credito o no
                             next($return[$key1]);
-                            $pvp = next($return[$key1]);
-                            $cost = next($return[$key1]);
-                            $stock = next($return[$key1]);
-                            $existingProduct = $this->db->get_where('producto', array('codigo' => $code))->result_array();
-                            if (empty($existingProduct)) {
+                            $pvpProducto = next($return[$key1]);
+                            $costoProducto = next($return[$key1]);
+                            $stockProducto = next($return[$key1]);
+                            $productoExistente = $this->db->get_where('producto', array('codigo' => $codigoProducto))->result_array();
+                            if (empty($productoExistente)) {
                                 $datosProducto = array(
-                                    'nombre' => '',
+                                    'nombre' => $nombreProducto,
                                     'marca' => $marca,
                                     'categoria' => $categoria,
-                                    'codigo' => $code,
-                                    'imagen' => '',
+                                    'codigo' => $codigoProducto,
+                                    'imagen' => 'default.png',
                                     'modelo' => '',
-                                    'costo' => $cost,
-                                    'pvp' => $pvp,
-                                    'descripcion' => $desc,
+                                    'costo' => $costoProducto,
+                                    'pvp' => $pvpProducto,
+                                    'descripcion' => '',
                                     'estado' => 1,
-                                    'stock' => $stock
+                                    'stock' => ($stockProducto > 0) ? 1 : 0
                                 );
                                 $this->db->insert('producto', $datosProducto);
                             } else {
                                 $datosProducto = array(
-                                    'nombre' => '',
+                                    'nombre' => $nombreProducto,
                                     'marca' => $marca,
                                     'categoria' => $categoria,
-                                    'imagen' => '',
+                                    'imagen' => 'default.png',
                                     'modelo' => '',
-                                    'costo' => $cost,
-                                    'pvp' => $pvp,
-                                    'descripcion' => $desc,
+                                    'costo' => $costoProducto,
+                                    'pvp' => $pvpProducto,
+                                    'descripcion' => '',
                                     'estado' => 1,
-                                    'stock' => $stock
+                                    'stock' => ($stockProducto > 0) ? 1 : 0
                                 );
                                 $this->db->set($datosProducto);
-                                $this->db->where('codigo', $code);
+                                $this->db->where('codigo', $codigoProducto);
                                 $this->db->update('producto');
                             }
                         }
                     }
+
                     // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra
-                    unlink($filePath);
+                    delete_files($path);
                     $titulo = "Dimquality::Admin - Actualizar Catalogo";
                     $dataHeader['titlePage'] = $titulo;
                     $this->load->view('admin/header', $dataHeader);

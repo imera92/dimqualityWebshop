@@ -37,7 +37,7 @@ class Usuario extends CI_Controller {
     if($this->session->userdata('user') != ""){
       redirect("web/index");//debe redigir a la pagina principal de usuario logeado
     }else{
-      redirect("web/index");//debe redirigir a la pagina de login de usuario
+      redirect("usuario/login");//debe redirigir a la pagina de login de usuario
     }
   }
 
