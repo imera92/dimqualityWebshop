@@ -1,3 +1,42 @@
+$('#userForm').validate({
+    debug: false,
+    rules:{
+        conf_clave: {
+            equalTo: '#clave'
+        },
+        telefono:{
+            digits: true,
+            minlength: 7,
+            maxlength: 10
+        },
+        cedula:{
+            digits: true,
+            minlength: 10,
+            maxlength: 13
+        }
+    },
+    messages:{
+        usuario: 'Ingrese un usuario',
+        nombre: 'Ingrese un nombre',
+        apellido: 'Ingrese un apellido',
+        correo: {
+            required:'Ingrese un correo',
+            email: 'Ingrese un correo válido'
+        },
+        clave: 'Ingrese su contraseña',
+        conf_clave: {
+            required: 'Confirme su contraseña',
+            equalTo: 'La contraseña no coincide'
+        },
+        cedula: 'Ingrese una cedula o RUC válido',
+        telefono: {
+            required:'Ingrese un télefono',
+            digits: 'Ingrese un télefono válido'
+        },
+        direccion: 'Ingrese su dirección'
+    }
+});
+
 $(document).ready(function() {
     $("input[name='usuario']").keydown(function (e) {
         // Permitir: backspace, delete, tab, escape, enter, guion y .
