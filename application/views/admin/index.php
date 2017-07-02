@@ -9,6 +9,6 @@
 	                </div>
 	            </div>
 	        </div>
+	        <!-- /.container-fluid -->
 	    </div>
 	    <!-- /#page-content-wrapper -->
-    </div>

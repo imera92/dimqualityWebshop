@@ -16,6 +16,7 @@
     <?php else: ?>
       
     <?php endif ?>
+    <script src="<?php echo base_url('public/js/bootstrap.min.js'); ?>"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script type="text/javascript" src= "<?php echo base_url('public/js/validacion.js'); ?>"></script> 
     </body>
