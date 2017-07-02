@@ -3,7 +3,7 @@
 		<div id="sidebar-wrapper">
 		    <ul class="sidebar-nav">
 		        <li class="sidebar-brand">
-		            <a href="#">
+		            <a href="<?php echo base_url('admin') ?>">
 		                <img class="img-responsive" src="<?php echo base_url('public/img/logo.jpg'); ?>">
 		            </a>
 		        </li>

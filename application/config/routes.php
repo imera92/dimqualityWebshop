@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'web/index';
 $route['login'] = 'usuario/login';
+$route['admin'] = 'admin/index';
 $route['logout'] = 'usuario/logout';
 $route['registro'] = 'usuario/crearUsuario';
 $route['carrito'] = 'web/carrito';
