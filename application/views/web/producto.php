@@ -9,7 +9,7 @@
 				</div>
 				<div class="col-xs-7">
 					<div class="row">
-						<h1 class="product-name"><?php echo $producto['descripcion']?></h1>	
+						<h1 class="product-name"><?php echo $producto['nombre']?></h1>	
 					</div>
 					<div class="row mt-20">
 						<span class="bold-text">Disponibilidad: </span><?php echo  ($producto['stock'] > 0) ? '<span class="available">Varios en stock</span>' : '<span class="not-available">Agotado</span>' ?>
