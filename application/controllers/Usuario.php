@@ -9,7 +9,8 @@ class Usuario extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->library('form_validation');
-		$this->load->library('session');
+		    $this->load->library('session');
+        $this->load->model('CarritoDeCompras');
         $this->load->model('ShopUser');
         date_default_timezone_set("America/Guayaquil");
 	}
@@ -66,19 +67,25 @@ class Usuario extends CI_Controller {
       $this->form_validation->set_rules('direccion', 'Direccion');
       $this->form_validation->set_rules('telefono', 'Teléfono');
 
-      $userData = array(
-        'user' => $this->input->post('usuario'),
-        'nombre' => strip_tags($this->input->post('nombre')),
-        'apellido' => strip_tags($this->input->post('apellido')),
-        'email' => strip_tags($this->input->post('correo')),
-        'password' => md5($this->input->post('password')),
-        'cedula' => strip_tags($this->input->post('cedula')),
-        // 'pais' => strip_tags($this->input->post('pais')),
-        'direccion' => strip_tags($this->input->post('direccion')),
-        'telefono' => strip_tags($this->input->post('telefono'))
-        );
 
       if($this->form_validation->run() == true){
+        // Creamos un carrito de compras vacio, que le sera asignado al usuario
+        $nuevoCarrito = new CarritoDeCompras();
+        $nuevoCarrito->guardarNuevoCarritoVacio();
+        $nuevoCarrito->getLastCarrito();
+
+        $userData = array(
+          'user' => $this->input->post('usuario'),
+          'nombre' => strip_tags($this->input->post('nombre')),
+          'apellido' => strip_tags($this->input->post('apellido')),
+          'email' => strip_tags($this->input->post('correo')),
+          'password' => md5($this->input->post('clave')),
+          'cedula' => strip_tags($this->input->post('cedula')),
+          // 'pais' => strip_tags($this->input->post('pais')),
+          'direccion' => strip_tags($this->input->post('direccion')),
+          'telefono' => strip_tags($this->input->post('telefono')),
+          'carrito' => $nuevoCarrito->getId()
+        );
         $insert = $this->ShopUser->insert($userData);
         if($insert){
           $this->session->set_userdata('success_msg', 'Your registration was successfully. Please login to your account.');

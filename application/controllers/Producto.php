@@ -41,6 +41,6 @@ class Producto extends CI_Controller {
 	$this->load->view('web/header', $dataHeader);
 	$this->load->view('web/producto', $dataBody);
 	$this->load->view('web/footer');
-}
+	}
 
 }

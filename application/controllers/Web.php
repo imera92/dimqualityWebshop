@@ -9,6 +9,8 @@ class Web extends CI_Controller {
       $this->load->helper('url');
       $this->load->helper('form');
       $this->load->library('session');
+      $this->load->model('ShopUser');
+      $this->load->model('CarritoDeCompras');
       date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -30,40 +32,69 @@ class Web extends CI_Controller {
     $titulo = "Dimquality::Admin - Shopping Cart";
     $dataHeader['titlePage'] = $titulo;
 
-    /*$user = $this->db->get_where('usuario', array('id' => 6))->result_array();
-    $this->session->set_userdata(array('id' => $user[0]['id'], 'user' => $user[0]['user']));
+    // Validamos si hay un usuario logueado
+    if ($this->loginCheck()) {
+      // Obtenemos el ID del carrito perteneciente al usuario logueado
+      $carritoId = $this->session->userdata('carritoId');
+      $carritoDB = new CarritoDeCompras();
+      $carritoDB->getCarritoPorId($carritoId);
 
-    $carrito = $this->db->get_where('carrito', array('usuario' => $user[0]['id']))->result_array();
-    $dataBody['subtotal'] = $carrito[0]['subtotal'];
-    $productos = $this->db->get_where('productocarrito', array('carrito' => $carrito[0]['id']))->result_array();
-    print_r($productos);
-    die();
-    */
-    $carritoSesion = $this->session->carrito;
-    $productosCarrito = array();
-    foreach ($carritoSesion['productos'] as $index => $producto) {
-      $productoId = $producto['id'];
-      $productoCantidad = $producto['cantidad'];
-      $productoPvp = $producto['pvp'];
+      // Verificamos si el carrito tiene productos
+      if (empty($carritoDB->getProductosCarrito())) {
+        // Si no productos en el carrito, enviamos un mensaje al frontend
+        $dataBody['mensaje'] = 'No hay datos para mostrar.';
+      } else {
+        // Guardamos los datos de todos los productos del carrito temporal en un arreglo para enviar al frontend
+        $productosCarrito = array();
+        foreach ($carritoDB->getProductosCarrito() as $index => $productoCarrito) {
+          array_push($productosCarrito, array(
+            'id' => $productoCarrito->getProducto()->getId(),
+            'cantidad' => $productoCarrito->getCantidad(),
+            'pvp' => $productoCarrito->getProducto()->getPVP(),
+            'nombre' => $productoCarrito->getProducto()->getNombre(),
+            'imagen' => $productoCarrito->getProducto()->getImagen()
+          ));        
+        }
+        $dataBody['subtotal'] = $carritoDB->getSubtotal();
+        $dataBody['productosCarrito'] = $productosCarrito;        
+      }
 
-      $this->db->select('descripcion, imagen');
-      $this->db->from('producto');
-      $this->db->where('id', $productoId);
-      $productoDB = $this->db->get()->row();
+    } else {
+      // Si no hay un usuario logueado, verificamos si hay un carrito temporal cargado en sesion
+      $carritoSesion = $this->session->carritoSesion;
+      if (is_null($carritoSesion)) {
+        // Si no hay un carrito temporal cargado en sesion, enviamos un mensaje al frontend
+        $dataBody['mensaje'] = 'No hay datos para mostrar.';
+      } else {
+        // Si ya habia un carrito temporal cargado en sesion, cargamos todos sus datos
+        $productosCarrito = array();
+        foreach ($carritoSesion['productos'] as $index => $productoCarrito) {
+          $productoId = $productoCarrito['producto'];
+          $productoCantidad = $productoCarrito['cantidad'];
+          $productoPvp = $productoCarrito['pvp'];
 
-      $productoDescripcion = $productoDB->descripcion;
-      $productoImagen = $productoDB->imagen;
-      array_push($productosCarrito, array(
-        'id' => $productoId,
-        'cantidad' => $productoCantidad,
-        'pvp' => $productoPvp,
-        'descripcion' => $productoDescripcion,
-        'imagen' => $productoImagen
-      ));
+          // Obtenemos de la DB el nombre y la imagen de cada producto en el carrito temporal
+          $this->db->select('nombre, imagen');
+          $this->db->from('producto');
+          $this->db->where('id', $productoId);
+          $productoDB = $this->db->get()->row();
+          $productoNombre = $productoDB->nombre;
+          $productoImagen = $productoDB->imagen;
+
+          // Guardamos los datos de todos los productos del carrito temporal en un arreglo para enviar al frontend
+          array_push($productosCarrito, array(
+            'id' => $productoId,
+            'cantidad' => $productoCantidad,
+            'pvp' => $productoPvp,
+            'nombre' => $productoNombre,
+            'imagen' => $productoImagen
+          ));
+          $dataBody['subtotal'] = $carritoSesion['subtotal'];
+          $dataBody['productosCarrito'] = $productosCarrito;
+        }
+
+      }
     }
-
-    $dataBody['subtotal'] = $carritoSesion['subtotal'];
-    $dataBody['productosCarrito'] = $productosCarrito;
 
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/carrito', $dataBody);
@@ -77,5 +108,15 @@ class Web extends CI_Controller {
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/comprarProductos');
     $this->load->view('web/footer');
+  }
+
+  private function loginCheck() {
+    $securityUser = new ShopUser();
+    $usuario = $this->session->userdata('user');
+    if($usuario == ""){
+      return false;
+    }else{
+      return true;
+    }
   }
 }

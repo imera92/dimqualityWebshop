@@ -2,45 +2,38 @@
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 	class ShopUser extends CI_Model{
-		var $persona = "";
-        var $correo = "";
+		private $user;
+        private $password;
 
         function __construct() {
             parent::__construct();
             $this->load->database();
             $this->load->library('session');
             $this->userTbl = 'usuario';
+
+            // Modelos Requeridos
+            $this->load->model('CarritoDeCompras');
         }
 
         function login_user($user, $password){
-        	$usuario = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
+            // Buscamos el usuario en la DB
+        	$usuarioDB = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
 
-            $result = $this->db->get_where("carrito", array('usuario'=> $usuario->id))->result_array();
-            $carritoUsuario = array("subtotal" => 0, "productos" => array());
-            if (!empty($result)) {
-                $carritoId = $result[0]["id"];
-                $carritoUsuario["subtotal"] = $result[0]["subtotal"];
-                $result = $this->db->get_where("productocarrito", array('carrito'=> $carritoId))->result_array();
-                foreach ($result as $row => $value) {
-                    $result2 = $this->db->get_where("producto", array('id'=> $value['producto']))->result_array();
-                    $pvpProducto = $result2[0]['pvp'];
+        	if ($usuarioDB) {
+                // Cargamos el carrito de compras del usuario
+                $carritoUsuario = new CarritoDeCompras();
 
-                    $productoCarrito = array('id' => $value['producto'], 'cantidad' => $value['cantidad'], 'pvp' => $pvpProducto);
-                    array_push($carritoUsuario['productos'], $productoCarrito);
-                }
-            }
-
-        	if ($usuario) {
                 $data_user = array(
-                    "id" => $usuario->id,
-                    "user" => $usuario->user,
-                    "nombre" => $usuario->nombre,
-                    "apellido" => $usuario->nombre,
-                    "correo" => $usuario->email,
-                    "cedula" => $usuario->cedula,
-                    "direccion" => $usuario->direccion,
-                    "telefono" => $usuario->telefono,
-                    "carrito" => $carritoUsuario
+                    "id" => $usuarioDB->id,
+                    "user" => $usuarioDB->user,
+                    "nombre" => $usuarioDB->nombre,
+                    "apellido" => $usuarioDB->nombre,
+                    "correo" => $usuarioDB->email,
+                    "cedula" => $usuarioDB->cedula,
+                    "direccion" => $usuarioDB->direccion,
+                    "telefono" => $usuarioDB->telefono,
+                    "carritoId" => $usuarioDB->carrito,
+                    "tipo" => "user"
                 );
                 $this->session->set_userdata($data_user);
                 return true;
@@ -61,7 +54,7 @@
 
         //return the status
             if($insert){
-                return $this->db->insert_id();;
+                return $this->db->insert_id();
             }else{
                 return false;
             }

@@ -9,128 +9,133 @@ class Carrito extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->library('grocery_CRUD');
+        $this->load->model('CarritoDeCompras');
+        $this->load->model('Producto');
+        $this->load->model('ProductoCarrito');
         $this->load->model('SecurityUser');
         $this->load->model('ShopUser');
         date_default_timezone_set("America/Guayaquil");
 	}
 
   public function anadirProducto()
-  {
-    // Obtenemos los productos enviados por POST
+  { 
+    // Obtenemos los datos del producto enviados por POST
     $productoId = $this->input->post('id');
     $cantidadProducto = $this->input->post('cantidad');
 
-    // Obtenemos el carrito de la sesion
-    $carritoSesion = $this->session->carrito;
-
     // Validamos si hay un usuario logueado
-    // Si un usuario no esta logueado, se crea un carrito en sesion
-    if (empty($carritoSesion)) {
-      $data_user = array(
-          "carrito" => array("subtotal" => 0, "productos" => array())
-      );
-      $this->session->set_userdata($data_user);
-      $carritoSesion = $this->session->carrito;
-    }
-    
-    // Validamos si el producto que se va a anadir ya esta en el carrito
-    $flag = false;
-    $flagIndex = 0;
-    if (!empty($carritoSesion['productos'])) {
-      foreach ($carritoSesion['productos'] as $index => $producto) {
-        if ($productoId == $producto['id']) {
-          $flag = true;
-          $flagIndex = $index;
+    if ($this->loginCheck()) {
+      // Si hay un usuario logueado obtenemos el ID de su carrito de la sesion
+      $carritoSesionId = $this->session->carritoId;
+
+      // Traemos el carrito de la DB
+      $carritoDB = new CarritoDeCompras();
+      $carritoDB->getCarritoPorId($carritoSesionId);
+
+      // Validamos si el carrito tiene productos
+      if (!empty($carritoDB->getProductosCarrito())) {
+        // Validamos si el producto que se va a anadir ya esta en el carrito
+        if ($carritoDB->productoEstaEnCarrito($productoId)) {
+          // Si el producto esta presente en el carrito, actualizamos la cantidad
+          $carritoDB->actualizarCantidadProducto($productoId, $cantidadProducto);          
+        } else {
+          // Si el producto no estaba en el carrito, lo anadimos
+          $carritoDB->guardarProducto($productoId, $cantidadProducto);
+        }
+      } else {
+        // Si el carrito no tiene productos, anadimos el producto nuevo directamente
+        $carritoDB->guardarProducto($productoId, $cantidadProducto);
+      }
+
+      // Guardamos el carrito de vuelta a la DB
+      $carritoDB->actualizarCarrito();
+    } else {
+      // Si no hay usuario logueado, verificamos si ya hay un carrito temporal guardado en sesion
+      $carritoSesion = $this->session->carritoSesion;
+      if (is_null($carritoSesion)) {
+        // Si no hay un carrito temporal ya creado en sesion, creamos uno y anadimos el producto
+        $carritoSesion = array("subtotal" => 0, "productos" => array());
+        $this->db->select('pvp');
+        $this->db->from('producto');
+        $this->db->where('id', $productoId);
+        $result = $this->db->get()->row();
+        $productoPvp = $result->pvp;
+        $productoCarrito = array('producto' => $productoId, 'pvp' => $productoPvp, 'cantidad' => $cantidadProducto);
+        array_push($carritoSesion['productos'], $productoCarrito);
+      } else {
+        // Si ya hay un carrito temporal creado en sesion, verificamos que tenga productos
+        $flag = false;
+        $flagIndex = 0;
+        if (!empty($carritoSesion['productos'])) {
+          foreach ($carritoSesion['productos'] as $index => $productoCarrito) {
+            if ($productoId == $productoCarrito['producto']) {
+              $flag = true;
+              $flagIndex = $index;
+            }
+          }
+
+          // Si hay productos en el carrito temporal, verificamos si el producto enviado ya fue anadido previamente
+          if ($flag) {
+            // Si el producto ya fue anadido previdamente, solo actualizamos la cantidad enviada
+            $carritoSesion['productos'][$flagIndex]['cantidad'] = $cantidadProducto;
+          } else {
+            // Si el producto no estaba en el carrito temporal, lo anadimos como producto nuevo
+            $this->db->select('pvp');
+            $this->db->from('producto');
+            $this->db->where('id', $productoId);
+            $result = $this->db->get()->row();
+            $productoPvp = $result->pvp;
+            $productoCarrito = array('producto' => $productoId, 'pvp' => $productoPvp, 'cantidad' => $cantidadProducto);
+            array_push($carritoSesion['productos'], $productoCarrito);
+          }  
+        } else {
+          // Si el carrito temporal no tenia productos, anadimos el producto enviado como producto nuevo
+          $this->db->select('pvp');
+          $this->db->from('producto');
+          $this->db->where('id', $productoId);
+          $result = $this->db->get()->row();
+          $productoPvp = $result->pvp;
+          $productoCarrito = array('producto' => $productoId, 'pvp' => $productoPvp, 'cantidad' => $cantidadProducto);
+          array_push($carritoSesion['productos'], $productoCarrito);
         }
       }
-    }
-    // Guardamos el carrito en sesion
-    if ($flag) {
-      // Si el producto ya estaba en el carrito de la sesion, solo actualizamos la cantidad
-      $carritoSesion['productos'][$flagIndex]['cantidad'] = $cantidadProducto;
-    } else {
-      // Si el producto no estaba en el carrito de la sesion, anadimos un producto nuevo
-      $this->db->select('pvp');
-      $this->db->from('producto');
-      $this->db->where('id', $productoId);
-      $result = $this->db->get()->result_array();
-      $pvpProducto = $result[0]['pvp'];
-      $productoCarrito = array('id' => $productoId, 'cantidad' => $cantidadProducto, 'pvp' => $pvpProducto);
-      array_push($carritoSesion['productos'], $productoCarrito);
-    }
 
-    // Calculamos subtotal del carrito y lo actualizamos
-    $subtotalCarrito = 0;
-    foreach ($carritoSesion['productos'] as $index => $producto) {
-      $subtotalProducto = $producto['cantidad'] * $producto['pvp'];
-      $subtotalCarrito += $subtotalProducto;
+      // Calculamos subtotal del carrito temporal y lo actualizamos
+      $subtotalCarrito = 0;
+      foreach ($carritoSesion['productos'] as $index => $productoCarrito) {
+        $subtotalProducto = $productoCarrito['cantidad'] * $productoCarrito['pvp'];
+        $subtotalCarrito += $subtotalProducto;
+      }
       $carritoSesion['subtotal'] = $subtotalCarrito;
+
+      // Reemplazamos el carrito temporal que habia en sesion por el nuevo
+      $data_user = array(
+          "carritoSesion" => $carritoSesion
+      );
+      $this->session->set_userdata($data_user);
     }
-    
-    // Guardamos el carrito nuevo en sesion
-    $this->session->set_userdata('carrito', $carritoSesion);
+    redirect('carrito');
+  }
+
+  public function eliminarProducto()
+  {
+    // Obtenemos los datos del producto enviados por POST
+    $productoId = $this->input->post('productoId');
 
     // Validamos si hay un usuario logueado
     if ($this->loginCheck()) {
-      // Obtenemos el id del usuario en sesion
-      $userId = $this->session->id;
+      // Si hay un usuario logueado obtenemos el ID de su carrito de la sesion
+      $carritoSesionId = $this->session->carritoId;
 
-      // Verificamos si ya hay carrito guardado para el usuario en la DB
-      $this->db->select('id');
-      $this->db->from('carrito');
-      $this->db->where('usuario', $userId);
-      $result = $this->db->get()->result_array();
-      if (empty($result)) {
-        // Si no hay carrito, creamos uno nuevo
-        $data = array(
-          'usuario' => $userId,
-          'subtotal' => $this->session->carrito['subtotal']
-        );
-        $this->db->insert('carrito', $data);
-
-        // Obtenemos id del nuevo carrito
-        $this->db->select('id');
-        $this->db->from('carrito');
-        $this->db->where('usuario', $userId);
-        $result = $this->db->get()->result_array();
-        $carritoId = $result[0]['id'];
-
-        // Guardamos los productos del carrito en la DB
-        foreach ($carritoSesion['productos'] as $index => $producto) {
-          $data = array(
-            'producto' => $producto['id'],
-            'cantidad' => $producto['cantidad'],
-            'fecha_insert' => date("Y-m-d h:i:s"),
-            'carrito' => $carritoId
-          );
-          $this->db->insert('productocarrito', $data);
-        }
-      } else {
-        // Obtenemos el id del carrito ya existene
-        $carritoId = $result[0]['id'];
-
-        // Actualizamos el carrito
-        $data = array(
-          'id' => $carritoId,
-          'usuario' => $userId,
-          'subtotal' => $this->session->carrito['subtotal']
-        );
-        $this->db->replace('carrito', $data);
-
-        // Guardamos los productos del carrito en la DB
-        foreach ($carritoSesion['productos'] as $index => $producto) {
-          $data = array(
-            'producto' => $producto['id'],
-            'cantidad' => $producto['cantidad'],
-            'fecha_insert' => date("Y-m-d h:i:s"),
-            'carrito' => $carritoId
-          );
-          $this->db->replace('productocarrito', $data);
-        }
+      // Traemos el carrito de la DB
+      $carritoDB = new CarritoDeCompras();
+      $carritoDB->getCarritoPorId($carritoSesionId);
+      if ($carritoDB->eliminarProducto($productoId)) {
+        $carritoDB->actualizarCarrito();
       }
-    }
+    } else {
 
-    redirect('carrito');
+    }
   }
 
   private function loginCheck() {
