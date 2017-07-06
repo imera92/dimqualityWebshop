@@ -14,6 +14,7 @@ class Web extends CI_Controller {
       date_default_timezone_set("America/Guayaquil");
 	}
 
+
   public function index() {
     $titulo = "Dimquality - Lo mejor en Tecnología y Electrodomésticos";
     $destacado=1;
