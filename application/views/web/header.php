@@ -24,6 +24,8 @@
 		<link href="<?php echo base_url('public/css/carrito.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'getProducto'): ?>
 		<link href="<?php echo base_url('public/css/producto.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'buscarProductos'): ?>
+		<link href="<?php echo base_url('public/css/busqueda.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
@@ -85,12 +87,14 @@
 					<img src="<?php echo base_url('public/img/logo2.png'); ?>" class="img-responsive">
 				</div>
 				<div class="col-sm-4 col-md-5 col-md-offset-1">
-					<div class="input-group">
-						<input type="text" name="search" value="" placeholder="Search" class="form-control input-lg">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-search"></i></button>  
-						</span>
-					</div>
+					<form id="formBusqueda" action="<?php echo base_url('web/buscarProductos'); ?>" method="GET">
+						<div class="input-group">
+							<input type="text" id="terminoBusqueda" name="t" value="" placeholder="Buscar un producto..." class="form-control input-lg">
+							<span class="input-group-btn">
+								<button id="botonBusqueda" type="button" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-search"></i></button>
+							</span>
+						</div>
+					</form>
 				</div>
 				<div class="col-sm-4 col-md-3 col-md-offset-1">
 					<div class="row">

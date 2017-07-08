@@ -11,6 +11,7 @@ class Web extends CI_Controller {
       $this->load->library('session');
       $this->load->model('ShopUser');
       $this->load->model('CarritoDeCompras');
+      $this->load->model('Producto');
       date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -107,6 +108,148 @@ class Web extends CI_Controller {
 
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/comprarProductos');
+    $this->load->view('web/footer');
+  }
+
+  public function buscarProductos()
+  {
+    $titulo = "Dimquality::WebShop - Búsqueda de Productos";
+    $dataHeader['titlePage'] = $titulo;
+
+    // Guardaremos los parametros de filtrado en un array para enviarlos al frontend y poder formar las URls de los filtros
+    $parametros = array();
+
+    // t   = Termino de busqueda
+    // cat = Categoria
+    // m   = Marca
+    // r   = Rango de precio
+    $termino = $this->input->get('t');
+    $parametros['termino'] = '?t=' . $termino;
+    if ($this->input->get('cat') != null) {
+      $categoriaInput = $this->input->get('cat');
+    } else {
+      $categoriaInput = '';
+    }
+    $parametros['categoria'] = '&cat=' . $categoriaInput;
+    if ($this->input->get('m') != null) {
+      $marcaInput = $this->input->get('m');
+    } else {
+      $marcaInput = '';
+    }
+    $parametros['marca'] = '&m=' . $marcaInput;
+    if ($this->input->get('r') != null) {
+      $rangoInput = $this->input->get('r');
+    } else {
+      $rangoInput = '';
+    }
+    $parametros['rangoPrecio'] = '&r=' . $rangoInput;
+
+    if (!is_null($termino) && preg_match('/^\s.*$/', $termino) != 1 && preg_match('/^.*\s$/', $termino) != 1) {
+      $productosEncontrados = $this->Producto->buscarProducto($termino, $categoriaInput, $marcaInput, $rangoInput);
+      
+      // Identificamos las categorias presentes en el array de productos
+      $categoriasFront = array();
+      foreach ($productosEncontrados as $index => $producto) {
+        // Validamos si el array de categorias por enviar esta vacio
+        if (empty($categoriasFront)) {
+          // Si el array de categorias por enviar esta vacio, le anadimos una categoria nueva
+          array_push($categoriasFront, array('nombre' => $producto->getCategoria(), 'cantidad' => 1));
+        } else {
+          // Si el array de categorias por enviar no esta vacio, validamos si la categoria del producto de la actual iteracion esta presente
+          $flag = false;
+          $foundIndex = null;
+          foreach ($categoriasFront as $index1 => $categoria) {
+            if ($categoria['nombre'] == $producto->getCategoria()) {
+              $flag = true;
+              $foundIndex = $index1;
+            }
+          }
+          if ($flag) {
+            // Si la categoria del producto de la actual iteracion esta presente, aumentamos su cantidad
+            $categoriasFront[$foundIndex]['cantidad']++;
+          } else {
+            // Si la categoria del producto de la actual iteracion no esta presente, la anadimos
+            array_push($categoriasFront, array('nombre' => $producto->getCategoria(), 'cantidad' => 1));
+          }
+        }
+      }
+
+      // Identificamos las marcas presentes en el array de productos
+      $marcasFront = array();
+      foreach ($productosEncontrados as $index => $producto) {
+        // Validamos si el array de categorias por enviar esta vacio
+        if (empty($marcasFront)) {
+          // Si el array de marcas por enviar esta vacio, le anadimos una marca nueva
+          array_push($marcasFront, array('nombre' => $producto->getMarca(), 'cantidad' => 1));
+        } else {
+          // Si el array de marcas por enviar no esta vacio, validamos si la marca del producto de la actual iteracion esta presente
+          $flag = false;
+          $foundIndex = null;
+          foreach ($marcasFront as $index1 => $marca) {
+            if ($marca['nombre'] == $producto->getMarca()) {
+              $flag = true;
+              $foundIndex = $index1;
+            }
+          }
+          if ($flag) {
+            // Si la marca del producto de la actual iteracion esta presente, aumentamos su cantidad
+            $marcasFront[$foundIndex]['cantidad']++;
+          } else {
+            // Si la marca del producto de la actual iteracion no esta presente, la anadimos
+            array_push($marcasFront, array('nombre' => $producto->getMarca(), 'cantidad' => 1));
+          }
+        }
+      }
+
+      // Identificamos los rangos de precios
+      // Cada rango de precio sera almacenado como un arreglo asociativo con su minimo, maximo y cantidad de productos
+      $rangoPrecio = array('min' => 0, 'max' => 49, 'cantidad' => 0);
+      $rangoPrecioFront = array();
+      $exitFlag = false;
+      $productosRevisados = 0;
+      while ($exitFlag == false) {
+        foreach ($productosEncontrados as $index => $producto) {
+          if ($producto->getPVP() >= $rangoPrecio['min'] && $producto->getPVP() <= $rangoPrecio['max'] ) {
+            $rangoPrecio['cantidad']++;
+          }
+        }
+        if ($rangoPrecio['cantidad'] > 0) {
+          array_push($rangoPrecioFront, $rangoPrecio);
+        }
+        $rangoPrecio['min'] += 50;
+        $rangoPrecio['max'] += 50;
+        $rangoPrecio['cantidad'] = 0;
+        if (!empty($rangoPrecioFront)) {
+          foreach ($rangoPrecioFront as $index => $value) {
+            $productosRevisados += $value['cantidad'];
+          }
+        }
+        if ($productosRevisados == count($productosEncontrados)) {
+          $exitFlag = true;
+        } else {
+          $productosRevisados = 0;
+        }
+      }
+
+      if (count($productosEncontrados) > 0) {
+        // $dataBody['termino'] = $termino;
+        $dataBody['parametros'] = $parametros;
+        $dataBody['mensaje'] = 'Resultados de búsqueda para: "' . $termino . '"';
+        $dataBody['productosEncontrados'] = $productosEncontrados;
+        $dataBody['categorias'] = $categoriasFront;
+        $dataBody['marcas'] = $marcasFront;
+        $dataBody['rangosPrecio'] = $rangoPrecioFront;
+      } else {
+        $dataBody['mensaje'] = 'El término de búsqueda ingresado no generó resultados.';
+      }
+    } elseif (!is_null($termino) && (preg_match('/^\s.*/', $termino) == 1 || preg_match('/^.*\s/', $termino) == 1)){
+      $dataBody['mensaje'] = 'Error. El término de búsqueda no puede contener espacios vacios ni al princpio ni al final.';
+    } else {
+      $dataBody['mensaje'] = 'Error. Debe escribir al menos una palabra para realizar la búsqueda.';
+    }
+    
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/busqueda', $dataBody);
     $this->load->view('web/footer');
   }
 
