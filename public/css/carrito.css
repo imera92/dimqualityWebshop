@@ -42,3 +42,6 @@ a[class='btn-remove']:hover, a[class='btn-remove']:active {
 	display: -ms-flexbox;
 	display:         flex;
 }
+.stepper{
+	width: 100%;
+}

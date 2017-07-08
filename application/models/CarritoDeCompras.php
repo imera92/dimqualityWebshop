@@ -97,17 +97,6 @@
             }
         }
 
-        // Funcion para guardar en la DB un nuevo carrito. Se utiliza cuando un usuario nuevo se registra
-        public static function guardarNuevoCarritoVacio()
-        {
-            // Obtener instancia de CodeIgniter para manejo de la DB
-            $instanciaCI =& get_instance();
-
-            $instanciaCI->db->insert('carrito', array(
-                'subtotal' => 0.00
-            ));
-        }
-
         // Funcion para obtener el ultimo carrito anadido a la DB
         public function getLastCarrito()
         {
@@ -139,7 +128,7 @@
             $instanciaCI->db->from('carrito');
             $instanciaCI->db->order_by('id', 'DESC');
             $instanciaCI->db->limit(1);
-            $result = $instanciaCI->get()->row();
+            $result = $instanciaCI->db->get()->row();
             $lastId = $result->id;
 
             return $lastId;
@@ -169,7 +158,7 @@
                     // Buscamos el producto en el carrito
                     foreach ($this->productosCarrito as $index => $productoCarrito) {
                         if ($productoCarrito->getProducto()->getId() == $productoId) {
-                            $this->productosCarrito[$index]->setCantidad($cantidad);
+                            $this->productosCarrito[$index]->setCantidad($cantidadProducto);
                         }
                     }
 
@@ -260,6 +249,33 @@
         }
 
         // RECORDAR: la instancia del Carrito es una interfaz entre la aplicacion y la DB. Primero modificamos la instancia de carrito, luego utilizamos este metodo para propagar los cambios a la DB
+        public function crearNuevoCarrito()
+        {   
+            $lastId = $this->getLastCarritoId();
+            $this->id = $lastId + 1;
+            $this->subtotal = 0.00;
+            $this->productosCarrito = array();   
+        }
+        public function guardarNuevoCarrito()
+        {
+            // Obtener instancia de CodeIgniter para manejo de la DB
+            $instanciaCI =& get_instance();
+
+            // Guardamos los datos del nuevo carrito
+            $instanciaCI->db->insert('carrito', array(
+                'id' => $this->id,
+                'subtotal' => $this->subtotal
+            ));
+            // $this->setId($this->getLastCarritoId() + 1);
+
+            // Guardamos los productos del carrito
+            if (!empty($this->productosCarrito)) {
+                foreach ($this->productosCarrito as $index => $productoCarrito) {
+                    $productoCarrito->guardarProductoCarritoDB($this->id);
+                }
+            }
+
+        }
         public function actualizarCarrito()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB

@@ -31,6 +31,7 @@
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/crearUsuario.js'); ?>"></script>
 	<?php elseif ($this->router->method == 'carrito'): ?>
+		<script src="<?php echo base_url('public/js/jquery.fs.stepper.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/carrito.js'); ?>"></script>
 	<?php endif; ?>
 </body>

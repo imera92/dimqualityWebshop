@@ -9,11 +9,11 @@ class Carrito extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->library('grocery_CRUD');
+        $this->load->model('ShopUser');
         $this->load->model('CarritoDeCompras');
         $this->load->model('Producto');
         $this->load->model('ProductoCarrito');
         $this->load->model('SecurityUser');
-        $this->load->model('ShopUser');
         date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -37,7 +37,7 @@ class Carrito extends CI_Controller {
         // Validamos si el producto que se va a anadir ya esta en el carrito
         if ($carritoDB->productoEstaEnCarrito($productoId)) {
           // Si el producto esta presente en el carrito, actualizamos la cantidad
-          $carritoDB->actualizarCantidadProducto($productoId, $cantidadProducto);          
+          $carritoDB->actualizarCantidadProducto($productoId, $cantidadProducto);
         } else {
           // Si el producto no estaba en el carrito, lo anadimos
           $carritoDB->guardarProducto($productoId, $cantidadProducto);
@@ -60,7 +60,7 @@ class Carrito extends CI_Controller {
         $this->db->where('id', $productoId);
         $result = $this->db->get()->row();
         $productoPvp = $result->pvp;
-        $productoCarrito = array('producto' => $productoId, 'pvp' => $productoPvp, 'cantidad' => $cantidadProducto);
+        $productoCarrito = array('producto' => $productoId, 'pvp' => $productoPvp, 'cantidad' => $cantidadProducto, 'fechaInsert' => date("Y-m-d h:i:s"));
         array_push($carritoSesion['productos'], $productoCarrito);
       } else {
         // Si ya hay un carrito temporal creado en sesion, verificamos que tenga productos
@@ -134,7 +134,17 @@ class Carrito extends CI_Controller {
         $carritoDB->actualizarCarrito();
       }
     } else {
+      // Traemos el carrito temporal de la sesion
+      $carritoSesion = $this->session->carritoSesion;
 
+      // Recorremos el carrito temporal para buscar el producto solicitado
+      foreach ($carritoSesion['productos'] as $index => $producto) {
+        if ($producto['producto'] == $productoId) {
+          $carritoSesion['subtotal'] -= $producto['pvp'];
+          unset($carritoSesion['productos'][$index]);
+          $this->session->set_userdata('carritoSesion', $carritoSesion);
+        }
+      }
     }
   }
 

@@ -12,6 +12,7 @@ class Usuario extends CI_Controller {
 		    $this->load->library('session');
         $this->load->model('CarritoDeCompras');
         $this->load->model('ShopUser');
+        $this->load->model('Producto');
         date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -71,8 +72,19 @@ class Usuario extends CI_Controller {
       if($this->form_validation->run() == true){
         // Creamos un carrito de compras vacio, que le sera asignado al usuario
         $nuevoCarrito = new CarritoDeCompras();
-        $nuevoCarrito->guardarNuevoCarritoVacio();
-        $nuevoCarrito->getLastCarrito();
+        
+        // Verificamos si existe un carrito temporal en sesion
+        $carritoSesion = $this->session->carritoSesion;
+        if (!is_null($carritoSesion)) {
+          $nuevoCarrito->crearNuevoCarrito();
+          foreach ($carritoSesion['productos'] as $index => $producto) {
+            $nuevoCarrito->guardarProducto($producto['producto'], $producto['cantidad']);
+          }
+          $nuevoCarrito->guardarNuevoCarrito();
+        } else {
+          $nuevoCarrito->guardarNuevoCarritoVacio();
+          $nuevoCarrito->getLastCarrito();
+        }
 
         $userData = array(
           'user' => $this->input->post('usuario'),

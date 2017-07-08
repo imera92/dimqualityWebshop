@@ -26,7 +26,7 @@
 								<div class="col-md-1 text-center">
 									<a href="#" class="btn-remove">
 										<i class="fa fa-times-circle" aria-hidden="true"></i>
-										<input type="hidden" name="productoId" value="<?php echo $producto['id']; ?>">
+										<input id="id<?php echo $producto['id']; ?>" type="hidden" name="productoId" value="<?php echo $producto['id']; ?>">
 									</a>
 								</div>
 								<div class="col-md-2">
@@ -38,8 +38,11 @@
 								<div class="col-md-2 text-center">
 									<?php echo $producto['pvp'];?>
 								</div>
-								<div class="col-md-2">
-									<input type="number" step="1" value="<?php echo $producto['cantidad'] ?>" min="0">
+								<div class="col-md-1">
+									<input id="cantidad<?php echo $producto['id']; ?>" type="number" name="productoCantidad" step="1" value="<?php echo $producto['cantidad'] ?>" min="1">
+								</div>
+								<div class="col-md-1">
+									<button data-productoId="<?php echo $producto['id']; ?>" class="btn btn-default btn-actualizar"><i class="fa fa-refresh" aria-hidden="true"></i></button>
 								</div>
 								<div class="col-md-2 text-center subtotal">
 									<?php echo ($producto['cantidad'] * $producto['pvp']) ?>
