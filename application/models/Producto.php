@@ -237,5 +237,135 @@
                 return false;
             }
         }
+
+        public function tieneStock()
+        {
+            if ($this->stock > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // Funcion para buscar productos en base a un termino de busqueda enviado
+        static public function buscarProducto($terminoBusqueda, $categoria = '', $marca = '', $rango = '')
+        {
+            // Obtener instancia de CodeIgniter para manejo de la DB
+            $instanciaCI =& get_instance();
+
+            // Convertimos el string recibido en un arreglo de keywords
+            $keywords = explode(' ', $terminoBusqueda);
+
+            $productosDB = array();
+            $productosEncontrados = array();
+            // Buscamos coincidencias en los productos de la DB por cada keyword
+            foreach ($keywords as $index => $keyword) {
+                // Traemos de la DB todos los productos cuyo nombre coincida con el termino de busqueda
+                $instanciaCI->db->select('id');
+                $instanciaCI->db->from('producto');
+                $instanciaCI->db->like('nombre', $keyword);
+                $result = $instanciaCI->db->get()->result_array();
+                foreach ($result as $index2 => $row) {
+                    $producto = new Producto();
+                    $producto->getProductoPorId($row['id']);
+                    array_push($productosDB, $producto);
+                }
+                // print_r($productosDB);
+                // die();
+
+                // Traemos de la DB todos los productos cuya marca coincida con el termino de busqueda
+                $instanciaCI->db->select('id');
+                $instanciaCI->db->from('producto');
+                $instanciaCI->db->like('marca', $keyword);
+                $result = $instanciaCI->db->get()->result_array();
+                foreach ($result as $index2 => $row) {
+                    $producto = new Producto();
+                    $producto->getProductoPorId($row['id']);
+                    array_push($productosDB, $producto);
+                }
+                // print_r($productosDB);
+                // die();
+
+                // Traemos de la DB todos los productos cuya categoria coincida con el termino de busqueda
+                $instanciaCI->db->select('id');
+                $instanciaCI->db->from('producto');
+                $instanciaCI->db->like('categoria', $keyword);
+                $result = $instanciaCI->db->get()->result_array();
+                foreach ($result as $index2 => $row) {
+                    $producto = new Producto();
+                    $producto->getProductoPorId($row['id']);
+                    array_push($productosDB, $producto);
+                }
+                // print_r($productosDB);
+                // die();
+
+                // Traemos de la DB todos los productos cuyo codigo coincida con el termino de busqueda
+                $instanciaCI->db->select('id');
+                $instanciaCI->db->from('producto');
+                $instanciaCI->db->like('codigo', $keyword);
+                $result = $instanciaCI->db->get()->result_array();
+                foreach ($result as $index2 => $row) {
+                    $producto = new Producto();
+                    $producto->getProductoPorId($row['id']);
+                    array_push($productosDB, $producto);
+                }
+                // print_r($productosDB);
+                // die();
+
+            }
+
+            // Refinamos la busqueda para que no haya productos repetidos
+            foreach ($productosDB as $index => $productoDB) {
+                if (!empty($productosEncontrados)) {
+                    $flag  = false;
+                    foreach ($productosEncontrados as $index3 => $producto) {
+                        if ($producto->id == $productoDB->id) {
+                            $flag = true;
+                        }
+                    }
+
+                    if ($flag == false) {
+                        array_push($productosEncontrados, $productoDB);
+                    }
+                } else {
+                    array_push($productosEncontrados, $productoDB);
+                }
+            }
+            // print_r($productosEncontrados);
+            // die();
+
+            // FILTRADO DE PRODUCTOS
+            // Si recibimos parametros de busqueda, filtramos el array de productos
+            // Filtro por categoria
+            if ($categoria != '') {
+                foreach ($productosEncontrados as $index => $producto) {
+                    if ($producto->getCategoria() != $categoria) {
+                        unset($productosEncontrados[$index]);
+                    }
+                }
+            }
+            // Filtro por marca
+            if ($marca != '') {
+                foreach ($productosEncontrados as $index => $producto) {
+                    if ($producto->getMarca() != $marca) {
+                        unset($productosEncontrados[$index]);
+                    }
+                }
+            }
+
+            // Filtro por precio
+            if ($rango != '') {
+                $rango = explode('-', $rango);
+                $min = $rango[0];
+                $max = $rango[1];
+                foreach ($productosEncontrados as $index => $producto) {
+                    if ($producto->getPVP() < $min || $producto->getPVP() > $max) {
+                        unset($productosEncontrados[$index]);
+                    }
+                }
+            }
+
+            return $productosEncontrados;
+        }
 	}
 ?>

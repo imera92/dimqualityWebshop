@@ -1,0 +1,48 @@
+.nombreProducto{
+	text-align: center;
+	color: #777;
+	font-size: 12px;
+}
+.precioProducto{
+	text-align: center;
+	color: #000;
+	font-size: 14px;
+	font-weight: bold;
+}
+.btn-masInfo{
+	font-size: 12px;
+}
+.btn-add {
+	font-size: 12px;
+    border-radius: 4px;
+    border-color: #86c969;
+    background-color: #69BC45;
+    color: #FFF;
+    transition: 0.15s;
+	-webkit-transition: 0.15s;
+	-moz-transition: 0.15s;
+	-o-transition: 0.15s;
+}
+.btn-add:hover {
+	background-color: #86c969;
+	color: #FFF;
+	transition: 0.15s;
+	-webkit-transition: 0.15s;
+	-moz-transition: 0.15s;
+	-o-transition: 0.15s;
+}
+.mensajeBusqueda-container{
+	background-color: #DAE8FC;
+	text-align: center;
+	font-size: 20px;
+}
+.filtro-container{
+	font-size: 12px;
+}
+.filtro-titulo{
+	color: #6ABC47;
+	font-weight: bold;
+}
+.filtro-cantidad{
+	color: #777;
+}
