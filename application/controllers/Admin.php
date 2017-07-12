@@ -72,12 +72,17 @@ class Admin extends CI_Controller {
             $crud=new grocery_CRUD();
             $crud->set_subject($titulo);
             $crud->set_table('producto');
-            $crud->columns('codigo','categoria','imagen','costo','pvp','descripcion','stock','estado');
-            $crud->required_fields('codigo','categoria','imagen','costo','pvp','descripcion','stock','estado');
-            $crud->field_type('localizacion', 'dropdown', array(
+            $crud->columns('nombre','codigo','categoria','imagen','costo','pvp','descripcion','stock','estado','destacado');
+            $crud->required_fields('nombre','marca','categoria','codigo','imagen','modelo','costo','pvp','descripcion','estado','stock','destacado');
+            $crud->field_type('estado', 'dropdown', array(
                 '0' => 'Inactivo',
                 '1' => 'Activo'
             ));
+            $crud->field_type('destacado','dropdown', array(
+                '0' => 'Destacado',
+                '1' => 'No Destacado'
+            ));
+            $crud->field_type('fechaCreacion', 'invisible');
             $crud->set_field_upload('imagen', 'assets/uploads/images/productos');
             $crud->display_as('codigo', 'Código');
             $crud->display_as('categoria', 'Categoría');
@@ -87,8 +92,8 @@ class Admin extends CI_Controller {
             $crud->unset_print();
             $crud->unset_texteditor('descripcion','full_text');
             $crud->set_language("spanish");
+            $crud->callback_before_insert(array($this,'know_date'));
             $output=$crud->render();
-
             $dataHeader['titlePage'] = 'Dimquality::Admin - Productos';
             $dataHeader['titleCRUD'] = $titulo;
             $dataHeader['css_files']=$output->css_files;
@@ -101,6 +106,11 @@ class Admin extends CI_Controller {
             redirect("admin/login");
         }
      }
+
+    public function know_date($post_array){
+        $post_array['fechaCreacion'] = date("Y-m-d");
+        return $post_array;
+    }
 
   
 

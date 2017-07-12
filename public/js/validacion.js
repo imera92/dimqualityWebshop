@@ -6,16 +6,15 @@ $(document).ready(function(){
    $('#save-and-go-back-button').addClass("btn-info");
    $('.box-content').addClass('container'); 
    $(".form-input-box input").keypress(function(tecla){
-        if( $(this).attr("id")=='field-costo' || $(this).attr("id")=='field-pvp '|| $(this).attr("id")=='field-codigo'){
+        if( $(this).attr("id")=='field-costo' || $(this).attr("id")=='field-pvp'|| $(this).attr("id")=='field-codigo'|| $(this).attr("id")=='field-stock'){
              if( tecla.charCode < 48 || tecla.charCode > 57){
                return false;
              }
         }else{
-             console.log("entre");
              if((tecla.charCode < 97 || tecla.charCode > 122) && (tecla.charCode < 65 || tecla.charCode > 90) && (tecla.charCode != 45)) return false;
              
         }    
    });   
-   
+   $(".chosen-search").remove();
     
 });
