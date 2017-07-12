@@ -145,20 +145,26 @@
                          <hr>
                         </div>
                     </div>
-                    <div id="team" class="owl-carousel owl-theme row">
-                        <?php foreach($Nuevos as $nuevo): ?>
-                            <div class="item col-md-3">
-                                <div class="thumbnail">
-                                    <img src="<?php echo base_url('public/img/prueba.jpg'); ?>">
-                                    <div class=caption>
-                                        <h3 style="color:#00BFFF"><?php echo $nuevo->nombre;?></h3>
-                                        <p><?php echo $nuevo->descripcion;?></p>
+                    <?php foreach($Nuevos as $nuevo): ?>
+                            <div class="col-xs-3 equalHeightBox">
+                                <div class="well">
+                                    <div class="row">
+                                        <img src="<?php echo base_url('assets/uploads/images/productos/' . $nuevo->imagen ); ?>">
                                     </div>
+                                    <div class="row">
+                                        <div class="col-xs-12"> 
+                                            <h3 style="color:#00BFFF"><?php echo $nuevo->nombre;?></h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <p><?php echo $nuevo->descripcion;?></p>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php endforeach; ?>   
                  </div>
         </div>
-        
     </div>
