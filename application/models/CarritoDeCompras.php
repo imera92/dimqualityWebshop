@@ -248,7 +248,6 @@
             $this->productosCarrito = array();
         }
 
-        // RECORDAR: la instancia del Carrito es una interfaz entre la aplicacion y la DB. Primero modificamos la instancia de carrito, luego utilizamos este metodo para propagar los cambios a la DB
         public function crearNuevoCarrito()
         {   
             $lastId = $this->getLastCarritoId();
@@ -256,6 +255,7 @@
             $this->subtotal = 0.00;
             $this->productosCarrito = array();   
         }
+        // RECORDAR: la instancia del Carrito es una interfaz entre la aplicacion y la DB. Primero modificamos la instancia de carrito, luego utilizamos este metodo para propagar los cambios a la DB
         public function guardarNuevoCarrito()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
