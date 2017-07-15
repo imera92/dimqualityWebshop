@@ -195,7 +195,7 @@ class Usuario extends CI_Controller {
         if($this->form_validation->run() == true){
           
           $userData = array(
-            'user' => $this->input->post('user'),
+            'user' => $this->input->post('usuario'),
             'nombre' => strip_tags($this->input->post('nombre')),
             'apellido' => strip_tags($this->input->post('apellido')),
             'email' => strip_tags($this->input->post('correo')),
@@ -205,11 +205,11 @@ class Usuario extends CI_Controller {
             'direccion' => strip_tags($this->input->post('direccion')),
             'telefono' => strip_tags($this->input->post('telefono')),
             //'carrito' => $nuevoCarrito->getId()
-          );          
+          );      
           $update = $this->ShopUser->update($this->session->userdata('id'), $userData);
           if($update){
             $this->session->set_userdata('success_msg', 'Su informacion ha sido actualizada con exito.');
-            redirect('index');
+            redirect('web/index');
           }else{
             $data['error_msg'] = 'No se han cambiado datos.';            
           }
