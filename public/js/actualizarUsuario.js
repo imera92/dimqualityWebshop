@@ -1,9 +1,6 @@
 $('#userForm').validate({
     debug: false,
-    rules:{
-        conf_clave: {
-            equalTo: '#clave'
-        },
+    rules:{        
         telefono:{
             digits: true,
             minlength: 7,
@@ -22,12 +19,7 @@ $('#userForm').validate({
         correo: {
             required:'Ingrese un correo',
             email: 'Ingrese un correo válido'
-        },
-        clave: 'Ingrese su contraseña',
-        conf_clave: {
-            required: 'Confirme su contraseña',
-            equalTo: 'La contraseña no coincide'
-        },
+        },        
         cedula: 'Ingrese una cedula o RUC válido',
         telefono: {
             required:'Ingrese un télefono',

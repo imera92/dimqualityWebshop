@@ -65,6 +65,7 @@
 									<?php if (!is_null($this->session->user)): ?>
 										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><?php echo $this->session->user; ?><span class="caret"></span></a>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+											<li><a href="<?php echo base_url('actualizar'); ?>">Actualizar Datos</a></li>
 				 							<li><a href="<?php echo base_url('logout'); ?>">Cerrar Sesión</a></li>
 										</ul>
 									<?php else: ?>
