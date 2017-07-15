@@ -53,6 +53,37 @@ class Usuario extends CI_Controller {
     }
   }
 
+  public function agendarCita(){
+	  //$data = array();
+	  //$userData = array();
+	  $result="";
+	  if($this->input->post('submit')){
+		  $fecha = $this->input->post('fecha');
+		  $categoria = $this->input->post('categoria');
+		  $descripcion = $this->input->post('descripcion');
+		  if (!empty($categoria) && !empty($descripcion)){
+			  $result = '<div id="exito" class="alert alert-success">Se ha registrado su cita con fecha: '.$fecha.'</div>';
+
+			  /*
+			  // para verificar lo ingresado y envidado por post
+			  $result = $fecha.' ';
+			  $result .= $categoria.' ';
+			  $result .= $descripcion;
+			  */
+		  } else{
+			  $result='<div class="alert alert-danger">Sorry there was an error sending your message. Please try again later</div>';
+		  }
+	  }
+
+	  $data['result'] = $result;
+	  $titulo = "Dimquality - agendar cita";
+	  $dataHeader['titlePage'] = $titulo;
+
+      $this->load->view('web/header', $dataHeader);
+      $this->load->view('web/agendarCita', $data);
+      $this->load->view('web/footer');
+  }
+
   public function crearUsuario(){
     $data = array();
     $userData = array();
@@ -72,7 +103,7 @@ class Usuario extends CI_Controller {
       if($this->form_validation->run() == true){
         // Creamos un carrito de compras vacio, que le sera asignado al usuario
         $nuevoCarrito = new CarritoDeCompras();
-        
+
         // Verificamos si existe un carrito temporal en sesion
         $carritoSesion = $this->session->carritoSesion;
         if (!is_null($carritoSesion)) {

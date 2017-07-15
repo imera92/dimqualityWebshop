@@ -11,7 +11,7 @@
 						<div class="col-md-4">
 							<a href=""><img class="img-responsive" src="https://facebookbrand.com/wp-content/themes/fb-branding/prj-fb-branding/assets/images/fb-art.png"></a>
 						</div>
-					</div>						
+					</div>
 				</div>
 				<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 mt-xs-20">
 					<span class="bold-text">INFORMACION ADICIONAL</span>
@@ -33,6 +33,10 @@
 	<?php elseif ($this->router->method == 'carrito'): ?>
 		<script src="<?php echo base_url('public/js/jquery.fs.stepper.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/carrito.js'); ?>"></script>
+	<?php elseif ($this->router->method == 'agendarCita'): ?>
+		<script src="<?php echo base_url('public/js/bootstrap-datetimepicker.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/bootstrap-datetimepicker.es.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/agendarCita.js'); ?>"></script>
 	<?php endif; ?>
 </body>
 </html>

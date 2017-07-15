@@ -27,6 +27,9 @@
 		<link href="<?php echo base_url('public/css/producto.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'buscarProductos'): ?>
 		<link href="<?php echo base_url('public/css/busqueda.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'agendarCita'): ?>
+		<link href="<?php echo base_url('public/css/bootstrap-datetimepicker.min.css'); ?>" rel="stylesheet" type="text/css">
+		<link href="<?php echo base_url('public/css/agendarCita.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
@@ -41,7 +44,7 @@
             return urlTmp;
         }
     </script>
-	
+
 </head>
 <body>
 	<div class="container-fluid">
@@ -104,7 +107,7 @@
 						</div>
 						<div class="col-md-5">
 							<h4>CONTACTENOS: 04)292-2763</h4>
-						</div>                    
+						</div>
 					</div>
 				</div>
 			</div>
