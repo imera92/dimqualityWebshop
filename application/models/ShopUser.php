@@ -1,9 +1,35 @@
 <?php
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+    /*
+        Tabla: 
+            usuario
+        Campos:
+            id
+            user
+            password
+            nombre
+            apellido
+            email
+            cedula
+            cuidad
+            provincia
+            direccion
+            telefono
+            carrito
+    */
+
 	class ShopUser extends CI_Model{
+        private $id;
 		private $user;
         private $password;
+        private $nombre;
+        private $apellido;
+        private $email;
+        private $cedula;
+        //private $cuidad;
+        //private $provincia;
+        private $telefono;
 
         function __construct() {
             parent::__construct();
@@ -14,6 +40,63 @@
             // Modelos Requeridos
             $this->load->model('CarritoDeCompras');
         }
+
+        /*
+        Getters
+        */
+        public function getId(){
+            return $this->id;
+        }
+        public function getUser(){
+            return $this->user;
+        }
+        public function getPassword(){
+            return $this->password;
+        }
+        public function getNombre(){
+            return $this->nombre;
+        }
+        public function getApellido(){
+            return $this->apellido;
+        }
+        public function getEmail(){
+            return $this->email;
+        }
+        public function getCedula(){
+            return $this->cedula;
+        }
+        public function getTelefono(){
+            return $this->telefono;
+        }
+
+        /*
+        Setters
+        */
+        public function setId($id){
+            $this->id = $id;
+        }
+        public function setUser($user){
+            $this->user = $user;
+        }
+        public function setPassword($password){
+            $this->password = $password;
+        }
+        public function setNombre($nombre){
+            $this->nombre = $nombre;
+        }
+        public function setApellido($apellido){
+            $this->apellido = $apellido;
+        }
+        public function setEmail($email){
+            $this->email = $email;
+        }
+        public function setCedula($cedula){
+            $this->cedula = $cedula;
+        }
+        public function setTelefono($telefono){
+            $this->telefono = $telefono;
+        }
+
 
         function login_user($user, $password){
             // Buscamos el usuario en la DB
@@ -27,7 +110,7 @@
                     "id" => $usuarioDB->id,
                     "user" => $usuarioDB->user,
                     "nombre" => $usuarioDB->nombre,
-                    "apellido" => $usuarioDB->nombre,
+                    "apellido" => $usuarioDB->apellido,
                     "correo" => $usuarioDB->email,
                     "cedula" => $usuarioDB->cedula,
                     "direccion" => $usuarioDB->direccion,
@@ -56,6 +139,18 @@
             if($insert){
                 return $this->db->insert_id();
             }else{
+                return false;
+            }
+        }
+
+        public function update($id, $userData)
+        {
+            $this->db->where('id', $id);
+            $update = $this->db->update($this->userTbl, $userData);
+            if ($update){
+                return true;
+            }
+            else{
                 return false;
             }
         }
