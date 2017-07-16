@@ -63,7 +63,11 @@
 						<div class="collapse navbar-collapse" id="menubar-collapse">
 							<ul class="nav navbar-nav">
 								<li><a href="<?php echo base_url(); ?>">INICIO</a></li>
-								<li><a href="#">SERVICIO TECNICO</a></li>
+								<?php if (!is_null($this->session->user)): ?>
+									<li><a href="<?php echo base_url('usuario/agendarCita') ?>">SERVICIO TECNICO</a></li>
+								<?php else: ?>
+									<li><a href="<?php echo base_url('login') ?>">SERVICIO TECNICO</a></li>
+								<?php endif ?>
 								<li class="dropdown">
 									<?php if (!is_null($this->session->user)): ?>
 										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><?php echo $this->session->user; ?><span class="caret"></span></a>

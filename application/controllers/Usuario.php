@@ -9,7 +9,7 @@ class Usuario extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->library('form_validation');
-		    $this->load->library('session');
+		$this->load->library('session');
         $this->load->model('CarritoDeCompras');
         $this->load->model('ShopUser');
         $this->load->model('Producto');
@@ -58,20 +58,71 @@ class Usuario extends CI_Controller {
 	  //$userData = array();
 	  $result="";
 	  if($this->input->post('submit')){
-		  $fecha = $this->input->post('fecha');
-		  $categoria = $this->input->post('categoria');
-		  $descripcion = $this->input->post('descripcion');
-		  if (!empty($categoria) && !empty($descripcion)){
-			  $result = '<div id="exito" class="alert alert-success">Se ha registrado su cita con fecha: '.$fecha.'</div>';
+		  $str_fecha = $this->input->post('fecha');
+		  $hora = substr($str_fecha,-5);
+		  $asunto = $this->input->post('asunto');
+		  if (!empty($asunto) && !empty($str_fecha)){
 
+			  echo '<script>console.log("'.$str_fecha.'")</script>';
+			  echo '<script>console.log("'.$hora.'")</script>';
+			  $fecha = date("Y-m-d H:i:s", strtotime($str_fecha));
 			  /*
 			  // para verificar lo ingresado y envidado por post
 			  $result = $fecha.' ';
 			  $result .= $categoria.' ';
 			  $result .= $descripcion;
 			  */
+			  $usuario = $this->session->userdata('user');
+			  if($usuario != ""){
+				  echo '<script>console.log("'.'usuario actual: '.$usuario.'")</script>';
+			  }else{
+				  echo '<script>console.log("'.'no ha iniciado sesión.'.'")</script>';
+			  }
+			  $citaDB = $this->db->get_where('cita', array('usuario' => $usuario, 'fecha' => $fecha));
+			  if ($citaDB->num_rows()==0){
+				  $cita_no_repetida = True;
+				  echo '<script>console.log("'.'es cita nueva.'.'")</script>';
+			  }else{
+				  $cita_no_repetida = False;
+				  echo '<script>console.log("'.'cita repetida.'.'")</script>';
+				  $result='<div id="citarepetida" class="alert alert-danger">Ud. ya tiene un cita en la fecha y hora ingresada</div>';
+			  }
+			  $horariotecnicoDB = $this->db->get_where('horariotecnico', array('horaInicio' => $hora, 'disponible' => 1));
+			  // si no tiene cita repetida y hay tecnicos disponibles
+			  if ($horariotecnicoDB->num_rows()>0 && $cita_no_repetida){
+				  $id_tecnico = $horariotecnicoDB->row()->tecnico;
+				  $id_horariotecnico = $horariotecnicoDB->row()->id;
+				  echo '<script>console.log("'.'tecnicos disponibles: '.$horariotecnicoDB->num_rows().'")</script>';
+				  echo '<script>console.log("'.'indice del 1er tecnico disponible: '.$id_tecnico.'")</script>';
+				  echo '<script>console.log("'.$str_fecha.'")</script>';
+				  echo '<script>console.log("'.$fecha.'")</script>';
+
+				  /*
+				  INSERT INTO `cita` (`id`, `tecnico`, `fecha`, `asunto`, `estado`) VALUES (NULL, '2', '2017-07-12 08:30:00', 'asasasas', '0');*/
+				  $nuevaCita = array(
+					  'usuario' => $usuario,
+					  'tecnico' => $id_tecnico,
+					  'fecha' => $fecha,
+					  'asunto' => $asunto
+				  );
+				  //se agrega registro en la tabla cita
+				  $this->db->insert('cita', $nuevaCita);
+
+				  //se actualiza la disponibilidad del tecnico asociado (disponible->0)
+				  $disponibilidad = array('disponible' => 0);
+				  $this->db->where('id', $id_horariotecnico);
+				  $this->db->update('horariotecnico', $disponibilidad);
+
+				  $result = '<div id="citacreada" class="alert alert-success">Se ha registrado su cita con fecha: '.$str_fecha.'</div>';
+			  }else{
+				  if ($cita_no_repetida){
+					  echo '<script>console.log("'.'No hay técnicos disponibles a esta hora'.'")</script>';
+					  $result='<div id="nodisponible" class="alert alert-danger">Horario no disponible, por favor elija otro.</div>';
+				  }
+			  }
+
 		  } else{
-			  $result='<div class="alert alert-danger">Sorry there was an error sending your message. Please try again later</div>';
+			  $result='<div id="nodisponible" class="alert alert-danger">Horario no disponible, por favor elija otro.</div>';
 		  }
 	  }
 
