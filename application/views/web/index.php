@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <?php foreach($Nuevos as $nuevo): ?>
-                            <div class="col-xs-3 equalHeightBox">
+                            <div class="col-xs-3 col-md-3 equalHeightBox">
                                 <div class="well">
                                     <div class="row">
                                         <img src="<?php echo base_url('assets/uploads/images/productos/' . $nuevo->imagen ); ?>">
