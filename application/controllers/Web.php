@@ -282,5 +282,10 @@ class Web extends CI_Controller {
       $this->load->view('web/ChangePassword');
       $this->load->view('web/footer');
   }
+  public function passwordReset(){
+    $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+    $dataHeader['titlePage'] = $titulo;
+    $this->load->view('web/password_reset', $dataHeader);
+  }
 }
 
