@@ -268,11 +268,19 @@ class Web extends CI_Controller {
   }
 
   public function RecuperarContrasena(){
-  $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-  $dataHeader['titlePage'] = $titulo;
-  $this->load->view('web/header');
-  $this->load->view('web/recuperarContrasena');
-  $this->load->view('web/footer');
-}
+      $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+      $dataHeader['titlePage'] = $titulo;
+      $this->load->view('web/header', $dataHeader);
+      $this->load->view('web/recuperarContrasena');
+      $this->load->view('web/footer');
+  }
+
+    public function ChangePassword(){
+      $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+      $dataHeader['titlePage'] = $titulo;
+      $this->load->view('web/header', $dataHeader);
+      $this->load->view('web/ChangePassword');
+      $this->load->view('web/footer');
+  }
 }
 
