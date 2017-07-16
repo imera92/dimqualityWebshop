@@ -82,8 +82,8 @@ class Usuario extends CI_Controller {
           }
           $nuevoCarrito->guardarNuevoCarrito();
         } else {
-          $nuevoCarrito->guardarNuevoCarritoVacio();
-          $nuevoCarrito->getLastCarrito();
+          $nuevoCarrito->crearNuevoCarrito();
+          $nuevoCarrito->guardarNuevoCarrito();
         }
 
         $userData = array(
