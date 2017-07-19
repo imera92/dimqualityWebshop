@@ -288,12 +288,14 @@ class Web extends CI_Controller {
     $this->load->view('web/password_reset', $dataHeader);
   }
   
+
+  //funcion para generar un token para que el usuario pueda cambiar la contraseña
   public function GenerarToken(){
       $this->db->select('*');
       $this->db->from('usuario');
       $this->db->where('email', $email);
       $User= $this->db->get()->row();
-      if($User->nombre != ' '){
+      if($User->nombre != ' '){ // verifica que el el correo proporcionaado le pertenece a un usuario activo 
           $cadena=$User->nombre.$User->id.rand(1,9999999).date('Y-m-d');
           $token=sh1($cadena);
           $data = array(
@@ -306,10 +308,34 @@ class Web extends CI_Controller {
             $enlace=$_SERVER["SERVER_NAME"].'/web/changuePassword?idusuario='.sha1($User->nombre).'&token='.$token;
             return $enlace;
           }
-      }else{
+      }else{ // le envia un mensaje de error notificando que ese correo no existe
 
         return FALSE;
       }
   }
+
+
+  // funcion para enviar el correo al usuario 
+    function enviarEmail( $email, $link ){
+          $mensaje = '<html>
+            <head>
+                <title>Restablece tu contraseña</title>
+            </head>
+            <body>
+              <p>Hemos recibido una petición para restablecer la contraseña de tu cuenta.</p>
+              <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
+              <p>
+                <strong>Enlace para restablecer tu contraseña</strong><br>
+                <a href="'.$link.'"> Restablecer contraseña </a>
+              </p>
+            </body>
+            </html>';
+        
+          $cabeceras = 'MIME-Version: 1.0' . "\r\n";
+          $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+          $cabeceras .= 'From: Dimquality <mimail@codedrinks.com>' . "\r\n";
+          // Se envia el correo al usuario
+          mail($email, "Recuperar contraseña", $mensaje, $cabeceras);
+    }
 }
 
