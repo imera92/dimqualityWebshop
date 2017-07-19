@@ -1,150 +1,114 @@
-	<div class="row">
-		<h1 class="text-center">COMPRAR PRODUCTOS</h1>
-	</div>
-	<div class="row">
-		<div class="col-lg-8">
+		<div class="row mt-50 mb-50">
 			<div class="row">
-				<div class="col-lg-10 col-lg-offset-1 well">
-					<div class="row">
-						<div class="col-lg-2">
-							<img class="img-responsive" src="http://via.placeholder.com/600x600">
-						</div>
-						<div class="col-lg-5">
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam augue, malesuada quis eros ac, aliquam pellentesque arcu. Pellentesque convallis commodo ante a placerat. Sed euismod ligula eu aliquam tempor. Sed arcu ex, vestibulum nec metus vitae, pharetra imperdiet massa. Curabitur nec tempus ligula, et blandit odio.
-							</p>
-						</div>
-						<div class="col-lg-2">
+				<div class="col-xs-12">
+					<h1>Confirme su Compra</h1>
+					<hr>				
+						<div class="col-xs-9 well mt-50">							
 							<div class="row">
-								<div class="col-lg-12">
-									PRECIO
+								<div class="col-md-3 col-md-offset-2 text-center bold-text">
+									Nombre del producto
+								</div>
+								<div class="col-md-2 text-center bold-text">
+									Precio Unit.
+								</div>
+								<div class="col-md-2 text-center bold-text">
+									Cantidad
+								</div>
+								<div class="col-md-2 text-center bold-text">
+									Sub-total
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									$ 100
+							<hr class="mt-5">
+							<?php foreach ($productosCarrito as $index => $producto): ?>
+								<div class="row row-eq-height mt-20 mb-20">								
+									<div class="col-md-2">
+										<img class="img-responsive" src="<?php echo base_url('assets/uploads/images/productos/' . $producto['imagen']); ?>">
+									</div>
+									<div class="col-md-3">
+										<a href="<?php echo base_url('producto/getProducto/' . $producto['id']); ?>"><?php echo $producto['nombre']; ?></a>
+									</div>
+									<div class="col-md-2 text-center">
+										<?php echo $producto['pvp'];?>
+									</div>
+									<div class="col-md-2 text-center">
+										<span class="bold-text grantotal">
+											<?php echo $producto['cantidad'] ?>
+										</span>
+									</div>								
+									<div class="col-md-2 text-center subtotal">
+										<?php echo ($producto['cantidad'] * $producto['pvp']) ?>
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="col-lg-2 text-center">
-							<div class="row">
-								<div class="col-lg-12">
-									CANTIDAD
+							<?php endforeach; ?>
+							<hr>
+							<div class="row row-eq-height mt-20">
+								<div class="col-md-2 col-md-offset-7 text-center bold-text grantotal-label">
+									Total
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<label>1</label>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>		
-			<div class="row">
-				<div class="col-lg-10 col-lg-offset-1 well">
-					<div class="row">
-						<div class="col-lg-2">
-							<img class="img-responsive" src="http://via.placeholder.com/600x600">
-						</div>
-						<div class="col-lg-5">
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam augue, malesuada quis eros ac, aliquam pellentesque arcu. Pellentesque convallis commodo ante a placerat. Sed euismod ligula eu aliquam tempor. Sed arcu ex, vestibulum nec metus vitae, pharetra imperdiet massa. Curabitur nec tempus ligula, et blandit odio.
-							</p>
-						</div>
-						<div class="col-lg-2">
-							<div class="row">
-								<div class="col-lg-12">
-									PRECIO
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									$ 100
+								<div class="col-md-2 text-center grantotal">
+									<?php echo $subtotal ?>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-2 text-center">
-							<div class="row">
-								<div class="col-lg-12">
-									CANTIDAD
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<label>1</label>
-								</div>
-							</div>
+						<div class="col-xs-3 mt-50">		
+							<div class="panel panel-default">
+								<div class="text-center">
+									<h3 class=" ">Datos de Compra</h3>
+								</div>		
+								<form class="panel-body">
+									<div class="form-group">
+										<label for="formaPago">Forma de pago<span class="red">*</span></label>
+										<fieldset id="formaPago">
+											<input type="radio" value="deposito" name="formaPago" required>
+											Depósito<br>
+											<input type="radio" value="transferencia" name="formaPago">
+											Transferencia<br>
+										</fieldset>
+									</div>
+									<div class="form-group">
+										<label for="datosEntrega">Datos de la entrega<span class="red">*</span></label>
+										<fieldset id="datosEntrega">
+											<input type="radio" value="retiro" name="datosEntrega" required>
+											<span>Retiro en local</span><br>
+											<input type="radio" value="entrega" name="datosEntrega" id="radioDom">
+											<span>Entrega a domicilio</span><br>
+										</fieldset>
+									</div>
+									<div id="billingAddress">
+										<h4 class="">Dirección de Facturación</h4>
+										<div class="form-group">
+											<label for="nombre">Nombre:<span class="red">*</span></label>
+											<input type="text" name="nombre" class="form-control" value="<?php echo $user['nombre'] ?> <?php echo $user['apellido'] ?>" required>
+										</div>
+										<div class="form-group">
+											<label for="cedula">Cedula:<span class="red">*</span></label>
+											<input type="text" name="cedula" class="form-control" value="<?php echo $user['cedula'] ?>" required>
+										</div>
+										<div class="form-group">
+											<label for="direccion">Direccion:<span class="red">*</span></label>
+											<input type="text" name="direccion" class="form-control" value="<?php echo $user['direccion'] ?>" required>
+											<div id="sameAddress" style="display: none;">
+												<input type="checkbox" name="sameAddress" checked id="sameCheck">Dirección de Entrega igual a Facturación
+											</div>
+										</div>
+									</div>
+									<div class="panel" id="deliveryAddress" style="display: none;">
+											<h4 class=" ">Dirección de Entrega</h4>
+										<div  class="form-group">
+											<label for="nombre">Nombre:<span class="red">*</span></label>
+											<input type="text" name="nombreEntrega" class="form-control" value="<?php echo $user['nombre'] ?> <?php echo $user['apellido'] ?>" required>
+										</div>
+										<div class="form-group">
+											<label for="direccion">Dirección:<span class="red">*</span></label>
+											<input type="text" name="direccionEntrega" class="form-control" value="<?php echo $user['direccion'] ?>" required>
+										</div>
+									</div>
+									<input type="submit" class="btn btn-primary btn-default btn-lg btn-comprar" value="Comprar">
+									<a href="<?php echo base_url("carrito") ?>" class ="btn btn-lg btn-danger" >Regresar</a>
+								</form>	
+							</div>						
 						</div>
-					</div>
+					</div>				
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-3 panel">
-				<h2 class="text-center">Total: $ 200.00</h2>
-			<div class="panel-body">			
-				<form>
-					<div class="form-group">
-						<label for="formaPago">Forma de pago</label>
-						<fieldset id="formaPago">
-							<input type="radio" value="" name="formaPago" required>
-							Depósito<br>
-							<input type="radio" value="" name="formaPago">
-							Transferencia<br>
-						</fieldset>
-					</div>
-					<div class="form-group">
-						<label for="datosEntrega">Datos de la entrega</label>
-						<fieldset id="datosEntrega">
-							<input type="radio" value="" name="datosEntrega" required>
-							Retiro en local<br>
-							<input type="radio" value="" name="datosEntrega" id="radioDom">
-							Entrega a domicilio<br>
-						</fieldset>
-					</div>
-					<div id="billingAddress" class="panel">
-							<h3 class="panel-title">Dirección de Facturación</h3>
-						<div class="panel-body form-group">
-							<div class="form-group">
-								<label for="nombre">Nombre:</label>
-								<input type="text" name="nombre" class="form-control" value="Nombre Apellido" required>
-							</div>
-							<div class="form-group">
-								<label for="cedula">Cedula:</label>
-								<input type="text" name="cedula" class="form-control" value="0987654321" required>
-							</div>
-							<div class="form-group">
-								<label for="direccion">Direccion:</label>
-								<input type="text" name="direccion" class="form-control" value="Dirección del Usuario" required>
-								<div id="sameAddress" style="display: none;">
-									<input type="checkbox" name="sameAddress" checked id="sameCheck">Dirección de Entrega igual a Facturación
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="panel" id="deliveryAddress" style="display: none;">					
-							<h3 class="panel-title">Dirección de Entrega</h3>					
-						<div class="panel-body">
-							<div  class="form-group">
-								<label for="nombre">Nombre:</label>
-								<input type="text" name="nombreEntrega" class="form-control" value="Nombre Apellido" required>
-							</div>
-							<div class="form-group">
-								<label for="direccion">Dirección:</label>
-								<input type="text" name="direccionEntrega" class="form-control" value="Dirección del Usuario" required>
-							</div>
-						</div>					
-					</div>
-					<div class="form-group">
-						
-					</div>
-					<input type="submit" name="" value="COMPRAR">
-				</form>			
-			</div>
-		</div>
-	</div>
-</div>
-<script  src="http://code.jquery.com/jquery-1.11.1.min.js"  integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE=" crossorigin="anonymous"></script>
-
-<script type="text/javascript" src="<?php echo base_url('public/js/comprarProductos.js'); ?>"></script>
-
