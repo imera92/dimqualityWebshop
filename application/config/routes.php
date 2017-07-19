@@ -58,5 +58,6 @@ $route['actualizar'] = 'usuario/actualizarUsuario';
 $route['producto/(:num)'] = 'producto/getProducto/$1';
 $route['carrito'] = 'web/carrito';
 $route['comprar'] = 'web/comprarProductos';
+$route['exito'] = 'web/compraExitosa';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

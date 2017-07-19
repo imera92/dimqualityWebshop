@@ -8,10 +8,12 @@ class Web extends CI_Controller {
       $this->load->database();
       $this->load->helper('url');
       $this->load->helper('form');
+      $this->load->library('form_validation');
       $this->load->library('session');
       $this->load->model('ShopUser');
       $this->load->model('CarritoDeCompras');
       $this->load->model('Producto');
+      $this->load->model('Transaccion');
       date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -109,6 +111,44 @@ class Web extends CI_Controller {
 
     // Validamos si hay un usuario logueado
     if ($this->loginCheck()) {
+      if($this->input->post('submit')){
+        $this->form_validation->set_rules('formaPago', 'Forma de Pago', 'required');
+        $this->form_validation->set_rules('datosEntrega', 'Datos de Entrega', 'required');
+        $this->form_validation->set_rules('nombre', 'Nombre de Facturación', 'required');
+        $this->form_validation->set_rules('cedula', 'Cedula de Facturación', 'required');
+        $this->form_validation->set_rules('direccion', 'Direccion de Facturación', 'required');
+        $this->form_validation->set_rules('nombreEntrega', 'Nombre Entrega', 'required');
+        $this->form_validation->set_rules('direccionEntrega', 'Direccion de Entrega', 'required');
+        if ($this->form_validation->run() == true) {
+          $carritoId = $this->session->userdata('carritoId');
+          $carritoDB = new CarritoDeCompras();
+          $carritoDB->getCarritoPorId($carritoId);
+          $compraIns = new Transaccion();
+          $compraIns->loadCarrito($carritoDB);
+          $compraIns->setFechaCompra(date(DATE_ATOM));
+          $compraIns->setUsuario($this->session->userdata('id'));
+          $compraIns->setTotal($carritoDB->getSubtotal());
+          $compraIns->setEstado(0);
+          $compraIns->setFormaPago($this->input->post('formaPago'));
+          $compraIns->setNombreFactura($this->input->post('nombre'));
+          $compraIns->setCedulaFactura($this->input->post('cedula'));
+          $compraIns->setDireccionFactura($this->input->post('direccion'));
+          $compraIns->setEntregaDomicilio($this->input->post('datosEntrega') == '');
+          $compraIns->setNombreEntrega($this->input->post('nombreEntrega'));
+          $compraIns->setDireccionEntrega($this->input->post('direccionEntrega'));
+          $compraExito = $compraIns->insertarDB();
+          if ($compraExito) {
+            $carritoDB->vaciarCarrito();
+            $carritoDB->actualizarCarrito();
+            redirect('exito');
+          }
+          else
+          {
+             $dataBody['mensaje'] = 'Ocurrió un error al procesar su compra. Por favor vuelva a intentar mas tarde.';
+          }          
+        }
+        
+      }
       // Obtenemos el ID del carrito perteneciente al usuario logueado
       $carritoId = $this->session->userdata('carritoId');
       $carritoDB = new CarritoDeCompras();
@@ -116,7 +156,7 @@ class Web extends CI_Controller {
 
       // Verificamos si el carrito tiene productos
       if (empty($carritoDB->getProductosCarrito())) {
-        // Si no productos en el carrito, regresamos al carrito
+      // Si no productos en el carrito, regresamos al carrito
         redirect("carrito");
       } else {
         // Guardamos los datos de todos los productos del carrito temporal en un arreglo para enviar al frontend
@@ -128,19 +168,27 @@ class Web extends CI_Controller {
             'pvp' => $productoCarrito->getProducto()->getPVP(),
             'nombre' => $productoCarrito->getProducto()->getNombre(),
             'imagen' => $productoCarrito->getProducto()->getImagen()
-          ));        
+            ));        
         }
         $dataBody['subtotal'] = $carritoDB->getSubtotal();
         $dataBody['productosCarrito'] = $productosCarrito;        
         $dataBody['user'] = $this->session->userdata;
       }
-
     } else {
       redirect("login");
     }
     $user = $this->session->userdata;
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/comprarProductos', $dataBody);
+    $this->load->view('web/footer');
+  }
+
+  public function compraExitosa()
+  {
+    $titulo = "Dimquality::WebShop - Comprar Exitosa";    
+    $dataHeader['titlePage'] = $titulo; 
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/compraExitosa');
     $this->load->view('web/footer');
   }
 
