@@ -25,6 +25,7 @@
 		{
 			loader('Producto');
 			$producto = new Producto;
+			echo 'Testing testGetProductoPorId';
 			$this->assertTrue($producto->getProductoPorId(1));
 		}
 	}
