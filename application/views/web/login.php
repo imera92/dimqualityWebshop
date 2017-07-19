@@ -22,7 +22,7 @@
 		            			<div class="form-group">
 		            				<div>
 										<label for="passwordInput" class="col-md-4">Contraseña<span class="red">*</span></label>
-										<label class="forget col-md-8 col-xs-12"><a>olvido su contraseña?</a></label>
+										<label class="forget col-md-8 col-xs-12"><a href="<?php echo base_url('web/recuperarContrasena'); ?>">olvido su contraseña?</a></label>
 									</div>
 		            				<?php echo form_password(array(
 		            					'id' => 'passwordInput',
