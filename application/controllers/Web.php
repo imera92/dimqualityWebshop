@@ -104,11 +104,43 @@ class Web extends CI_Controller {
   }
   
   public function comprarProductos(){
-    $titulo = "Dimquality::WebShop - Comprar Productos";
-    $dataHeader['titlePage'] = $titulo;
+    $titulo = "Dimquality::WebShop - Comprar Productos";    
+    $dataHeader['titlePage'] = $titulo; 
 
+    // Validamos si hay un usuario logueado
+    if ($this->loginCheck()) {
+      // Obtenemos el ID del carrito perteneciente al usuario logueado
+      $carritoId = $this->session->userdata('carritoId');
+      $carritoDB = new CarritoDeCompras();
+      $carritoDB->getCarritoPorId($carritoId);
+
+      // Verificamos si el carrito tiene productos
+      if (empty($carritoDB->getProductosCarrito())) {
+        // Si no productos en el carrito, regresamos al carrito
+        redirect("carrito");
+      } else {
+        // Guardamos los datos de todos los productos del carrito temporal en un arreglo para enviar al frontend
+        $productosCarrito = array();
+        foreach ($carritoDB->getProductosCarrito() as $index => $productoCarrito) {
+          array_push($productosCarrito, array(
+            'id' => $productoCarrito->getProducto()->getId(),
+            'cantidad' => $productoCarrito->getCantidad(),
+            'pvp' => $productoCarrito->getProducto()->getPVP(),
+            'nombre' => $productoCarrito->getProducto()->getNombre(),
+            'imagen' => $productoCarrito->getProducto()->getImagen()
+          ));        
+        }
+        $dataBody['subtotal'] = $carritoDB->getSubtotal();
+        $dataBody['productosCarrito'] = $productosCarrito;        
+        $dataBody['user'] = $this->session->userdata;
+      }
+
+    } else {
+      redirect("login");
+    }
+    $user = $this->session->userdata;
     $this->load->view('web/header', $dataHeader);
-    $this->load->view('web/comprarProductos');
+    $this->load->view('web/comprarProductos', $dataBody);
     $this->load->view('web/footer');
   }
 
