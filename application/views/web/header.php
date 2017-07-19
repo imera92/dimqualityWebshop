@@ -18,6 +18,10 @@
 		<link href="<?php echo base_url('public/css/index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'login'): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'actualizarUsuario'): ?>
+		<link href="<?php echo base_url('public/css/actualizarUsuario.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'comprarProductos'): ?>
+		<link href="<?php echo base_url('public/css/comprarProductos.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'crearUsuario'): ?>
 		<link href="<?php echo base_url('public/css/crearUsuario.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'carrito'): ?>
