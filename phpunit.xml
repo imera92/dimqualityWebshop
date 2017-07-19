@@ -6,7 +6,7 @@
     convertWarningsToExceptions="true">
     <testsuites>
         <testsuite name="test">
-            <directory>./Tests/</directory>
+            <directory>./application/tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
