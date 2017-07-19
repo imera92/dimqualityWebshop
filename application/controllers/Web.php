@@ -287,5 +287,29 @@ class Web extends CI_Controller {
     $dataHeader['titlePage'] = $titulo;
     $this->load->view('web/password_reset', $dataHeader);
   }
+  
+  public function GenerarToken(){
+      $this->db->select('*');
+      $this->db->from('usuario');
+      $this->db->where('email', $email);
+      $User= $this->db->get()->row();
+      if($User->nombre != ' '){
+          $cadena=$User->nombre.$User->id.rand(1,9999999).date('Y-m-d');
+          $token=sh1($cadena);
+          $data = array(
+            'userId' => $User->id,
+            'fecha' =>  date('Y-m-d'),
+            'token' => $token
+          );
+          $resultado=$this->db->insert('restaurarrcontraseña', $data);
+          if($resultado){
+            $enlace=$_SERVER["SERVER_NAME"].'/web/changuePassword?idusuario='.sha1($User->nombre).'&token='.$token;
+            return $enlace;
+          }
+      }else{
+
+        return FALSE;
+      }
+  }
 }
 
