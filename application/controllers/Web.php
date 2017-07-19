@@ -316,7 +316,7 @@ class Web extends CI_Controller {
 
 
   // funcion para enviar el correo al usuario 
-    function enviarEmail( $email, $link ){
+    function enviarEmail( $email, $enlace ){
           $mensaje = '<html>
             <head>
                 <title>Restablece tu contraseña</title>
@@ -326,7 +326,7 @@ class Web extends CI_Controller {
               <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
               <p>
                 <strong>Enlace para restablecer tu contraseña</strong><br>
-                <a href="'.$link.'"> Restablecer contraseña </a>
+                <a href="'.$enlace.'"> Restablecer contraseña </a>
               </p>
             </body>
             </html>';
