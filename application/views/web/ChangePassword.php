@@ -10,6 +10,9 @@
                     <label>Confirmar nueva contraseña</label>
                     <input  type ="password" class="form-control" placeholder="" type="email">
             </div>
+            <input type="hidden" name="t" value="<?php echo $token ?>">
+            <input type="hidden" name="us" value="<?php echo $usuario ?>"> 
+            <input>
             <div class="col-md-12">
                     <button class="btn btn-success ">Actualizar contraseña</button>
             </div>

@@ -27,6 +27,7 @@
     <script src="<?php echo base_url('public/js/bootstrap.min.js'); ?>"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>
     <script src="<?php echo base_url('public/js/busqueda.js'); ?>"></script>
+	<script src="<?php echo base_url('public/js/recuperar.js'); ?>"></script>
 	<?php if ($this->router->method == 'crearUsuario'): ?>
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/crearUsuario.js'); ?>"></script>
