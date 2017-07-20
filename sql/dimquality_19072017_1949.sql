@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-07-2017 a las 06:10:44
+-- Tiempo de generación: 20-07-2017 a las 02:47:46
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -39,6 +39,11 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `user`, `password`, `persona`, `correo`) VALUES
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com'),
 (0, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'imera92@gmail.com');
 
 -- --------------------------------------------------------
@@ -49,6 +54,7 @@ INSERT INTO `admin` (`id`, `user`, `password`, `persona`, `correo`) VALUES
 
 CREATE TABLE `carrito` (
   `id` int(11) NOT NULL,
+  `usuario` int(11) NOT NULL,
   `subtotal` decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -56,9 +62,8 @@ CREATE TABLE `carrito` (
 -- Volcado de datos para la tabla `carrito`
 --
 
-INSERT INTO `carrito` (`id`, `subtotal`) VALUES
-(1, '0.00'),
-(2, '0.00');
+INSERT INTO `carrito` (`id`, `usuario`, `subtotal`) VALUES
+(1, 0, '0.00');
 
 -- --------------------------------------------------------
 
@@ -70,6 +75,29 @@ CREATE TABLE `categoriaproducto` (
   `id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cita`
+--
+
+CREATE TABLE `cita` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(128) NOT NULL,
+  `tecnico` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `asunto` varchar(200) NOT NULL,
+  `estado` int(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- Volcado de datos para la tabla `cita`
+--
+
+INSERT INTO `cita` (`id`, `usuario`, `tecnico`, `fecha`, `asunto`, `estado`) VALUES
+(1, 'wjvelez', 1, '2017-07-20 10:00:00', 'qwerty', 0),
+(2, 'wjvelez', 1, '2017-07-17 12:00:00', 'qwaszx', 0);
 
 -- --------------------------------------------------------
 
@@ -92,6 +120,30 @@ CREATE TABLE `estadotransaccion` (
   `id` int(11) NOT NULL,
   `estado` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `horariotecnico`
+--
+
+CREATE TABLE `horariotecnico` (
+  `id` int(11) NOT NULL,
+  `tecnico` int(11) NOT NULL,
+  `horaInicio` time NOT NULL,
+  `horaFin` time NOT NULL,
+  `disponible` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `horariotecnico`
+--
+
+INSERT INTO `horariotecnico` (`id`, `tecnico`, `horaInicio`, `horaFin`, `disponible`) VALUES
+(1, 1, '10:00:00', '11:00:00', 0),
+(2, 1, '12:00:00', '13:00:00', 0),
+(3, 2, '09:00:00', '10:00:00', 1),
+(4, 2, '10:00:00', '11:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -233,6 +285,8 @@ CREATE TABLE `pma__favorite` (
 
 INSERT INTO `pma__favorite` (`username`, `tables`) VALUES
 ('root', '[{\"db\":\"dimquality\",\"table\":\"categoriaproducto\"}]'),
+('root', '[{\"db\":\"dimquality\",\"table\":\"categoriaproducto\"}]'),
+('root', '[{\"db\":\"dimquality\",\"table\":\"categoriaproducto\"}]'),
 ('root', '[{\"db\":\"dimquality\",\"table\":\"categoriaproducto\"}]');
 
 -- --------------------------------------------------------
@@ -292,6 +346,8 @@ CREATE TABLE `pma__recent` (
 --
 
 INSERT INTO `pma__recent` (`username`, `tables`) VALUES
+('root', '[{\"db\":\"dimquality\",\"table\":\"producto\"},{\"db\":\"dimquality\",\"table\":\"usuario\"},{\"db\":\"dimquality\",\"table\":\"admin\"},{\"db\":\"dimquality\",\"table\":\"productocarrito\"}]'),
+('root', '[{\"db\":\"dimquality\",\"table\":\"producto\"},{\"db\":\"dimquality\",\"table\":\"usuario\"},{\"db\":\"dimquality\",\"table\":\"admin\"},{\"db\":\"dimquality\",\"table\":\"productocarrito\"}]'),
 ('root', '[{\"db\":\"dimquality\",\"table\":\"producto\"},{\"db\":\"dimquality\",\"table\":\"usuario\"},{\"db\":\"dimquality\",\"table\":\"admin\"},{\"db\":\"dimquality\",\"table\":\"productocarrito\"}]'),
 ('root', '[{\"db\":\"dimquality\",\"table\":\"producto\"},{\"db\":\"dimquality\",\"table\":\"usuario\"},{\"db\":\"dimquality\",\"table\":\"admin\"},{\"db\":\"dimquality\",\"table\":\"productocarrito\"}]');
 
@@ -401,6 +457,8 @@ CREATE TABLE `pma__userconfig` (
 
 INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
 ('root', '2017-06-06 02:01:55', '{\"collation_connection\":\"utf8mb4_unicode_ci\"}'),
+('root', '2017-06-06 02:01:55', '{\"collation_connection\":\"utf8mb4_unicode_ci\"}'),
+('root', '2017-06-06 02:01:55', '{\"collation_connection\":\"utf8mb4_unicode_ci\"}'),
 ('root', '2017-06-06 02:01:55', '{\"collation_connection\":\"utf8mb4_unicode_ci\"}');
 
 -- --------------------------------------------------------
@@ -454,53 +512,14 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id`, `nombre`, `marca`, `categoria`, `codigo`, `imagen`, `modelo`, `costo`, `pvp`, `descripcion`, `estado`, `stock`, `destacado`, `fechaCreacion`) VALUES
-(1, 'Lavadora Digital 16 Kg. Turbo Drum Blanca / Tapa d', 'LG', 'LAVADORAS', 'LG-WF-SL1632EK', 'default.png', '', '584.85', '623.84', '', 1, 0, 0, NULL),
-(2, 'Lavadora Digital 16 Kg. Turbo Drum Plata / Tapa de', 'LG', 'LAVADORAS', 'LG-WF-S1634EK', 'default.png', '', '660.47', '704.50', '', 1, 1, 0, NULL),
-(3, 'SECADORA DE ROPA A GAS DE 19Kg', 'LG', 'SECADORAS DE ROPA', 'LG-DLG1002W', 'default.png', '', '559.64', '596.95', '', 1, 0, 0, NULL),
-(4, 'SECADORA DE ROPA A GAS DE 21Kg - BLANCA - CONVERTI', 'LG', 'SECADORAS DE ROPA', 'LG-DT21WS', 'default.png', '', '567.20', '605.01', '', 1, 0, 0, NULL),
-(5, 'REFRIG. DE  13,5 PIES NF / DOS PUERTAS / SMART INV', 'LG', 'REFRIGERADORAS', 'LG-GT32WPP', 'default.png', '', '661.73', '705.85', '', 1, 1, 0, NULL),
-(6, 'REFRIG. DE  15 PIES NF / DOS PUERTAS / DIAGNOSTICO', 'LG', 'REFRIGERADORAS', 'LG-GT40WGP', 'default.png', '', '772.65', '824.16', '', 1, 1, 0, NULL),
-(7, 'Refrig S&S 23 pies Titanium Moving Ice Maker - LED', 'LG', 'REFRIGERADORAS', 'LG-GS65MPP1', 'default.png', '', '1.00', '1.00', '', 1, 0, 0, NULL),
-(8, 'Refrig S&S 23 pies Titanium con Disp. de agua y hi', 'LG', 'REFRIGERADORAS', 'LG-GS65SPP1', 'default.png', '', '1.00', '1.00', '', 1, 1, 0, NULL),
-(9, '0', 'LG', 'REFRIGERADORAS', 'AIRES ACONDICIONADOS ', 'default.png', '', '0.00', '0.00', '', 1, 0, 0, NULL),
-(10, 'A/C SPLIT 12.000 BTU BASICO', 'LG', 'REFRIGERADORAS', 'LG-SP122CE', 'default.png', '', '622.66', '664.17', '', 1, 1, 0, NULL),
-(11, 'A/C SPLIT 18.000 BTU ECONO INVERTER', 'LG', 'REFRIGERADORAS', 'LG-VM182CS', 'default.png', '', '988.19', '1.00', '', 1, 1, 0, NULL),
-(12, 'A/C SPLIT 12.000 BTU ECONO INVERTER', 'LG', 'REFRIGERADORAS', 'LG-VM122C6', 'default.png', '', '748.70', '798.62', '', 1, 1, 0, NULL),
-(13, 'A/C SPLIT 18.000 BTU ECONO INVERTER', 'LG', 'REFRIGERADORAS', 'LG-VM182C6', 'default.png', '', '962.98', '1.00', '', 1, 1, 0, NULL),
-(14, 'A/C SPLIT 24.000 BTU ECONO INVERTER', 'LG', 'REFRIGERADORAS', 'LG-VM242C6', 'default.png', '', '1.00', '1.00', '', 1, 1, 0, NULL),
-(15, 'TUBERIA PARA DE AC VR122CL', 'LG', 'REFRIGERADORAS', 'LG-SQ060905D01', 'default.png', '', '63.02', '67.22', '', 1, 1, 0, NULL),
-(16, 'MICRO. 1,1pies PANTALLA LED / TOUCH / SILVER MENU ', 'LG', 'MICROONDAS', 'LG-MS1140S', 'default.png', '', '181.50', '193.60', '', 1, 0, 0, NULL),
-(17, 'MICRO. 1,1pies PANTALLA LED / TOUCH / BLANCO MENU ', 'LG', 'MICROONDAS', 'LG-MS1142GWA', 'default.png', '', '165.12', '176.13', '', 1, 0, 0, NULL),
-(18, 'EQ. SONIDO 3.000 / DUAL USB / ECUALIZADOR LATINO /', 'LG', 'AUDIO', 'LG-CM4350', 'default.png', '', '257.13', '274.27', '', 1, 0, 0, NULL),
-(19, 'EQ. SONIDO 5.000 / DUAL USB / ECUALIZADOR LATINO /', 'LG', 'AUDIO', 'LG-CM4450', 'default.png', '', '269.73', '287.72', '', 1, 0, 0, NULL),
-(20, 'EQ. SONIDO 5.000 / AUTO DJ / DUAL USB / ECUALIZADO', 'LG', 'AUDIO', 'LG-CM4460', 'default.png', '', '282.34', '301.16', '', 1, 1, 0, NULL),
-(21, 'EQ. SONIDO 8.000 / DUAL USB / ECUALIZADOR LATINO /', 'LG', 'AUDIO', 'LG-CM4550', 'default.png', '', '321.41', '342.84', '', 1, 0, 0, NULL),
-(22, 'EQ. SONIDO 8.000 / DUAL USB / ECUALIZADOR LATINO /', 'LG', 'AUDIO', 'LG-CM4560', 'default.png', '', '326.45', '348.22', '', 1, 0, 0, NULL),
-(23, 'EQ. SONIDO 11.000 / X BOOM  BLUETOOTH/ DUAL USB / ', 'LG', 'AUDIO', 'LG-CM4750', 'default.png', '', '414.69', '442.33', '', 1, 0, 0, NULL),
-(24, 'EQ. SONIDO 12.000 / DUAL USB / ECUALIZADOR LATINO ', 'LG', 'AUDIO', 'LG-CM5760', 'default.png', '', '439.89', '469.22', '', 1, 1, 0, NULL),
-(25, 'PARLANTE AMPLIFICADO 3.500W / BLUETOOTH / DOBLE US', 'LG', 'AUDIO', 'LG-OM5540', 'default.png', '', '414.69', '442.33', '', 1, 1, 0, NULL),
-(26, 'PARLANTE AMPLIFICADO 4.800W / BLUETOOTH + NFC / DO', 'LG', 'AUDIO', 'LG-OM5541', 'default.png', '', '485.27', '517.62', '', 1, 1, 0, NULL),
-(27, '0', 'LG', 'AUDIO', 'TELEVISORES ', 'default.png', '', '0.00', '0.00', '', 1, 0, 0, NULL),
-(28, 'DVD / USB / MP3', 'LG', 'AUDIO', 'LG-DP132', 'default.png', '', '52.94', '56.47', '', 1, 1, 0, NULL),
-(29, 'DVD / GRABA A USB / ESCANEO PROGRESIVO /  DivX / K', 'LG', 'AUDIO', 'LG-DP547', 'default.png', '', '57.98', '61.85', '', 1, 1, 0, NULL),
-(30, 'GAFAS 3D', 'LG', 'AUDIO', 'LG-AG-F316', 'default.png', '', '5.04', '5.38', '', 1, 1, 0, NULL),
-(31, 'CONTRO REMOTO PARA PANTALLAS SMART SERIE LA', 'LG', 'AUDIO', 'LG-ANMR400', 'default.png', '', '23.95', '25.54', '', 1, 0, 0, NULL),
-(32, 'CONTRO REMOTO PARA PANTALLAS SMART - CONTROL DE VO', 'LG', 'AUDIO', 'LG-ANMR600', 'default.png', '', '36.55', '38.99', '', 1, 1, 0, NULL),
-(33, 'TELEVISOR LED 32\"  HD SMART TV / 2 HDMI / USB', 'LG', 'AUDIO', 'LG-32LH600B', 'default.png', '', '513.00', '547.20', '', 1, 1, 0, NULL),
-(34, 'TELEVISOR LED 42\" SMART TV / FULL HD / MODO FUTBOL', 'LG', 'AUDIO', 'LG-42LB5800', 'default.png', '', '819.29', '873.91', '', 1, 1, 0, NULL),
-(35, 'TELEVISOR LED 42\" SMART SHARE / MAGIC REMOTE / PAN', 'LG', 'AUDIO', 'LG-42LF5850', 'default.png', '', '819.29', '873.91', '', 1, 0, 0, NULL),
-(36, 'TELEVISOR LED 43\" SMART TV / FULL HD', 'LG', 'AUDIO', 'LG-43LH6000', 'default.png', '', '831.89', '887.35', '', 1, 1, 0, NULL),
-(37, 'TELEVISOR LED DE 47\" FULL HD / 3 HDMI / SENSOR INT', 'LG', 'AUDIO', 'LG-47LS4600', 'default.png', '', '983.15', '1.00', '', 1, 0, 0, NULL),
-(38, 'TELEVISOR LED 47\" SMART TV / FULL HD / MODO FUTBOL', 'LG', 'AUDIO', 'LG-47LB5800', 'default.png', '', '1.00', '1.00', '', 1, 1, 0, NULL),
-(39, 'TELEVISOR LED 49\" SMART TV / FULL HD - LOCAL', 'LG', 'AUDIO', 'LG-49LH6000', 'default.png', '', '1.00', '1.00', '', 1, 0, 0, NULL),
-(40, 'TELEVISOR LED 49\" 4K SMART TV / ULTRA HD / TRIPLE ', 'LG', 'AUDIO', 'LG-49UB7000', 'default.png', '', '1.00', '1.00', '', 1, 1, 0, NULL),
-(41, 'TELEVISOR LED 55\" SMART TV / FULL HD - LOCAL', 'LG', 'AUDIO', 'LG-55LH6000', 'default.png', '', '1.00', '1.00', '', 1, 0, 0, NULL),
-(42, 'TABLET  7\" BLANCA - WIFI - PANTALLA FULL HD - MEM.', 'LG', 'TABLETS', 'LG-LGV400.AMIAWN', 'default.png', '', '248.31', '264.86', '', 1, 0, 0, NULL),
-(43, 'TABLET  8,3\" NEGRO  - WIFI - Procesador Quad Core ', 'LG', 'TABLETS', 'LG-LGV480.AMIABK', 'default.png', '', '274.78', '293.09', '', 1, 1, 0, NULL),
-(44, 'TABLET  8\" BLANCA - WIFI-LTE 4G - Procesador Quad ', 'LG', 'TABLETS', 'LG-LGV490W', 'default.png', '', '436.11', '465.19', '', 1, 0, 0, NULL),
-(45, 'TABLET  8\" NEGRA - WIFI -LTE 4G Procesador Quad Co', 'LG', 'TABLETS', 'LG-LGV490B', 'default.png', '', '436.11', '465.19', '', 1, 1, 0, NULL),
-(46, 'TABLET  10\" NEGRO - WIFI - PANTALLA FULL HD - MEM.', 'LG', 'TABLETS', 'LG-LGV700.AMIABK', 'default.png', '', '397.04', '423.51', '', 1, 1, 0, NULL),
-(47, 'TABLET  10\" BLANCA - WIFI - PANTALLA FULL HD - MEM', 'LG', 'TABLETS', 'LG-LGV700.AMIAWH', 'default.png', '', '397.04', '423.51', '', 1, 1, 0, NULL);
+(1, 'refrigeradora', 'lg', '', '000486', '/8dsd/dd', 'lgwsdw', '240.00', '248.20', NULL, 1, 5, 0, '2017-07-11'),
+(2, 'MacBook', 'Mac', 'laptops&Notebooks', 'orem ipsum ', '', ' amet', '602.00', '650.00', 'Intel Core 2 Duo processor,1GB memory, larger hard drives, 1GB memory, larger hard drives', 0, 5, 1, '2017-07-11'),
+(3, 'Licuadora', 'oster', 'components', 'dwd', 'dde', 'dede', '30.00', '45.00', '700-watt peak power\r\nMess-free spout\r\n3 cup chopping bowl', 1, 5, 1, '2017-07-11'),
+(4, 'Batidora', 'oster', 'ddededede', 'de', '', 'oster', '78.00', '85.00', '4 qt. stainless steel bowl\r\n6 speeds & QuickBurst button\r\nBowl Rest™ mixer stabilizer\r\nDoubles as a hand mixer', 1, 8, 1, '2017-07-11'),
+(7, 'dell latitude E5450', 'Dell', 'laptops', 'ddde', '', 'latitude', '740.00', '749.99', 'Intel Core i3-5010U Processor (3M Cache, 2.10 GHz), 4GB DDR3L 1600MHz', 1, 9, 1, '2017-06-01'),
+(8, 'dwdw', 'dwdw', 'dwdw', '565', '50e40-tabla.jpg', 'dwdwdwdw', '56.00', '6565.00', 'dwdw', 1, 56, 1, '2017-07-11'),
+(9, 'dede', 'q', 'q', '8', 'a0397-tabla.jpg', 'qw', '5.00', '5.00', 'wdw``', 1, 548, 1, NULL),
+(10, 'qq', 'q', 'q', '4', '926b9-tabla.jpg', 'e', '8.00', '8.00', 'dwd', 1, 8, 0, '2017-07-11');
 
 -- --------------------------------------------------------
 
@@ -514,6 +533,39 @@ CREATE TABLE `productocarrito` (
   `fecha_insert` datetime NOT NULL,
   `carrito` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `restaurarcontraseña`
+--
+
+CREATE TABLE `restaurarcontraseña` (
+  `id` int(10) NOT NULL,
+  `userId` int(10) NOT NULL,
+  `fecha` date NOT NULL,
+  `token` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tecnico`
+--
+
+CREATE TABLE `tecnico` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `correo` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tecnico`
+--
+
+INSERT INTO `tecnico` (`id`, `nombre`, `correo`) VALUES
+(1, 'tecnico1', 't1@dq.com'),
+(2, 'tecnico2', 't2@dq.com');
 
 -- --------------------------------------------------------
 
@@ -565,17 +617,8 @@ CREATE TABLE `usuario` (
   `ciudad` varchar(60) DEFAULT NULL,
   `provincia` varchar(60) DEFAULT NULL,
   `direccion` varchar(100) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `carrito` int(11) NOT NULL
+  `telefono` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `usuario`
---
-
-INSERT INTO `usuario` (`id`, `user`, `password`, `nombre`, `apellido`, `email`, `cedula`, `ciudad`, `provincia`, `direccion`, `telefono`, `carrito`) VALUES
-(1, 'imera92', 'eb675e6ee4ac3b943552670add77285b', 'Ivan', 'Mera', 'imera92@gmail.com', '0924166127', NULL, NULL, 'Guayacanes', '0981617261', 1),
-(2, 'user1', '912ec803b2ce49e4a541068d495ab570', 'nombress', 'apellido', 'correo@correo.com', '0987654321', NULL, NULL, 'dasdasdasdas', '0987654321', 2);
 
 --
 -- Índices para tablas volcadas
@@ -634,6 +677,13 @@ ALTER TABLE `producto`
   ADD UNIQUE KEY `codigo` (`codigo`);
 
 --
+-- Indices de la tabla `restaurarcontraseña`
+--
+ALTER TABLE `restaurarcontraseña`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `userId` (`userId`);
+
+--
 -- Indices de la tabla `transaccion`
 --
 ALTER TABLE `transaccion`
@@ -655,7 +705,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `categoriaproducto`
 --
@@ -685,7 +735,12 @@ ALTER TABLE `marca`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
+-- AUTO_INCREMENT de la tabla `restaurarcontraseña`
+--
+ALTER TABLE `restaurarcontraseña`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `transaccion`
 --
@@ -695,7 +750,7 @@ ALTER TABLE `transaccion`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
