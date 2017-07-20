@@ -66,6 +66,11 @@
 								<?php echo round($subtotal * 1.14, 2) ?>
 							</div>
 						</div>
+						<div class="row mt-20">
+							<div class="col-md-4 col-md-offset-9 text-center bold-text grantotal-label">
+								<a href="<?php echo base_url('comprar'); ?>" class="btn btn-lg btn-primary">Comprar</a>
+							</div>							
+						</div>
 					</div>
 				<?php endif; ?>
 			</div>
