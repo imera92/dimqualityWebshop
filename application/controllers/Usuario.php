@@ -206,7 +206,7 @@ class Usuario extends CI_Controller {
       if($this->input->post('submit')){
         $this->form_validation->set_rules('usuario', 'Usuario', 'required|callback_user_update_check');
         $this->form_validation->set_rules('nombre', 'Nombre', 'required');
-        $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+        // $this->form_validation->set_rules('apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('correo', 'Email', 'required|valid_email|callback_email_update_check');
         //$this->form_validation->set_rules('clave', 'password', 'required');
         //$this->form_validation->set_rules('conf_clave', 'confirmar clave', 'required|matches[clave]');
