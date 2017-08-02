@@ -31,6 +31,10 @@
 		<link href="<?php echo base_url('public/css/producto.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'buscarProductos'): ?>
 		<link href="<?php echo base_url('public/css/busqueda.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'recuperarContrasena'): ?>
+		<link href="<?php echo base_url('public/css/recuperarContasena.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'ChangePassword'): ?>
+		<link href="<?php echo base_url('public/css/changePassword.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
