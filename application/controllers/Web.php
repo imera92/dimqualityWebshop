@@ -35,6 +35,7 @@ class Web extends CI_Controller {
   {
     $titulo = "Dimquality::Admin - Shopping Cart";
     $dataHeader['titlePage'] = $titulo;
+    $dataBody = Array();
 
     // Validamos si hay un usuario logueado
     if ($this->loginCheck()) {
@@ -66,7 +67,7 @@ class Web extends CI_Controller {
     } else {
       // Si no hay un usuario logueado, verificamos si hay un carrito temporal cargado en sesion
       $carritoSesion = $this->session->carritoSesion;
-      if (is_null($carritoSesion)) {
+      if (is_null($carritoSesion) || empty($carritoSesion['productos'])) {
         // Si no hay un carrito temporal cargado en sesion, enviamos un mensaje al frontend
         $dataBody['mensaje'] = 'No hay datos para mostrar.';
       } else {
@@ -96,7 +97,6 @@ class Web extends CI_Controller {
           $dataBody['subtotal'] = $carritoSesion['subtotal'];
           $dataBody['productosCarrito'] = $productosCarrito;
         }
-
       }
     }
 
