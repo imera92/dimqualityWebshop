@@ -19,6 +19,7 @@ $('#userForm').validate({
             checkCedula: true
         },
         correo:{
+            email: false,
             checkEmail: true
         }
     },
@@ -26,8 +27,7 @@ $('#userForm').validate({
         usuario: 'Ingrese un usuario',
         nombre: 'Ingrese al menos un nombre o su razón social',
         correo: {
-            required:'Ingrese un correo',
-            email: 'Ingrese un correo válido'
+            required:'Ingrese un correo'
         },
         clave: {
             required: 'Ingrese una contraseña',
@@ -39,12 +39,10 @@ $('#userForm').validate({
         },
         cedula: {
             required: 'Ingrese un número de cédula o RUC',
-            checkCedula: 'Su número de cédula o RUC debe tener un mínimo de 10 dígitos',
             digits: 'Sólo puede ingresar dígitos en este campo'
         },
         telefono: {
             required:'Ingrese un télefono',
-            checkTelefono: 'Ingrese un télefono válido (042123456/0981234567)',
             digits: 'Sólo puede ingresar dígitos en este campo'
         },
         direccion: 'Ingrese su dirección'
@@ -56,10 +54,10 @@ $.validator.addMethod('checkEmail', function(value, element) {
 }, 'Ingrese una dirección de correo válida');
 $.validator.addMethod('checkCedula', function(value, element) {
     return this.optional(element) || value.length == 10 || value.length == 13;
-}, 'Ingrese un número de cédula o RUC válido');
+}, 'Su número de cédula debe tener 10 dígitos y su RUC debe tener 13 dígitos');
 $.validator.addMethod('checkTelefono', function(value, element) {
     return this.optional(element) || value.length == 9 || value.length == 10;
-}, 'Ingrese un número de teléfono válido');
+}, 'Ingrese un télefono válido (042123456/0981234567)');
 
 $(document).ready(function() {
     $("input[name='usuario']").keydown(function (e) {
