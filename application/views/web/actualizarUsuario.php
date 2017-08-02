@@ -12,20 +12,20 @@
               <?php echo form_error('usuario','<span class="help-block">','</span>'); ?>
             </div>
             <div class="form-group col-md-6">
-              <label for="nombre">Nombre <span class="red">*</span></label>
-              <input type="text" name="nombre" class="form-control" required placeholder="Ingrese su Nombre" value="<?php echo !empty($user['nombre'])?$user['nombre']:''; ?>"/>
+              <label for="nombre">Nombre o Razón Social <span class="red">*</span></label>
+              <input type="text" name="nombre" class="form-control" required placeholder="Ingrese su nombre o razón social" value="<?php echo !empty($user['nombre'])?$user['nombre']:''; ?>"/>
               <?php echo form_error('nombre','<span class="help-block">','</span>'); ?>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <label for="email">Correo Electrónico<span class="red">*</span></label>
+              <label for="email">Correo Electrónico <span class="red">*</span></label>
               <input type="email" name="correo" class="form-control" required aria-describedby="emailHelp" placeholder="Ingrese su correo" value="<?php echo !empty($user['email'])?$user['email']:''; ?>"/>
               <?php echo form_error('correo','<span class="help-block">','</span>'); ?>
             </div>
             <div class="form-group col-md-6">
-              <label for="apellido">Apellido <span class="red">*</span></label>
-              <input type="text" name="apellido" class="form-control" required placeholder="Ingrese su Apellido" value="<?php echo !empty($user['apellido'])?$user['apellido']:''; ?>"/>
+              <label for="apellido">Apellido</label>
+              <input type="text" name="apellido" class="form-control" placeholder="Ingrese su Apellido" value="<?php echo !empty($user['apellido'])?$user['apellido']:''; ?>"/>
               <?php echo form_error('apellido','<span class="help-block">','</span>'); ?>
             </div>
           </div>
@@ -33,13 +33,13 @@
           <hr class="secondary-separator">
           <div class="row">
             <div class="form-group col-md-6">
-              <label for="cedula">Cédula o RUC<span class="red">*</span></label>
-              <input type="text" class="form-control" name="cedula" maxlength="13" required placeholder="Ingrese su Nro. de Cedula"  value="<?php echo !empty($user['cedula'])?$user['cedula']:''; ?>">
+              <label for="cedula">Cédula o RUC <span class="red">*</span></label>
+              <input type="text" class="form-control" name="cedula" maxlength="13" required placeholder="Ingrese su Nro. de Cedula o RUC"  value="<?php echo !empty($user['cedula'])?$user['cedula']:''; ?>">
               <?php echo form_error('cedula','<span class="help-block">','</span>'); ?>
             </div>
             <div class="form-group col-md-6">
-              <label for="telefono">Número de Teléfono<span class="red">*</span></label>
-              <input type="text" class="form-control" name="telefono" maxlength="10" required placeholder="Ingrese número de teléfono" pattern="[0-9]{9,10}" value="<?php echo !empty($user['telefono'])?$user['telefono']:''; ?>">
+              <label for="telefono">Número de Teléfono <span class="red">*</span></label>
+              <input type="text" class="form-control" name="telefono" maxlength="10" required placeholder="Ingrese su número de teléfono (042123456/0981234567)" value="<?php echo !empty($user['telefono'])?$user['telefono']:''; ?>">
               <?php echo form_error('telefono','<span class="help-block">','</span>'); ?>
             </div>
           </div>
