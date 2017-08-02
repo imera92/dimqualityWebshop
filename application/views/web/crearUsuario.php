@@ -62,8 +62,10 @@
               <?php echo form_error('direccion','<span class="help-block">','</span>'); ?>
             </div>
           </div>
-          <div class="form-group col-md-12">
-            <input class="btn btn-registrar" name="submit" type="submit" value="Registrar"/><span class="required">* Campo Requerido</span>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <input class="btn btn-registrar" name="submit" type="submit" value="Registrar"/><span class="required">* Campo Requerido</span>
+            </div>            
           </div>
         </form>
       </div>
