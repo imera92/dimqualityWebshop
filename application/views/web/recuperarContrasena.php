@@ -1,13 +1,13 @@
 <div class="well contenedor col-md-6  col-md-offset-3 mt-150 mb-200">
      <div class="row">    
-       <form id ="formRecuperar" action="<?php echo base_url('web/passwordReset'); ?>" method="get">
+       <form class ="formRecuperar" action="<?php echo base_url('web/verificarCorreo'); ?>" method="post">
             <h1 class="pl-15">Recuperar tu contraseña</h1>
             <div class="form-group col-md-8"> 
                     <label>Direccion De Correo Electronico</label>
                     <input  name="email" class="form-control email" placeholder="correo electronico" type="email">
             </div>
             <div class="col-md-12">
-                    <button type="button" class="btn btn-success botonBusqueda">Enviar</button>
+                    <button type="button" class="btn btn-success Busqueda">Enviar</button>
             </div>
         </form>
     </div>

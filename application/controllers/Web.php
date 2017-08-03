@@ -268,23 +268,22 @@ class Web extends CI_Controller {
     }
   }
 
-  public function RecuperarContrasena(){
+  public function recuperarContrasena(){
       $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
       $dataHeader['titlePage'] = $titulo;
-
       $this->load->view('web/header', $dataHeader);
       $this->load->view('web/recuperarContrasena');
       $this->load->view('web/footer');
   }
 
     public function ChangePassword(){
-      $token=$_GET['token'];
-      $usuario=$_Get['idusuario'];
+      $token=$this->input->get('token');
+      $usuario= $this->input->get('idusuario');
       $this->db->from('restaurarcontraseña');
       $this->db->select('*');
       $this->db->where('token', $token);
       $restaurar= $this->db->get()->row();
-      if( $restaurar != null &&)
+      if( $restaurar != null )
       {
         if ($usuario== sha1($restaurar->userId) && $token==$restaurar->token){
           $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
@@ -297,27 +296,40 @@ class Web extends CI_Controller {
         }
       }
   }
-  public function ActualizarContraseña(){
-    $token=$this->input->get('t');//token
-    $user=$this->input->get('us');//user
-    $nuevaContraseña= $this->input->post('contraseña');
+  public function ActualizarContrasena(){
+    $token=$this->input->post('t');//token
+    $user=$this->input->post('us');//user
+    $nuevaContraseña= $this->input->post('contrasena');
     $VerificarContraseña= $this->input->post('vContraseña');
-    if ( $nuevaContraseña== $VerificarContraseña && $token!= "" && $user!="" && $nuevaContraseña!="" && $VerificarContraseña !=""){
-        $this->db->set('password', $nuevaContraseña);
-        $this->db->insert('usuario');
-        $this->db->where('userId', $user);
-        $this->db->delete('restaurarcontraseña');
-    }
+     $this->db->from('restaurarcontraseña');
+      $this->db->select('*');
+      $this->db->where('token', $token);
+      $restaurar= $this->db->get()->row();
+      if( $restaurar != null )
+      { 
+        if(sha1($restaurar->userId)==$user){
+          if ( $nuevaContraseña ==$VerificarContraseña){
+              $data= array('password'=> $nuevaContraseña);
+              $this->db->where('id', $restaurar->userId);
+              $this->db->update('usuario',$data);
+              $this->db->where('token', $token);
+              $this->db->delete('restaurarcontraseña');
+              header('Location: http://localhost/dimqualityWebshop/login ');
+              
+          }else{
+            echo "contraseña no coincide";
+          }
+        }else{
+           echo "no coincide los usuarios";
+        }
+      }else{
+         echo "no hay";
+      }
 
   }
   //funcion para generar un token para que el usuario pueda cambiar la contraseña
-  public function GenerarToken($email)
-  {
-      $this->db->from('usuario');
-      $this->db->select('*');
-      $this->db->where('email', $email);
-      $usuario = $this->db->get()->row();    
-      if( $usuario != null){ // verifica que el el correo proporcionaado le pertenece a un usuario activo 
+  public function GenerarToken($usuario)
+  { 
           $cadena=$usuario->nombre.$usuario->id.rand(1,9999999).date('Y-m-d');
           $token=sha1($cadena);
           $data = array(  
@@ -327,15 +339,33 @@ class Web extends CI_Controller {
           );
           $resultado=$this->db->insert('restaurarcontraseña', $data);
           if($resultado){
-            $enlace=$_SERVER["SERVER_NAME"].'/web/changuePassword?idusuario='.sha1($usuario->id).'&token='.$token;
+            $enlace=$_SERVER["SERVER_NAME"].'/dimqualityWebshop/web/ChangePassword?idusuario='.sha1($usuario->id).'&token='.$token;
             return $enlace;
+          }else{ 
+             return False;
           }
-      }else{ // le envia un mensaje de error notificando que ese correo no existe
+  }
 
-            //mensaje
-
+  public function verificarCorreo(){
+      $email = $this->input->post('email');
+      if ($email != ""){
+        $this->db->from('usuario');
+        $this->db->select('*');
+        $this->db->where('email', $email);
+        $usuario = $this->db->get()->row();
+        if( $usuario != null){
+            $enlace= $this->GenerarToken($usuario);
+            //$this->enviarEmail($usuario->email,$enlace);
+            echo $enlace;
+        }else{
+              $mensaje= 'este correo no registra ninguna cuenta';
+              echo $mensaje;
+        }
+      }else {
+          echo "ingrese un correo electronico";
       }
   }
+
 
 
   // funcion para enviar el correo al usuario 
@@ -362,14 +392,9 @@ class Web extends CI_Controller {
     }
     
     public function passwordReset(){
-      $email=$this->input->get('email');
-      if($email !=""){
-          $enlace = $this->GenerarToken($email);    
-          //$this->enviarEmail($email,$enlace);
           $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
           $dataHeader['titlePage'] = $titulo;
           //$this->load->view('web/password_reset', $dataHeader);
-      }
     }
   
 }

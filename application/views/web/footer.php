@@ -27,10 +27,13 @@
     <script src="<?php echo base_url('public/js/bootstrap.min.js'); ?>"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>
     <script src="<?php echo base_url('public/js/busqueda.js'); ?>"></script>
-	<script src="<?php echo base_url('public/js/recuperar.js'); ?>"></script>
 	<?php if ($this->router->method == 'crearUsuario'): ?>
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/crearUsuario.js'); ?>"></script>
+	<?php elseif ($this->router->method == 'recuperarContrasena'): ?>
+		<script src="<?php echo base_url('public/js/recuperar.js'); ?>"></script>
+	<?php elseif ($this->router->method == 'ChangePassword'): ?>
+		<script src="<?php echo base_url('public/js/RenovarContrasena.js'); ?>"></script>
 	<?php elseif ($this->router->method == 'carrito'): ?>
 		<script src="<?php echo base_url('public/js/jquery.fs.stepper.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/carrito.js'); ?>"></script>
