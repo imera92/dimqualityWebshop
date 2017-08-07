@@ -20,10 +20,7 @@
 		                            ));?>
 		            			</div>
 		            			<div class="form-group">
-		            				<div>
-										<label for="passwordInput" class="col-md-4">Contraseña<span class="red">*</span></label>
-										<label class="forget col-md-8 col-xs-12"><a href="<?php echo base_url('web/recuperarContrasena'); ?>">olvido su contraseña?</a></label>
-									</div>
+									<label for="passwordInput" class="col-md-4 pl-5">Contraseña<span class="red">*</span></label>	
 		            				<?php echo form_password(array(
 		            					'id' => 'passwordInput',
 		                                'name' => 'password',
@@ -32,7 +29,8 @@
 		                                'class' => 'form-control',
 		                            ));?>
 		            			</div>
-		            			<button type="submit" class="btn btn-login">Iniciar sesión</button><span class="required">* Campo Requerido</span>
+								<label class="col-md-12 col-xs-12 pl-5"><a href="<?php echo base_url('web/recuperarContrasena'); ?>">¿Olvidó su contraseña?</a></label>
+								<button type="submit" class="btn btn-login">Iniciar sesión</button><span class="required">* Campo Requerido</span>
 	            			</fieldset>
 	            		<?php echo form_close(); ?>
 	            	</div>

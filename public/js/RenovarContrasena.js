@@ -1,12 +1,52 @@
+$("#formCheckPassword").validate({
+           rules: {
+               contrasena: { 
+                 required: true,
+                    minlength: 6,
+                    maxlength: 10,
 
-Contrasena_V=$('.vc').val();
-$('.vc').keypress(function(){
-    Contrasena= $('.c').val();
-    Contrasena_V= $('vc').val();    
-    if(Contrasena != Contrasena_V){ 
-        console.log("deed");
-        $('.vc').css("background-color","rgba(215, 40, 44, 0.4)");
-    }if(Contrasena == Contrasena_V){
-        $('.vc').css("background-color","white");
-    }
- });
+               } , 
+
+                   vContraseña: { 
+                    required:true,
+                    equalTo: ".c",
+                    minlength: 6,
+                    maxlength: 10
+               }
+           },
+     messages:{
+         contrasena: { 
+                 required:"Password Requerido",
+                 minlength: "Minimo 6 caracteres",
+                 maxlength: "Maximo 10 caracteres"
+               },
+       vContraseña: { 
+         equalTo: "El password debe ser igual al anterior",
+         minlength: "Minimo 6 caracteres",
+         maxlength: "Maximo 10 caracteres"
+       }
+     }
+
+});
+
+$('.Busqueda').on('click', function(){ 
+    console.log("click")
+    $.ajax({
+                    type:"POST",
+                    url:  base_url + "/web/ActualizarContrasena",
+                    data: {contrasena:$('.c').val(), vContraseña:$('.vc').val(), t:$('.t').val(), us:$('.us').val()},
+                    dataType: 'text',
+                    success: function(data){
+                            color='alert-danger';
+                            $('.msg').append($('<div>',{class:'  alert  alert-dismissable'+" "+color}).append
+                                (
+                                    $('<strong>',{text: data}),
+                                    $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
+                                )
+                            ); 
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+});

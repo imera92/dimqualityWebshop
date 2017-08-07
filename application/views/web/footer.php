@@ -31,9 +31,10 @@
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/crearUsuario.js'); ?>"></script>
 	<?php elseif ($this->router->method == 'recuperarContrasena'): ?>
-		<script src="<?php echo base_url('public/js/recuperar.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/recuperar.js'); ?>"> var base_url = '<?php echo base_url(); ?>';  </script>
 	<?php elseif ($this->router->method == 'ChangePassword'): ?>
-		<script src="<?php echo base_url('public/js/RenovarContrasena.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/RenovarContrasena.js'); ?>">var base_url = '<?php echo base_url(); ?>';</script>
 	<?php elseif ($this->router->method == 'carrito'): ?>
 		<script src="<?php echo base_url('public/js/jquery.fs.stepper.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/carrito.js'); ?>"></script>

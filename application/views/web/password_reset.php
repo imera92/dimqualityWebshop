@@ -21,7 +21,7 @@
                         <div class="well col-md-5" style=" box-shadow: 2px 2px 5px #999;">
                             <div class="mb-30" >
                                 <h1>Cambio contraseña</h1>
-                                <p>Revisa tu email para cambiar tu contraseña.Si no aparece en los proximos minutos mira la carpeta de spam</p>
+                                <p><?php echo $msg; ?></p>
                             </div>
                             <button class="btn btn-success "><a href="<?php echo base_url('login'); ?>">Iniciar sesion</a></button>
                         </div>

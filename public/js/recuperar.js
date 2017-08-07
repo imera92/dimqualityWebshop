@@ -1,9 +1,9 @@
 $('.Busqueda').on('click', function(){ 
     if ($('.email').val() != '') {
-            if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($('.email').val())){
+            if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($('.email').val())){ // hacer tambien en el backend
                 $.ajax({
                     type:"POST",
-                    url:"verificarCorreo",
+                    url:  base_url + "/web/verificarCorreo",
                     data: {email:$('.email').val()},
                     dataType: 'text',
                     success: function(data){
@@ -12,7 +12,7 @@ $('.Busqueda').on('click', function(){
                         }else{
                             color='alert-success';
                         }
-                        $('.well').append($('<div>',{class:' alert  alert-dismissable'+" "+color}).append
+                        $('.msg').append($('<div>',{class:'  alert  alert-dismissable'+" "+color}).append
                             (
                                 $('<strong>',{text: data}),
                                 $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
@@ -24,17 +24,17 @@ $('.Busqueda').on('click', function(){
                     }
                 });
             }else{
-                $('.well').append($('<div>',{class:' alert alert-danger  alert-dismissable'}).append
+                $('.msg').append($('<div>',{class:' alert   alert-danger  alert-dismissable'}).append
                 (
-                    $('<strong>',{text: 'la direccion de email no es valida'}),
+                    $('<strong>',{text: 'Es necesario que ingrese un dirección de correo para recuperar su contraseña'}),
                     $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
                 )
             );       
             }   
     } else {        
-            $('.well').append($('<div>',{class:' alert alert-danger  alert-dismissable agregado'}).append
+            $('.msg').append($('<div>',{class:'alert alert-danger  alert-dismissable agregado'}).append                              
                 (
-                    $('<strong>',{text: 'El email es un campo requerido para recuperar su cuenta'}),
+                    $('<strong>',{text: 'Es necesario que ingrese una dirección de correo para recuperar su contraseña'}),
                     $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
                 )
             );
