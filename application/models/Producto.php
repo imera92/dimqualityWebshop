@@ -11,7 +11,6 @@
             categoria (varchar)
             codigo (Unique)(varchar)
             imagen (varchar)
-            costo (varchar)
             pvp (varchar)
             descripcion (varchar)
             estado (int)
@@ -28,7 +27,6 @@
         private $categoria;
         private $codigo;
         private $imagen;
-        private $costo;
         private $pvp;
         private $descripcion;
         private $estado;
@@ -75,11 +73,6 @@
         public function getImagen()
         {
             return $this->imagen;
-        }
-
-        public function getCosto()
-        {
-            return $this->costo;
         }
 
         public function getPVP()
@@ -140,11 +133,6 @@
             $this->imagen = $imagen;
         }
 
-        public function setCosto($costo)
-        {
-            $this->costo = $costo;
-        }
-
         public function setPVP($pvp)
         {
             $this->pvp = $pvp;
@@ -192,7 +180,6 @@
                     $this->categoria = $productoDB->categoria;
                     $this->codigo = $productoDB->codigo;
                     $this->imagen = $productoDB->imagen;
-                    $this->costo = $productoDB->costo;
                     $this->pvp = $productoDB->pvp;
                     $this->descripcion = $productoDB->descripcion;
                     $this->estado = $productoDB->estado;

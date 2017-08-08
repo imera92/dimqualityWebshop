@@ -72,8 +72,8 @@ class Admin extends CI_Controller {
             $crud=new grocery_CRUD();
             $crud->set_subject($titulo);
             $crud->set_table('producto');
-            $crud->columns('nombre','codigo','categoria','imagen','costo','pvp','descripcion','stock','estado','destacado');
-            $crud->required_fields('nombre','marca','categoria','codigo','imagen','modelo','costo','pvp','descripcion','estado','stock','destacado');
+            $crud->columns('nombre','marca','categoria','codigo','imagen','pvp','descripcion','estado','stock','destacado');
+            $crud->required_fields('nombre','marca','categoria','codigo','pvp','estado','stock','destacado');
             $crud->field_type('estado', 'dropdown', array(
                 '0' => 'Inactivo',
                 '1' => 'Activo'
@@ -82,6 +82,7 @@ class Admin extends CI_Controller {
                 '0' => 'Destacado',
                 '1' => 'No Destacado'
             ));
+            $crud->field_type('stock','integer');
             $crud->field_type('fechaCreacion', 'invisible');
             $crud->set_field_upload('imagen', 'assets/uploads/images/productos');
             $crud->display_as('codigo', 'Código');
@@ -90,8 +91,9 @@ class Admin extends CI_Controller {
             $crud->display_as('descripcion', 'Descripción');
             $crud->unset_export();
             $crud->unset_print();
-            $crud->unset_texteditor('descripcion','full_text');
-            $crud->set_language("spanish");
+            // $crud->unset_texteditor('descripcion','full_text');
+            $crud->field_type('descripcion', 'text');
+            $crud->set_language('spanish');
             $crud->callback_before_insert(array($this,'know_date'));
             $output=$crud->render();
             $dataHeader['titlePage'] = 'Dimquality::Admin - Productos';
@@ -110,9 +112,7 @@ class Admin extends CI_Controller {
     public function know_date($post_array){
         $post_array['fechaCreacion'] = date("Y-m-d");
         return $post_array;
-    }
-
-  
+    }  
 
     public function actualizarCatalogo() {
         if ($this->securityCheckAdmin()) {
@@ -235,7 +235,6 @@ class Admin extends CI_Controller {
                             // Hay que preguntar si vamos a guardar el precio con tarjeta de credito o no
                             next($return[$key1]);
                             $pvpProducto = next($return[$key1]);
-                            $costoProducto = next($return[$key1]);
                             $stockProducto = next($return[$key1]);
                             $productoExistente = $this->db->get_where('producto', array('codigo' => $codigoProducto))->result_array();
                             if (empty($productoExistente)) {
@@ -245,8 +244,6 @@ class Admin extends CI_Controller {
                                     'categoria' => $categoria,
                                     'codigo' => $codigoProducto,
                                     'imagen' => 'default.png',
-                                    'modelo' => '',
-                                    'costo' => $costoProducto,
                                     'pvp' => $pvpProducto,
                                     'descripcion' => '',
                                     'estado' => 1,
@@ -259,8 +256,6 @@ class Admin extends CI_Controller {
                                     'marca' => $marca,
                                     'categoria' => $categoria,
                                     'imagen' => 'default.png',
-                                    'modelo' => '',
-                                    'costo' => $costoProducto,
                                     'pvp' => $pvpProducto,
                                     'descripcion' => '',
                                     'estado' => 1,
