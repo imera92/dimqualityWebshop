@@ -75,15 +75,17 @@ class Admin extends CI_Controller {
             $crud->columns('nombre','marca','categoria','codigo','imagen','pvp','descripcion','estado','stock','destacado');
             $crud->required_fields('nombre','marca','categoria','codigo','pvp','estado','stock','destacado');
             $crud->field_type('estado', 'dropdown', array(
-                '0' => 'Inactivo',
-                '1' => 'Activo'
+                '1' => 'Activo',
+                '2' => 'Inactivo'
             ));
             $crud->field_type('destacado','dropdown', array(
-                '0' => 'Destacado',
-                '1' => 'No Destacado'
+                '1' => 'Destacado',
+                '2' => 'No Destacado'
             ));
             $crud->field_type('stock','integer');
             $crud->field_type('fechaCreacion', 'invisible');
+            $crud->set_rules('estado', 'Estado', 'callback_estado_check');
+            $crud->set_rules('destacado', 'Destacado', 'callback_destacado_check');
             $crud->set_field_upload('imagen', 'assets/uploads/images/productos');
             $crud->display_as('codigo', 'Código');
             $crud->display_as('categoria', 'Categoría');
@@ -107,7 +109,34 @@ class Admin extends CI_Controller {
         } else {
             redirect("admin/login");
         }
-     }
+    }
+
+    public function estado_check($estado){
+        if ($estado == 1) {
+            if ($this->input->post('stock') > 0) {
+                return TRUE;
+            } else {
+                $this->form_validation->set_message('estado_check', 'El producto tiene stock igual a 0. No puede estar como activo.');
+                return FALSE;
+            }
+        }
+    }
+
+    public function destacado_check($destacado){
+        if($destacado == 1){
+            if ($this->input->post('stock') > 0) {
+                if ($this->input->post('estado') == 1) {
+                    return TRUE;
+                } else {
+                    $this->form_validation->set_message('destacado_check', 'El producto está inactivo. No se puede destacar.');
+                    return FALSE;
+                }
+            } else {
+                $this->form_validation->set_message('destacado_check', 'El producto tiene stock igual a 0. No se puede destacar.');
+                return FALSE;
+            }
+        }
+    }
 
     public function know_date($post_array){
         $post_array['fechaCreacion'] = date("Y-m-d");
@@ -144,8 +173,8 @@ class Admin extends CI_Controller {
 
                 $this->load->view('admin/header', $dataHeader);
                 $this->load->view('admin/lat-menu');
-                $error = array('error' => $this->upload->display_errors());
-                $this->load->view('admin/catalogo', $error);
+                $dataBody = array('success' => 0, 'message' => 'No seleccionó un archivo para actualizar el catálogo.');
+                $this->load->view('admin/catalogo', $dataBody);
                 $this->load->view('admin/footer');
             } else {
                 $this->load->library('phpexcel');
@@ -196,87 +225,121 @@ class Admin extends CI_Controller {
                 // Obtenemos todas las marcas de la DB y las guardamos en un array
                 $this->db->select('nombre');
                 $this->db->from('marca');
-                $result = $this->db->get()->result_array();
+                $marcasDB = $this->db->get()->result_array();
 
-                // Validamos que hayan marcas existentes en la DB, caso contrario mostramos mensaje de error
-                if (empty($result)) {
-                    delete_files($path);
+                // Obtenemos todas las categorias de la DB y las guaradmos en un array
+                $this->db->select('nombre');
+                $this->db->from('categoriaproducto');
+                $categoriasDB = $this->db->get()->result_array();
 
-                    $titulo = "Dimquality::Admin - Actualizar Catalogo";
-                    $dataHeader['titlePage'] = $titulo;
-                    $this->load->view('admin/header', $dataHeader);
-                    $this->load->view('admin/lat-menu');
-                    $this->load->view('admin/catalogo', array('success' => 0, 'message' => 'Error. No hay marcas existentes en la base de datos.'));
-                    $this->load->view('admin/footer');
-                } else {
-                    foreach ($result as $index => $row) {
+                if (!empty($marcasDB)) {
+                    foreach ($marcasDB as $index => $row) {
                         $marcasArray[] = $row['nombre'];
-                    }
+                    }                    
+                } else {
+                    $marcasArray = array();
+                }
 
-                    /*header('Content-type: application/json');
-                    echo json_encode($return);
-                    die();*/
+                if (!empty($categoriasDB)) {
+                    foreach ($categoriasDB as $index => $row) {
+                        $categoriasArray[] = $row['nombre'];
+                    }                    
+                } else {
+                    $categoriasArray = array();
+                }
+
+                /*header('Content-type: application/json');
+                echo json_encode($return);
+                delete_files($path);
+                die();*/
 
 
-                    // Inicializamos las variables para evitar errores durance el proceso
-                    $marca = '';
-                    $categoria = '';
-                    
-                    foreach ($return as $key1 => $row) {
-                        // Empezamos a validar los datos del archivo
-                        if (in_array($return[$key1]['A'], $marcasArray)) {
-                            $marca = $return[$key1]['A'];
-                        }elseif (in_array($return[$key1]['A'], array('LAVADORAS', 'SECADORAS DE ROPA', 'REFRIGERADORAS', 'AIRES ACONDICIONADOS', 'MICROONDAS', 'AUDIO', 'TELEVISORES', 'TABLETS'))) {
-                            $categoria = $return[$key1]['A'];
-                        }else{
-                            $codigoProducto = current($return[$key1]);
-                            $nombreProducto = next($return[$key1]);
+                // Inicializamos las variables para evitar errores durance el proceso
+                $marca = '';
+                $categoria = '';
+                $flag = 0;
 
-                            // Hay que preguntar si vamos a guardar el precio con tarjeta de credito o no
-                            next($return[$key1]);
-                            $pvpProducto = next($return[$key1]);
-                            $stockProducto = next($return[$key1]);
-                            $productoExistente = $this->db->get_where('producto', array('codigo' => $codigoProducto))->result_array();
-                            if (empty($productoExistente)) {
-                                $datosProducto = array(
-                                    'nombre' => $nombreProducto,
-                                    'marca' => $marca,
-                                    'categoria' => $categoria,
-                                    'codigo' => $codigoProducto,
-                                    'imagen' => 'default.png',
-                                    'pvp' => $pvpProducto,
-                                    'descripcion' => '',
-                                    'estado' => 1,
-                                    'stock' => ($stockProducto > 0) ? 1 : 0
-                                );
-                                $this->db->insert('producto', $datosProducto);
-                            } else {
-                                $datosProducto = array(
-                                    'nombre' => $nombreProducto,
-                                    'marca' => $marca,
-                                    'categoria' => $categoria,
-                                    'imagen' => 'default.png',
-                                    'pvp' => $pvpProducto,
-                                    'descripcion' => '',
-                                    'estado' => 1,
-                                    'stock' => ($stockProducto > 0) ? 1 : 0
-                                );
-                                $this->db->set($datosProducto);
-                                $this->db->where('codigo', $codigoProducto);
-                                $this->db->update('producto');
-                            }
+                foreach ($return as $key1 => $row) {
+                    if ($key1 > 1) {
+                        if ((count($row) == 1)) {
+                            $flag = 1;
+                        } else {
+                            $flag = 2;
                         }
                     }
 
-                    // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra
-                    delete_files($path);
-                    $titulo = "Dimquality::Admin - Actualizar Catalogo";
-                    $dataHeader['titlePage'] = $titulo;
-                    $this->load->view('admin/header', $dataHeader);
-                    $this->load->view('admin/lat-menu');
-                    $this->load->view('admin/catalogo', array('success' => 1));
-                    $this->load->view('admin/footer');
+                    // Empezamos a validar los datos del archivo
+                    if ($flag == 0) {
+                        $marca = $return[$key1]['A'];
+                        if (!in_array($marca, $marcasArray)) {
+                            $data = array(
+                                    'nombre' => $marca
+                            );
+
+                            $this->db->insert('marca', $data);
+                        }
+                        $flag++;
+                    } elseif ($flag == 1) {
+                        $categoria = $return[$key1]['A'];
+                        if (!in_array($categoria, $categoriasArray)) {
+                            $data = array(
+                                    'nombre' => $categoria
+                            );
+
+                            $this->db->insert('categoriaproducto', $data);
+                        }
+                    } elseif ($flag == 2) {
+                        $codigoProducto = current($return[$key1]);
+                        $nombreProducto = next($return[$key1]);
+
+                        next($return[$key1]);
+                        $pvpProducto = next($return[$key1]);
+                        next($return[$key1]);
+                        $stockProducto = next($return[$key1]);
+                        $productoExistente = $this->db->get_where('producto', array('codigo' => $codigoProducto))->result_array();
+                        $fechaActual = date('Y-m-d');
+                        if (empty($productoExistente)) {
+                            $datosProducto = array(
+                                'nombre' => $nombreProducto,
+                                'marca' => $marca,
+                                'categoria' => $categoria,
+                                'codigo' => $codigoProducto,
+                                'imagen' => '',
+                                'pvp' => $pvpProducto,
+                                'descripcion' => '',
+                                'estado' => ($stockProducto > 0) ? 1 : 2,
+                                'stock' => $stockProducto,
+                                'destacado' => 2,
+                                'fechaCreacion' => $fechaActual = date('Y-m-d')
+                            );
+                            $this->db->insert('producto', $datosProducto);
+                        } else {
+                            $datosProducto = array(
+                                'nombre' => $nombreProducto,
+                                'marca' => $marca,
+                                'categoria' => $categoria,
+                                'imagen' => '',
+                                'pvp' => $pvpProducto,
+                                'descripcion' => '',
+                                'estado' => ($stockProducto > 0) ? 1 : 2,
+                                'stock' => $stockProducto,
+                                'destacado' => 2,
+                            );
+                            $this->db->set($datosProducto);
+                            $this->db->where('codigo', $codigoProducto);
+                            $this->db->update('producto');
+                        }
+                    }
                 }
+
+                // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra
+                delete_files($path);
+                $titulo = "Dimquality::Admin - Actualizar Catalogo";
+                $dataHeader['titlePage'] = $titulo;
+                $this->load->view('admin/header', $dataHeader);
+                $this->load->view('admin/lat-menu');
+                $this->load->view('admin/catalogo', array('success' => 1, 'message' => 'El catalogo se actualizó exitosamente.'));
+                $this->load->view('admin/footer');
             }
         } else {
             redirect("admin/login");

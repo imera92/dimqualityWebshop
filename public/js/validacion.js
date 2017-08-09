@@ -98,5 +98,17 @@ $(document).ready(function(){
         }
     });
     $(".chosen-search").remove();
-
+    if ($('div[id = field-estado]').html() == '1') {
+        $('div[id = field-estado]').html('Activo');
+    } else {
+        $('div[id = field-estado]').html('Inactivo');
+    }
+    if ($('div[id = field-destacado]').html() == '1') {
+        $('div[id = field-destacado]').html('Destacado');
+    } else {
+        $('div[id = field-destacado]').html('No Destacado');
+    }
+    if ($('div[id = field-stock]').html() == '&nbsp;') {
+        $('div[id = field-stock]').html('0');
+    }
 });

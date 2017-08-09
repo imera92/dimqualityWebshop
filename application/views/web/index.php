@@ -115,56 +115,119 @@
             </div>
         </div>
         <div class="row mb-40">
-                <div class="productos_destacados">
-                    <div class="section-title center">
-                        <h2>Productos <strong>Destacados</strong></h2>
-                        <div class="line">
-                         <hr>
-                        </div>
+            <div class="productos_destacados">
+                <div class="section-title center">
+                    <h2>Productos <strong>Destacados</strong></h2>
+                    <div class="line">
+                     <hr>
                     </div>
-                    <div id="team" class="owl-carousel owl-theme row">
-                        <?php foreach($resultados as $row): ?>
-                            <div class="item col-md-3">
-                                <div class="thumbnail">
-                                    <img src="<?php echo base_url('public/img/prueba.jpg'); ?>">
-                                    <div class=caption>
-                                        <h3 style="color:#00BFFF"><?php echo $row->nombre;?></h3>
-                                        <p><?php echo $row->descripcion;?></p>
+                </div>
+                <?php foreach($productosDestacados as $index => $producto): ?>
+                        <div class="col-xs-12 col-sm-6 col-md-3 equalHeightBox">
+                            <div class="well">
+                                <div class="row">
+                                    <?php 
+                                    if ($producto->getImagen() == ''){
+                                        $imagenUrl = base_url("assets/uploads/images/productos/default.png");
+                                    } else {
+                                        $imagenUrl = base_url("assets/uploads/images/productos/".$producto->getImagen());
+                                    }
+                                    ?>
+                                    <img class="img-responsive" src="<?php echo $imagenUrl; ?>">
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 nombreProducto">
+                                        <span><?php echo $producto->getNombre(); ?></span>
+                                    </div>
+                                </div>
+                                <div class="row mt-10">
+                                    <div class="col-xs-12 precioProducto">
+                                        <span>$ <?php echo $producto->getPVP(); ?></span>
+                                    </div>
+                                </div>
+                                <div class="row mt-10 text-center">
+                                    <div class="col-xs-8">
+                                        <a href="<?php echo base_url('producto/' . $producto->getId()); ?>" class="btn btn-default btn-masInfo">Más Información</a>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <?php echo form_open('carrito/anadirProducto' , array('id' => 'frm-anadirProducto')); ?>
+                                            <?php echo form_input(array(
+                                                'type' => 'hidden',
+                                                'id' => 'cantidadInput',
+                                                'name' => 'cantidad',
+                                                'value' => 1,
+                                            ));?>
+                                            <?php echo form_input(array(
+                                                'type' => 'hidden',
+                                                'id' => 'idInput',
+                                                'name' => 'id',
+                                                'value' => $producto->getId()
+                                            ));?>
+                                            <button type="submit" class="btn btn-add"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+                                        <?php echo form_close(); ?>
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                 </div>
+                        </div>
+                <?php endforeach; ?>
+            </div>
         </div>   
         <div class="row mb-40">
-             <div class="productos_Nuevos">
-                    <div class="section-title center">
-                        <h2>Productos <strong>Nuevos</strong></h2>
-                        <div class="line">
-                         <hr>
-                        </div>
+            <div class="productos_Nuevos">
+                <div class="section-title center">
+                    <h2>Productos <strong>Nuevos</strong></h2>
+                    <div class="line">
+                     <hr>
                     </div>
-                    <?php foreach($Nuevos as $nuevo): ?>
-                            <div class="col-xs-3 col-md-3 equalHeightBox">
-                                <div class="well">
-                                    <div class="row">
-                                        <img src="<?php echo base_url('assets/uploads/images/productos/' . $nuevo->imagen ); ?>">
+                </div>
+                <?php foreach($productosRecientes as $index => $producto): ?>
+                        <div class="col-xs-12 col-sm-6 col-md-3 equalHeightBox">
+                            <div class="well">
+                                <div class="row">
+                                    <?php 
+                                    if ($producto->getImagen() == ''){
+                                        $imagenUrl = base_url("assets/uploads/images/productos/default.png");
+                                    } else {
+                                        $imagenUrl = base_url("assets/uploads/images/productos/".$producto->getImagen());
+                                    }
+                                    ?>
+                                    <img class="img-responsive" src="<?php echo $imagenUrl; ?>">
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 nombreProducto">
+                                        <span><?php echo $producto->getNombre(); ?></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xs-12"> 
-                                            <h3 style="color:#00BFFF"><?php echo $nuevo->nombre;?></h3>
-                                        </div>
+                                </div>
+                                <div class="row mt-10">
+                                    <div class="col-xs-12 precioProducto">
+                                        <span>$ <?php echo $producto->getPVP(); ?></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <p><?php echo $nuevo->descripcion;?></p>
-                                        </div>
+                                </div>
+                                <div class="row mt-10 text-center">
+                                    <div class="col-xs-8">
+                                        <a href="<?php echo base_url('producto/' . $producto->getId()); ?>" class="btn btn-default btn-masInfo">Más Información</a>
                                     </div>
-                                    
+                                    <div class="col-xs-4">
+                                        <?php echo form_open('carrito/anadirProducto' , array('id' => 'frm-anadirProducto')); ?>
+                                            <?php echo form_input(array(
+                                                'type' => 'hidden',
+                                                'id' => 'cantidadInput',
+                                                'name' => 'cantidad',
+                                                'value' => 1,
+                                            ));?>
+                                            <?php echo form_input(array(
+                                                'type' => 'hidden',
+                                                'id' => 'idInput',
+                                                'name' => 'id',
+                                                'value' => $producto->getId()
+                                            ));?>
+                                            <button type="submit" class="btn btn-add"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+                                        <?php echo form_close(); ?>
+                                    </div>
                                 </div>
                             </div>
-                    <?php endforeach; ?>   
-                 </div>
+                        </div>
+                <?php endforeach; ?>   
+            </div>
         </div>
     </div>

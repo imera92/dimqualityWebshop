@@ -354,5 +354,55 @@
 
             return $productosEncontrados;
         }
+
+        static public function productosRecientes($cantidad = 1)
+        {
+            $productosArray = Array();
+
+            // Obtener instancia de CodeIgniter para manejo de la DB
+            $instanciaCI =& get_instance();
+
+            // Traemos de la DB los n productos recientes
+            $instanciaCI->db->select('id');
+            $instanciaCI->db->from('producto');
+            $instanciaCI->db->where('estado', 1);
+            $instanciaCI->db->order_by('fechaCreacion', 'DESC');
+            $instanciaCI->db->limit($cantidad);
+            $productosDB = $instanciaCI->db->get()->result_array();
+
+            // Instanciamos los productos y los guardamos en el arreglo
+            foreach ($productosDB as $index => $row) {
+                $producto = new Producto();
+                $producto->getProductoPorId($row['id']);
+                array_push($productosArray, $producto);
+            }
+
+            return $productosArray;
+        }
+
+        static public function productosDestacados()
+        {
+            $productosArray = Array();
+
+            // Obtener instancia de CodeIgniter para manejo de la DB
+            $instanciaCI =& get_instance();
+
+            // Traemos de la DB los n productos recientes
+            $instanciaCI->db->select('id');
+            $instanciaCI->db->from('producto');
+            $instanciaCI->db->where('estado', 1);
+            $instanciaCI->db->where('destacado', 1);
+            $instanciaCI->db->order_by('fechaCreacion', 'DESC');
+            $productosDB = $instanciaCI->db->get()->result_array();
+
+            // Instanciamos los productos y los guardamos en el arreglo
+            foreach ($productosDB as $index => $row) {
+                $producto = new Producto();
+                $producto->getProductoPorId($row['id']);
+                array_push($productosArray, $producto);
+            }
+
+            return $productosArray;
+        }
 	}
 ?>

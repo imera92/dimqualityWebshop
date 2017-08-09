@@ -5,7 +5,14 @@
 				</div>
 			<?php else: ?>
 				<div class="col-xs-3 col-xs-offset-1">
-					<img class="img-responsive" src="<?php echo base_url('assets/uploads/images/productos/'.$producto['imagen']); ?>">
+					<?php 
+					if ($producto['imagen'] == ''){
+						$imagenUrl = base_url("assets/uploads/images/productos/default.png");
+					} else {
+						$imagenUrl = base_url("assets/uploads/images/productos/".$producto['imagen']);
+					}
+					?>
+					<img class="img-responsive" src="<?php echo $imagenUrl; ?>">
 				</div>
 				<div class="col-xs-7">
 					<div class="row">

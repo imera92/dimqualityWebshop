@@ -21,16 +21,11 @@ class Web extends CI_Controller {
 
   public function index() {
     $titulo = "Dimquality - Lo mejor en Tecnología y Electrodomésticos";
-    $destacado=1;
-    $fechaActual= date("Y-m-d");
-    $fechaAnterior = strtotime ( '-5 day' , strtotime ( $fechaActual ) ) ;
-    $fechaAnterior = date ( 'Y-m-j' , $fechaAnterior);
     $dataHeader['titlePage'] = $titulo;
-    $this->db->where('destacado',$destacado);
-    $query=$this->db->get('producto');
-    $query2 = $this->db->query("SELECT * FROM producto where fechaCreacion BETWEEN '$fechaAnterior' AND '$fechaActual';");
-    $dataBody['resultados']=$query->result();
-    $dataBody['Nuevos']=$query2->result();
+    $productosRecientes = $this->Producto->productosRecientes(4);
+    $productosDestacados = $this->Producto->productosDestacados();
+    $dataBody['productosRecientes'] = $productosRecientes;
+    $dataBody['productosDestacados'] = $productosDestacados;
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/index', $dataBody);
     $this->load->view('web/footer');
