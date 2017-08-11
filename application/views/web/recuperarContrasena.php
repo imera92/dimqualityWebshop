@@ -13,7 +13,7 @@
                     </div>
             </form>
             <div class="col-md-12 nota pl-15">
-                <p><span class="bold-text">(Nota:</span>Por favor, proporciona la dirección de correo que usaste para tu cuenta.Te enviaremos un correo al mail que coloques arriba para resetear tu contraseña)</p>
+                <p><span class="bold-text">(Nota:</span> Por favor, proporciona la dirección de correo que usaste para tu cuenta.Te enviaremos un correo al mail que coloques arriba para resetear tu contraseña)</p>
             </div>
         </div>        
     </div>

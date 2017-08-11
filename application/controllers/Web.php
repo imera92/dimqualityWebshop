@@ -276,7 +276,7 @@ class Web extends CI_Controller {
       $this->load->view('web/footer');
   }
 
-    public function ChangePassword(){
+    public function ChangePassword($mensaje=0){
       $token=$this->input->get('token');
       $usuario= $this->input->get('idusuario');
       $this->db->from('restaurarcontraseña');
@@ -294,6 +294,8 @@ class Web extends CI_Controller {
           $this->load->view('web/ChangePassword',$dataBody);
           $this->load->view('web/footer');
         }
+      }else{
+         redirect('cambiarContrasena');
       }
   }
   public function ActualizarContrasena(){
@@ -314,20 +316,13 @@ class Web extends CI_Controller {
                       $this->db->update('usuario',$data);
                       $this->db->where('token', $token);
                       $this->db->delete('restaurarcontraseña');
-                      $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-                      $dataHeader['titlePage'] = $titulo;
-                      $dataBody['msg'] ="Su contraseña ha sido cambiada con éxito";
-                      $this->load->view('web/header', $dataHeader);
-                      $this->load->view('web/password_reset', $dataBody); 
-                      
-                  }else{
-                    echo "Hubo un error al procesar su requerimiento.Las contraseñas no coinciden";
-                  }
+                      echo 'usuario/login/1';
+                  }       
               }else{
                 echo "Hubo un error al procesar su requerimiento.La nueva contraseña debe tener minimo 6 caracteres";
               }
           }else{
-              $this->mensaje();
+               redirect('cambiarContrasena');
           }
     }else{
         echo "Hubo un error al procesar su requerimiento.La contraseña no puede ser vacia";
@@ -336,17 +331,15 @@ class Web extends CI_Controller {
 
   }
   
-  public function mensaje(){
+  public function mensaje($mensaje){
               $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-              $dataHeader['titlePage'] = $titulo;
-              $dataBody['msg'] ="Hubo un error al procesar su requerimiento";
-              $this->load->view('web/header', $dataHeader);
+              $dataBody['titlePage'] = $titulo;
+              $dataBody['msg'] ="Su contraseña ha sido cambiado con exito";
               $this->load->view('web/password_reset', $dataBody);
   }
   
   //funcion para generar un token para que el usuario pueda cambiar la contraseña
-  public function GenerarToken($usuario)
-  { 
+  public function GenerarToken($usuario){ 
           $cadena=$usuario->nombre.$usuario->id.rand(1,9999999).date('Y-m-d');
           $token=sha1($cadena);
           $data = array(  
@@ -385,11 +378,10 @@ class Web extends CI_Controller {
                 $this->db->delete('restaurarcontraseña');
                 $enlace= $this->GenerarToken($usuario);
               }
-              echo $enlace;
-
-        }else{
-              $mensaje= 'La dirección de correo proporcionada no está vinculada a ninguna cuenta de usuario';
-              echo $mensaje;
+              echo 'Se le ha enviado un mensaje a su correo';
+        }else
+        {
+              echo 'La dirección de correo proporcionada no está vinculada a ninguna cuenta de usuario';
         }
       }else {
           echo "Es necesario que ingrese un dirección de correo para recuperar su contraseña";
@@ -413,12 +405,11 @@ class Web extends CI_Controller {
               </p>
             </body>
             </html>';
-        
-          $cabeceras = 'MIME-Version: 1.0' . "\r\n";
-          $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-          $cabeceras .= 'From: Dimquality <mimail@codedrinks.com>' . "\r\n";
+          $headers = 'From: webmaster@example.com' . "\r\n" .
+                      'Reply-To: webmaster@example.com' . "\r\n" .
+                      'X-Mailer: PHP/' . phpversion();
           //Se envia el correo al usuario
-          mail($email, "Recuperar contraseña", $mensaje, $cabeceras);
+          mail($email, "Recuperar contraseña", $mensaje, $headers);
     }
 }
 

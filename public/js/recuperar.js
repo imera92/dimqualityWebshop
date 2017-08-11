@@ -7,7 +7,7 @@ $('.Busqueda').on('click', function(){
                     data: {email:$('.email').val()},
                     dataType: 'text',
                     success: function(data){
-                        if(data=="este correo no registra ninguna cuenta" || data =="ingrese un correo electronico"){
+                        if(data=="La dirección de correo proporcionada no está vinculada a ninguna cuenta de usuario" || data =="ingrese un correo electronico"){
                             color='alert-danger';
                         }else{
                             color='alert-success';

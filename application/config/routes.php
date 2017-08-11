@@ -56,5 +56,6 @@ $route['logout'] = 'usuario/logout';
 $route['registro'] = 'usuario/crearUsuario';
 $route['producto/(:num)'] = 'producto/getProducto/$1';
 $route['carrito'] = 'web/carrito';
+$route['cambiarContrasena']='web/recuperarContrasena';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

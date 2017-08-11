@@ -30,23 +30,24 @@ $("#formCheckPassword").validate({
 });
 
 $('.Busqueda').on('click', function(){ 
-    console.log("click")
     $.ajax({
                     type:"POST",
                     url:  base_url + "/web/ActualizarContrasena",
                     data: {contrasena:$('.c').val(), vContraseña:$('.vc').val(), t:$('.t').val(), us:$('.us').val()},
                     dataType: 'text',
                     success: function(data){
-                            color='alert-danger';
-                            $('.msg').append($('<div>',{class:'  alert  alert-dismissable'+" "+color}).append
-                                (
-                                    $('<strong>',{text: data}),
-                                    $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
-                                )
-                            ); 
-                    },
-                    error: function(data){
-                        console.log(data);
+                            if(data=='Hubo un error al procesar su requerimiento.La nueva contraseña debe tener minimo 6 caracteres' || data=='Hubo un error al procesar su requerimiento.La contraseña no puede ser vacia'){   
+                                color='alert-danger';
+                                    $('.msg').append($('<div>',{class:'  alert  alert-dismissable'+" "+color}).append
+                                        (
+                                            $('<strong>',{text: data}),
+                                            $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
+                                        )
+                                );
+                            }else{
+                                console.log(data);
+                                window.location.href = base_url+ data;
+                            }
                     }
-                });
+    });
 });
