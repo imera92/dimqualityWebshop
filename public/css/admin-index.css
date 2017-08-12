@@ -8,3 +8,11 @@ body{
 	border: 2px solid #33cc33;
 	text-align: center;
 }
+
+.box{
+	display: inline;
+}
+h2{
+	background-color:grey;
+}
+
