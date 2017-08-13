@@ -1,0 +1,28 @@
+.subasta{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.btn-crear{
+    background-color: rgba(51, 204, 51, 0.5);
+}
+
+.info-subasta{
+    padding-left: 5%;
+}
+
+.disponible{
+    color: limegreen;
+    font-weight: bold;
+}
+
+.no-disponible{
+    color: #c9302c;
+    font-weight: bold;
+}
+
+.btn-subasta{
+    width: 80%;
+    margin-bottom: 5%;
+    margin-left: 10%;
+}
