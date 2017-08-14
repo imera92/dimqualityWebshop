@@ -1,4 +1,4 @@
-var cate, marc, produInfo,id;
+var cate, marc, produInfo;
 function obtenerFecha(){
     var d = new Date();
     var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
@@ -10,28 +10,24 @@ function obtenerFecha(){
     minDate: obtenerFecha()
 });
 
-$( ".categoria" ).click(function() {
-    cate=$(this).text();
-    $('.marca-list').remove();
+$( ".categoria" ).on('change',function() {
+    cate=$(this).val();
+    $('.marca-op').remove();
     $.ajax({
                     type:"GET",
                     url:  base_url + "Subasta/obtenerMarca",
-                    data: {categoria:$(this).text()},
+                    data: {categoria:$(this).val()},
                     dataType: 'json',
                     success: function(data){
-                            $('.marca').append($('<ul>',{class:'dropdown-menu marcalist'}));
-                           
-                            $.each(data, function(key, value){        
+                            $.each(data, function(key, value){   
+                                console.log(data[key].marca);     
                                 if(data[key].marca != ' '){
-                                    $('.marca > ul').append
+                                    $('.marca').append
                                         (
-                                            $('<li>').append
-                                            (
-                                                $('<a>',{text: data[key].marca, href:'#', class:'marca-list'})
-                                            )
+                                                $('<option>',{text: data[key].marca, class:'marca-op'})   
                                         )      
                                 }else{
-                                    $('.marcalist').remove();   
+                                    $('.marca.op').remove();
                                 }
                             })
                     },
@@ -41,28 +37,25 @@ $( ".categoria" ).click(function() {
     });
 });
 
-$(".marca").on("click", ".marca-list", function(){
-    $(".productolist").remove();
-    marc= $(this).text();
+$(".marca").on("change", function(){
+    $('.product-op').remove();
+    marc= $(this).val()
     $.ajax({
                     type:"GET",
                     url:  base_url + "Subasta/obtenerProductos",
-                    data: {categoria:cate, marca:$(this).text() },
+                    data: {categoria:cate, marca:$(this).val() },
                     dataType: 'json',
                     success: function(data){
-                            $('.producto').append($('<ul>',{class:'dropdown-menu productolist'}));
                              produInfo=data;
                             $.each(data, function(key, value){        
                                 if(data[key].nombre !=' '){
-                                    $('.producto > ul').append
+                                    $('.producto').append
                                         (
-                                            $('<li>').append
-                                            (
-                                                $('<a>',{text: data[key].nombre, href:'#', class: 'product-list'})
-                                            )
+                                            
+                                                $('<option>',{text: data[key].nombre, class: 'product-op'})                                           
                                         )     
                                 }else{
-                                    $(".productolist").remove();
+                                    $(".product-op").remove();
                                 }
                             })
                     },
@@ -73,28 +66,33 @@ $(".marca").on("click", ".marca-list", function(){
     
 });
 
-$(".producto").on("click", ".productolist", function(){
-        
-        producto=$(this).text();
-        $.each(produInfo, function(key, value){  
-            if(produInfo[key].nombre==producto){
-                id=produInfo[key].id;
-            }
-        });  
-});
+
+
+
+
 
 $( ".obtener" ).click(function() {
     FechaHoraInicio= $('.fh-i').val();
     FechaHoraFin=$('.fh-f').val();
     PrecioBase=$('.pb').val();
+    $.each(produInfo, function(key, value){
+        producto=produInfo[key].nombre;
+        producto_selec=$('.producto').val();
+        console.log(producto);
+        console.log(producto_selec);
+        if(producto.localeCompare(producto_selec)==0){
+            id_pro=produInfo[key].id;
+            console.log(id_pro);
+            return id_pro;
+        }
+    });
     $.ajax({
                     type:"POST",
                     url:  base_url + "Subasta/Guardar",
-                    data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PreBa:PrecioBase, categoria:cate, product:id },
+                    data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:id_pro },
                     dataType: 'text',
                     success: function(data){
-                
-                            if(data.localeCompare('La subasta se ha creado exitosamente')){
+                            if(data.localeCompare('La subasta se ha creado exitosamente')==0){
                                 color='success';
                             }else{
                                 color='danger';

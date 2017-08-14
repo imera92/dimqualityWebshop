@@ -15,7 +15,7 @@
                             <?php if (isset($subasta)): ?>
                                         <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaInicio) ?>"/>
                                      <?php else: ?>
-                                        <input  class="form-control pb fh-f"> 
+                                        <input  class="form-control fh-i"> 
                                     <?php endif; ?>
                             <span class="input-group-addon bdate1">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -29,7 +29,7 @@
                                    <?php if (isset($subasta)): ?>
                                         <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaFin) ?>"/>
                                      <?php else: ?>
-                                        <input  class="form-control pb fh-f"> 
+                                        <input  class="form-control fh-f"> 
                                     <?php endif; ?>
                                    <span class="input-group-addon bdate2">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -39,27 +39,29 @@
                     </div>
                     <div class="form-group ">
                         <label class="col-md-4">Producto: </label>
-                        <div class="col-md-8 pb-15 pl-0">
-                            <div class="dropdown box">
-                                <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">Categoria<span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <?php foreach ($categorias as  $categoria): ?>
-                                        <li class="li"><a href="#" class="categoria"><?php echo $categoria->nombre; ?></a></li>
-                                    <?php endforeach; ?>
-                                </ul>
-            
+                        <div class="col-md-8 pb-15 pl-0 ml-0">
+                            <div class="box col-md-3 pl-0 ml-0">
+                                <strong>Categoria: </strong>
+                                <select class="form-control categoria col-md-2">
+                                        <?php foreach ($categorias as  $categoria): ?>
+                                            <option class=><?php echo $categoria->nombre;?></option>
+                                        <?php endforeach; ?>
+                                    
+                                </select>
                             </div>
-                            <div class="dropdown box marca">
-                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Marca<span class="caret"></span></button>
-                                
+                            <div class=" box  col-md-3">
+                                <strong>Marca: </strong>
+                                <select class="form-control marca">
+                                </select>
                             </div>
-                            <div class="dropdown box producto">
-                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Producto<span class="caret"></span></button>
-                                
+                            <div class="box  col-md-3">
+                                <strong>Producto: </strong>
+                                <select class="form-control producto">
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group ">
+                    <div class="form-group">
                             <label for="pwd "class="col-md-4">Precio base: </label>
                             <div class="col-md-8 pl-0 " >
                                 <?php if ( isset($subasta)):?>
@@ -70,8 +72,8 @@
                                 
                             </div>
                     </div>                 
-                    <button type="button" class="btn btn-primary ml-15 obtener">Guardar</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Cancelar</button>
+                    <button type="button" class="btn btn-primary ml-15 mt-20 obtener">Guardar</button>
+                    <button type="button" class="btn btn-danger mt-20" data-toggle="modal" data-target="#myModal">Cancelar</button>
                     <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
                             <!-- Modal content-->

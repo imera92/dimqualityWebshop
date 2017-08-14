@@ -50,36 +50,59 @@ class Subasta extends CI_Controller {
         $this->output->set_output(json_encode($restaurar));
     }
 
+    //funcion que verifique que ese producto ya no esta siendo subastado    
+    function verificarProducto($id){
+        $this->db->from('subasta');
+        $this->db->where('producto',$id);
+        $this->db->select('*');
+        $result= $this->db->get()->result_array();
+        if ($result==null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    
+    
     function Guardar(){
         $FechaHoraInicio=$this->input->post('Fhi');
         $FechaHoraFin=$this->input->post('Fhf');
-        $precioBase=$this->input->post('PreBa');
+        $precioBase=$this->input->post('PrecioBase');
         $producto=$this->input->post('product');
         if($producto != null && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
-            if (strtotime($FechaHoraInicio) < time())
+            if (strtotime($FechaHoraInicio) < time() )
             {   
                 echo 'Ha ocurrido un error. La Fecha de inicio no puede ser menor a la hora actual';
-            }else{
-                if (strtotime($FechaHoraFin) < time())
-                {   
-                    $activa=0;
-                }
-                else{ $activa=1;}
+            }
+            elseif(strtotime($FechaHoraFin)< time()){
+                echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menos a la hora actual';
+            }elseif($this->verificarProducto($producto)){
+                echo 'Ha ocurrido un error. Este producto ya esta siendo subastado';
+            }
+            else{
                 $FechaHoraInicio=date("Y-m-d H:i:s", strtotime($FechaHoraInicio));
                 $FechaHoraFin=date("Y-m-d H:i:s", strtotime($FechaHoraFin));
-                $now=new DateTime("now");
                 $data = array(
                 'fechaInicio' => $FechaHoraInicio,
                 'fechaFin' =>$FechaHoraFin,
                 'producto' => $producto,
                 'precioBase' => $precioBase,
-                'estado' => $activa
+                'estado' => 1
                 );
                 $this->db->insert('subasta', $data);
                 echo 'La subasta se ha creado exitosamente';
             }
         }else{
-            echo 'Ha ocurrido un error. Todos los campos son requeridos.';
+            if($FechaHoraFin==null){
+                echo 'Ha ocurrido un error. La fecha Fin de subasta es obligatoria';
+            }elseif($FechaHoraInicio==null){
+                echo 'Ha ocurrido un error. La fecha de inicio de subasta es obligatoria';
+            }elseif($precioBase==null){
+                echo 'Ha ocurrido un error. EL precio base es obligatorio';
+            }elseif($producto==null){
+                echo 'Ha ocurrido un error. El producto es obligatorio';
+            }
         }
     }
 
