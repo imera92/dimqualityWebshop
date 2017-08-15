@@ -8,14 +8,14 @@
             </div>
             <div class="col-md-8 mt-50 col-md-offset-2 msg">
                 <h2 class="pl-10"> <?php echo $Accion;?> Subastas</h2>
-                <form>
+                <form id="SubastaForm">
                     <div class="form-group ">
                         <label for="fehca/hora" class="col-md-4">Fecha y hora de inicio: </label>
                         <div class="col-md-8 pb-15 input-group date datetimepicker1 dt1">
                             <?php if (isset($subasta)): ?>
                                         <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaInicio) ?>"/>
                                      <?php else: ?>
-                                        <input  class="form-control fh-i"> 
+                                        <input name="fhi"  class="form-control fh-i"> 
                                     <?php endif; ?>
                             <span class="input-group-addon bdate1">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -29,7 +29,7 @@
                                    <?php if (isset($subasta)): ?>
                                         <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaFin) ?>"/>
                                      <?php else: ?>
-                                        <input  class="form-control fh-f"> 
+                                        <input name="fhf" class="form-control fh-f"> 
                                     <?php endif; ?>
                                    <span class="input-group-addon bdate2">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -67,7 +67,7 @@
                                 <?php if ( isset($subasta)):?>
                                         <input  class="form-control pb" value="<?php echo $subasta->precioBase;?>">
                                 <?php else: ?>
-                                         <input  class="form-control pb">
+                                         <input name ="preb" class="form-control pb">
                                 <?php endif; ?>   
                                 
                             </div>

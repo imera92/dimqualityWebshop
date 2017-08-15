@@ -6,7 +6,38 @@ function obtenerFecha(){
 }
 
 
- $('.datetimepicker1').datetimepicker({
+$("#SubastaForm").validate({
+    rules: {
+        fhi: { 
+          required: true
+
+        } , 
+
+            fhf: { 
+             required:true
+            
+        },
+            preb:{
+                requiered:true
+        }
+    },
+messages:{
+  contrasena: { 
+          required:"Password Requerido",
+          minlength: "Minimo 6 caracteres",
+          maxlength: "Maximo 10 caracteres"
+        },
+vContraseña: { 
+  equalTo: "El password debe ser igual al anterior",
+  minlength: "Minimo 6 caracteres",
+  maxlength: "Maximo 10 caracteres"
+}
+}
+
+});
+
+
+$('.datetimepicker1').datetimepicker({
     minDate: obtenerFecha()
 });
 

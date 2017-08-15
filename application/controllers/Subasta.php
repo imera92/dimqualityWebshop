@@ -54,13 +54,13 @@ class Subasta extends CI_Controller {
     function verificarProducto($id){
         $this->db->from('subasta');
         $this->db->where('producto',$id);
-        $this->db->select('*');
-        $result= $this->db->get()->result_array();
-        if ($result==null){
-            return true;
+        $result= $this->db->get()->row();
+        if($result != null){
+            return TRUE;
         }else{
-            return false;
+            return FALSE;
         }
+        //$this->output->set_output(json_encode($result));
     }
     
     
