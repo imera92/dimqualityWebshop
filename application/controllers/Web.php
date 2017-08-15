@@ -372,11 +372,12 @@ class Web extends CI_Controller {
               if( $restaurar == null )
               { 
                 $enlace= $this->GenerarToken($usuario);
-                //$this->enviarEmail($usuario->email,$enlace);
+                $this->enviarEmail($usuario->email,$enlace);
               }else{
                 $this->db->where('userId', $usuario->id);
                 $this->db->delete('restaurarcontraseña');
                 $enlace= $this->GenerarToken($usuario);
+                $this->enviarEmail($usuario->email,$enlace);
               }
               echo 'Se le ha enviado un mensaje a su correo';
         }else
@@ -391,7 +392,8 @@ class Web extends CI_Controller {
 
 
   // funcion para enviar el correo al usuario 
-    function enviarEmail( $email, $enlace ){
+  /*  
+  function enviarEmail( $email, $enlace ){
           $mensaje = '<html>
             <head>
                 <title>Restablece tu contraseña</title>
@@ -410,6 +412,34 @@ class Web extends CI_Controller {
                       'X-Mailer: PHP/' . phpversion();
           //Se envia el correo al usuario
           mail($email, "Recuperar contraseña", $mensaje, $headers);
-    }
+    }*/
+
+     
+      function enviarEmail($email, $enlace){
+        $config = array();
+        $config['useragent']           = "CodeIgniter";
+        $config['mailpath']            = "/usr/bin/sendmail"; // or "/usr/sbin/sendmail"
+        $config['protocol']            = "smtp";
+        $config['smtp_host']           = "localhost";
+        $config['smtp_port']           = "25";
+        $config['mailtype'] = 'html';
+        $config['charset']  = 'utf-8';
+        $config['newline']  = "\r\n";
+        $config['wordwrap'] = TRUE;
+        
+          $this->load->library('email');      
+          $this->email->initialize($config);
+          $this->email->from('user@example.com','Your name');
+          $this->email->to($email);
+          $this->email->subject('Email Test');
+          $this->email->message('Testing the email class.');
+          if($this->email->send()) {
+            echo 'Enviado';
+          } else {
+            show_error($this->email->print_debugger());
+          }
+      }
+    
+    
 }
 
