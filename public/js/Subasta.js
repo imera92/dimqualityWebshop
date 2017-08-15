@@ -109,12 +109,9 @@ $( ".obtener" ).click(function() {
     $.each(produInfo, function(key, value){
         producto=produInfo[key].nombre;
         producto_selec=$('.producto').val();
-        console.log(producto);
-        console.log(producto_selec);
+
         if(producto.localeCompare(producto_selec)==0){
             id_pro=produInfo[key].id;
-            console.log(id_pro);
-            return id_pro;
         }
     });
     $.ajax({

@@ -79,6 +79,8 @@ class Subasta extends CI_Controller {
                 echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menos a la hora actual';
             }elseif($this->verificarProducto($producto)){
                 echo 'Ha ocurrido un error. Este producto ya esta siendo subastado';
+            }elseif(strtotime($FechaHoraInicio)>strtotime($FechaHoraFin)){
+                echo 'Ha ocurrido un error. La fecha de inicio no puede ser mayor a la fecha final de una subasta';
             }
             else{
                 $FechaHoraInicio=date("Y-m-d H:i:s", strtotime($FechaHoraInicio));
@@ -105,13 +107,59 @@ class Subasta extends CI_Controller {
             }
         }
     }
-
+    //funcion para actualizarr una determinada subasta
+    function ActualizarSubasta(){
+        $id= $this->input->post('id');
+        $FechaHoraInicio=$this->input->post('Fhi');
+        $FechaHoraFin=$this->input->post('Fhf');
+        $precioBase=$this->input->post('PrecioBase');
+        $producto=$this->input->post('product');
+        $this->db->from('producto');
+        $this->db->where('nombre',$producto);
+        $this->db->select('*');
+        $product=$this->db->get()->row();
+        $id_producto=$product->id;
+        if($id_producto != null && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
+            if (strtotime($FechaHoraInicio) < time() )
+            {   
+                echo 'Ha ocurrido un error. La Fecha de inicio no puede ser menor a la hora actual';
+            }
+            elseif(strtotime($FechaHoraFin)< time()){
+                echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menos a la hora actual';
+            }elseif(strtotime($FechaHoraInicio)>strtotime($FechaHoraFin)){
+                echo 'Ha ocurrido un error. La fecha de inicio no puede ser mayor a la fecha final de una subasta';
+            }
+            else{
+                
+                $FechaHoraInicio=date("Y-m-d H:i:s", strtotime($FechaHoraInicio));
+                $FechaHoraFin=date("Y-m-d H:i:s", strtotime($FechaHoraFin));
+                $data = array(
+                    'fechaInicio' => $FechaHoraInicio,
+                    'fechaFin' =>$FechaHoraFin,
+                    'producto' => $id_producto,
+                    'precioBase' => $precioBase,
+                    'estado' => 1
+                );
+                $this->db->where('id',$id);
+                $this->db->update('subasta', $data);
+                echo 'La subasta se ha actualizado exitosamente';
+            }
+        }else{
+            echo 'Ha ocurrido un error. Todos los campos son requeridos ';
+        }
+    }
+    //funcion que carga la vista de actualizar subasta a partir de un id 
     function Actualizar(){
         $id=$this->input->get('id');
         $this->db->from('subasta');
         $this->db->where('id', $id);
         $this->db->select('*');
-        $dataBody['subasta']=$this->db->get()->row();
+        $subasta=$this->db->get()->row();
+        $dataBody['subasta']=$subasta;
+        $this->db->from('producto');
+        $this->db->where('id',$subasta->producto);
+        $this->db->select('*');
+        $dataBody['producto']= $this->db->get()->row();
         $dataBody['Accion']='Editar';
          if ($this->securityCheckAdmin()) {
             $query = $this->db->get('categoriaproducto');

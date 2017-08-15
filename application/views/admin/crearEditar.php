@@ -13,7 +13,7 @@
                         <label for="fehca/hora" class="col-md-4">Fecha y hora de inicio: </label>
                         <div class="col-md-8 pb-15 input-group date datetimepicker1 dt1">
                             <?php if (isset($subasta)): ?>
-                                        <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaInicio) ?>"/>
+                                        <input  class ="form-control fh-i" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaInicio) ?>"/>
                                      <?php else: ?>
                                         <input name="fhi"  class="form-control fh-i"> 
                                     <?php endif; ?>
@@ -27,7 +27,7 @@
                             <div class="col-md-8 pb-15 input-group date datetimepicker1 dt2">
                     
                                    <?php if (isset($subasta)): ?>
-                                        <input  class ="form-control" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaFin) ?>"/>
+                                        <input  class ="form-control fh-f" id="datetimepickerFrom" type="text" value="<?= htmlspecialchars($subasta->fechaFin) ?>"/>
                                      <?php else: ?>
                                         <input name="fhf" class="form-control fh-f"> 
                                     <?php endif; ?>
@@ -43,20 +43,35 @@
                             <div class="box col-md-3 pl-0 ml-0">
                                 <strong>Categoria: </strong>
                                 <select class="form-control categoria col-md-2">
-                                        <?php foreach ($categorias as  $categoria): ?>
-                                            <option class=><?php echo $categoria->nombre;?></option>
-                                        <?php endforeach; ?>
+                                        <?php if (isset($subasta)): ?>
+                                            <option><?php echo $producto->categoria;?></option>
+                                            <?php foreach ($categorias as  $categoria): ?>
+                                                <?php if ($producto->categoria!=$categoria->nombre): ?>
+                                                    <option><?php echo $categoria->nombre;?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <?php foreach ($categorias as  $categoria): ?>
+                                                <option><?php echo $categoria->nombre;?></option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     
                                 </select>
                             </div>
                             <div class=" box  col-md-3">
                                 <strong>Marca: </strong>
                                 <select class="form-control marca">
+                                    <?php if (isset($subasta)): ?>
+                                        <option class="marca-op" ><?php echo $producto->marca;?></option>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                             <div class="box  col-md-3">
                                 <strong>Producto: </strong>
                                 <select class="form-control producto">
+                                    <?php if (isset($subasta)): ?>
+                                        <option class="product-op"><?php echo $producto->nombre;?></option>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                         </div>
@@ -71,8 +86,14 @@
                                 <?php endif; ?>   
                                 
                             </div>
-                    </div>                 
-                    <button type="button" class="btn btn-primary ml-15 mt-20 obtener">Guardar</button>
+                    </div>
+                    <?php if ( isset($subasta)):?>
+                            <button type="button" class="btn btn-primary ml-15 mt-20 actualizar">Actualizar</button>
+                            <input type="hidden" name="t" class="id" value="<?php echo $subasta->id ?>">
+                    <?php else: ?>
+                            <button type="button" class="btn btn-primary ml-15 mt-20 obtener">Guardar</button>
+                    <?php endif; ?>                  
+                    
                     <button type="button" class="btn btn-danger mt-20" data-toggle="modal" data-target="#myModal">Cancelar</button>
                     <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
