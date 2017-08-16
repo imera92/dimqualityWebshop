@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require(APPPATH.'libraries/REST_Controller.php')
+require(APPPATH.'libraries/REST_Controller.php');
 
 Class Api extends REST_Controller{
 	function _construct(){
@@ -11,18 +11,30 @@ Class Api extends REST_Controller{
         $this->methods['login_post']['level'] = 0;
 	}
 
-	public function login_get{
+	public function login_post(){
 		if ($this->post("user") && $this->post("password")){
-			$sUser = $this->ShopUser->api_login_user($this->post("user"), $this->post("password"))
-			if ($sUser != false) {	
-				$this->response($sUser, 200);
+			$this->load->model('ShopUser');
+			$suser = $this->ShopUser->api_login_user($this->post("user"), $this->post("password"));
+			if ($suser != false) {
+				$resp = array(
+					'status' => "success", 
+					'user' => $suser);
+				$this->response($resp, 200);
 			}
 			else{
-				$this->response("Usuario o contraseña no concuerdan", 400);
+				$message = array(
+					'message' => "Usuario o password no concuerdan",
+					'body' => $this->post(), 
+				 );
+				$this->response($message, 400);
 			}
 		}
 		else{
-			$this->response("Usuario o contraseña invalidos", 400);
+			$message = array(
+				'message' => "Usuario o password no invalidos",
+				'body' => $this->post(),
+			 );
+			$this->response($message, 400);
 		}
 	}
 }

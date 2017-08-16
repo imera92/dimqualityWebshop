@@ -207,7 +207,7 @@
 	    }
 
 
-        public function newApiKey($level,$ignorelimits,$isPrivateKey,$ipAddresses)
+        public function newApiKey($level,$ignorelimits)
         {
             //generamos la key
             $key = $this->generateToken();
@@ -223,9 +223,8 @@
             $data = array(
                 "key"           =>      $key,
                 "level"         =>      $level,
-                "ignore_limits" =>      $ignore_limits,
-                "is_private_key"=>      $is_private_key,
-                "ip_addresses"  =>      $ip_addresses
+                "ignore_limits" =>      $ignorelimits,
+                "date_created"=>      date('Y-m-d'),
             );
 
             $this->db->insert("keys", $data);
