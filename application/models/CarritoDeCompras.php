@@ -48,6 +48,11 @@
         ///////////////////////////////////
         // Setters
         ///////////////////////////////////
+        public function setId ($id)
+        {
+            $this->id = $id;
+        }
+
         public function setSubtotal($subtotal)
         {
             $this->$subtotal = $subtotal;
@@ -129,7 +134,11 @@
             $instanciaCI->db->order_by('id', 'DESC');
             $instanciaCI->db->limit(1);
             $result = $instanciaCI->db->get()->row();
-            $lastId = $result->id;
+            if (!is_null($result)) {
+                $lastId = $result->id;
+            } else {
+                $lastId = null;
+            }
 
             return $lastId;
         }
