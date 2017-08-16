@@ -8,19 +8,12 @@
 	            		</div>
 	            	</div>
 	            	<div class="col-md-12 mt-50">
-            			<?php if(isset($success)): ?>
-		            		<?php if ($success == 1): ?>
-		            			<div class="alert alert-success alert-dismissable">
-		            			 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		            			 	El catalogo se actualizó exitosamente.
-		            			</div>
-	            			<?php else: ?>
-	            				<div class="alert alert-success alert-dismissable">
-	            				 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	            				 	<?php echo $message; ?>
-	            				</div>
-	            			<?php endif; ?>
-        				<?php endif; ?>
+	            		<?php if (isset($success)): ?>
+		            		<div class="alert alert-<?php echo ($success == 1) ? 'success' : 'danger'; ?> alert-dismissable">
+		            		 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		            		 	<?php echo $message; ?>
+		            		</div>
+	            		<?php endif; ?>
 	            	</div>
 	                <div class="col-md-12 mt-50">
 	                	<div class="well">

@@ -59,7 +59,7 @@ class Usuario extends CI_Controller {
     if($this->input->post('submit')){
       $this->form_validation->set_rules('usuario', 'Usuario', 'required|callback_user_check');
       $this->form_validation->set_rules('nombre', 'Nombre', 'required');
-      $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+      // $this->form_validation->set_rules('apellido', 'Apellido', 'required');
       $this->form_validation->set_rules('correo', 'Email', 'required|valid_email|callback_email_check');
       $this->form_validation->set_rules('clave', 'password', 'required');
       $this->form_validation->set_rules('conf_clave', 'confirmar clave', 'required|matches[clave]');
@@ -86,15 +86,39 @@ class Usuario extends CI_Controller {
           $nuevoCarrito->guardarNuevoCarrito();
         }
 
+        // Borramos exceso de espacios vacios en el username
+        $userInput = $this->input->post('usuario');
+        $userInput = trim($userInput);
+        $userInput = preg_replace('/\s+/', '', $userInput);
+
+        // Borramos exceso de espacios vacios en el nombre
+        $nombreInput = strip_tags($this->input->post('nombre'));
+        $nombreInput = trim($nombreInput);
+        $nombreInput = preg_replace('/\s+/', ' ', $nombreInput);
+
+        // Borramos exceso de espacios vacios en la direccion
+        $direccionInput = strip_tags($this->input->post('direccion'));
+        $direccionInput = trim($direccionInput);
+        $direccionInput = preg_replace('/\s+/', ' ', $direccionInput);
+
+        // Verificamos si se envia apellido y borramos exceso de espacios vacios
+        if (!is_null($this->input->post('apellido'))) {
+          $apellidoInput = strip_tags($this->input->post('apellido'));
+          $apellidoInput = trim($apellidoInput);
+          $apellidoInput = preg_replace('/\s+/', ' ', $apellidoInput);
+        } else {
+          $apellidoInput = '';
+        }
+
         $userData = array(
-          'user' => $this->input->post('usuario'),
-          'nombre' => strip_tags($this->input->post('nombre')),
-          'apellido' => strip_tags($this->input->post('apellido')),
+          'user' => $userInput,
+          'nombre' => $nombreInput,
+          'apellido' => $apellidoInput,
           'email' => strip_tags($this->input->post('correo')),
           'password' => md5($this->input->post('clave')),
           'cedula' => strip_tags($this->input->post('cedula')),
           // 'pais' => strip_tags($this->input->post('pais')),
-          'direccion' => strip_tags($this->input->post('direccion')),
+          'direccion' => $direccionInput,
           'telefono' => strip_tags($this->input->post('telefono')),
           'carrito' => $nuevoCarrito->getId()
         );
@@ -158,7 +182,7 @@ class Usuario extends CI_Controller {
     $con['conditions'] = array('cedula'=>$str);
     $checkCedula = $this->ShopUser->getRows($con);
     if($checkCedula > 0){
-      $this->form_validation->set_message('cedula_check', 'La cédula ya está registrado.');
+      $this->form_validation->set_message('cedula_check', 'La cédula ya está registrada.');
       return FALSE;
     } else {
       return TRUE;
@@ -182,7 +206,7 @@ class Usuario extends CI_Controller {
       if($this->input->post('submit')){
         $this->form_validation->set_rules('usuario', 'Usuario', 'required|callback_user_update_check');
         $this->form_validation->set_rules('nombre', 'Nombre', 'required');
-        $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+        // $this->form_validation->set_rules('apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('correo', 'Email', 'required|valid_email|callback_email_update_check');
         //$this->form_validation->set_rules('clave', 'password', 'required');
         //$this->form_validation->set_rules('conf_clave', 'confirmar clave', 'required|matches[clave]');
@@ -193,30 +217,60 @@ class Usuario extends CI_Controller {
 
 
         if($this->form_validation->run() == true){
-          
+          // Borramos exceso de espacios vacios en el username
+          $userInput = $this->input->post('usuario');
+          $userInput = trim($userInput);
+          $userInput = preg_replace('/\s+/', '', $userInput);
+
+          // Borramos exceso de espacios vacios en el nombre
+          $nombreInput = strip_tags($this->input->post('nombre'));
+          $nombreInput = trim($nombreInput);
+          $nombreInput = preg_replace('/\s+/', ' ', $nombreInput);
+
+          // Borramos exceso de espacios vacios en la direccion
+          $direccionInput = strip_tags($this->input->post('direccion'));
+          $direccionInput = trim($direccionInput);
+          $direccionInput = preg_replace('/\s+/', ' ', $direccionInput);
+
+          // Verificamos si se envia apellido y borramos exceso de espacios vacios
+          if (!is_null($this->input->post('apellido'))) {
+            $apellidoInput = strip_tags($this->input->post('apellido'));
+            $apellidoInput = trim($apellidoInput);
+            $apellidoInput = preg_replace('/\s+/', ' ', $apellidoInput);
+          } else {
+            $apellidoInput = '';
+          }
           $userData = array(
-            'user' => $this->input->post('usuario'),
-            'nombre' => strip_tags($this->input->post('nombre')),
-            'apellido' => strip_tags($this->input->post('apellido')),
+            'user' => $userInput,
+            'nombre' => $nombreInput,
+            'apellido' => $apellidoInput,
             'email' => strip_tags($this->input->post('correo')),
             //'password' => md5($this->input->post('clave')),
             'cedula' => strip_tags($this->input->post('cedula')),
             // 'pais' => strip_tags($this->input->post('pais')),
-            'direccion' => strip_tags($this->input->post('direccion')),
+            'direccion' => $direccionInput,
             'telefono' => strip_tags($this->input->post('telefono')),
             //'carrito' => $nuevoCarrito->getId()
-          );      
+          );
+
           $update = $this->ShopUser->update($this->session->userdata('id'), $userData);
           if($update){
-            $this->session->set_userdata('success_msg', 'Su informacion ha sido actualizada con exito.');
+            // Actualizamos datos en sesion
+            $this->session->set_userdata('user', $userInput);
+            $this->session->set_userdata('nombre', $nombreInput);
+            $this->session->set_userdata('apellido', $apellidoInput);
+            $this->session->set_userdata('correo', strip_tags($this->input->post('correo')));
+            $this->session->set_userdata('cedula', strip_tags($this->input->post('cedula')));
+            $this->session->set_userdata('direccion', $direccionInput);
+            $this->session->set_userdata('telefono', strip_tags($this->input->post('telefono')));
+
+            $data['msg'] = 'Su informacion ha sido actualizada con exito.';
             redirect('web/index');
           }else{
-            $data['error_msg'] = 'No se han cambiado datos.';            
+            $data['msg'] = 'No se han cambiado datos.';
           }
-        }
-      }
-      else{
-        $userData = array(
+        } else {
+          $userData = array(
             'user' => $this->session->userdata('user'),
             'nombre' => $this->session->userdata('nombre'),
             'apellido' => $this->session->userdata('apellido'),
@@ -227,7 +281,22 @@ class Usuario extends CI_Controller {
             'direccion' => $this->session->userdata('direccion'),
             'telefono' => $this->session->userdata('telefono')
             //'carrito' => $nuevoCarrito->getId())
-            );
+          );
+        }
+      }
+      else{
+        $userData = array(
+          'user' => $this->session->userdata('user'),
+          'nombre' => $this->session->userdata('nombre'),
+          'apellido' => $this->session->userdata('apellido'),
+          'email' => $this->session->userdata('correo'),
+          //'password' => md5($this->input->post('clave')),
+          'cedula' => $this->session->userdata('cedula'),
+          // 'pais' => strip_tags($this->input->post('pais')),
+          'direccion' => $this->session->userdata('direccion'),
+          'telefono' => $this->session->userdata('telefono')
+          //'carrito' => $nuevoCarrito->getId())
+        );
       }
 
       $data['user'] = $userData;
@@ -278,18 +347,18 @@ class Usuario extends CI_Controller {
       return true;
     }
     if (strlen($str)!=10 && strlen($str)!=13) {
-      $this->form_validation->set_message('cedula_update_check', 'Formato de cédula no valido (10 o 13 digitos).');
+      $this->form_validation->set_message('cedula_update_check', 'Su número de cédula debe tener 10 dígitos y su RUC debe tener 13 dígitos.');
       return false;
     }
     if (!is_numeric($str)){
-      $this->form_validation->set_message('cedula_update_check', 'Formato de cédula no valido (10 o 13 digitos).');
+      $this->form_validation->set_message('cedula_update_check', 'Su número de cédula debe tener 10 dígitos y su RUC debe tener 13 dígitos.');
       return false;
     }    
     $con['returnType'] = 'count';
     $con['conditions'] = array('cedula'=>$str);
     $checkCedula = $this->ShopUser->getRows($con);
     if($checkCedula > 0){
-      $this->form_validation->set_message('cedula_update_check', 'La cédula ya está registrado.');
+      $this->form_validation->set_message('cedula_update_check', 'La cédula ya está registrada.');
       return FALSE;
     } else {
       return TRUE;

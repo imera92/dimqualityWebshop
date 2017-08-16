@@ -58,7 +58,14 @@
 							<div class="col-xs-3 equalHeightBox">
 								<div class="well">
 									<div class="row">
-										<img class="img-responsive" src="<?php echo base_url('assets/uploads/images/productos/' . $producto->getImagen() ); ?>">
+										<?php 
+										if ($producto->getImagen() == ''){
+											$imagenUrl = base_url("assets/uploads/images/productos/default.png");
+										} else {
+											$imagenUrl = base_url("assets/uploads/images/productos/".$producto->getImagen());
+										}
+										?>
+										<img class="img-responsive" src="<?php echo $imagenUrl; ?>">
 									</div>
 									<div class="row">
 										<div class="col-xs-12 nombreProducto">

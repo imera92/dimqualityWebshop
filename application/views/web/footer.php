@@ -35,6 +35,10 @@
 		<script src="<?php echo base_url('public/js/actualizarUsuario.js'); ?>"></script>
 	<?php elseif ($this->router->method == 'comprarProductos'): ?>
 		<script src="<?php echo base_url('public/js/comprarProductos.js'); ?>"></script>
+	<?php elseif ($this->router->method == 'recuperarContrasena'): ?>
+		<script src="<?php echo base_url('public/js/recuperar.js'); ?>"></script>
+	<?php elseif ($this->router->method == 'ChangePassword'): ?>
+		<script src="<?php echo base_url('public/js/RenovarContrasena.js'); ?>"></script>
 	<?php elseif ($this->router->method == 'carrito'): ?>
 		<script src="<?php echo base_url('public/js/jquery.fs.stepper.min.js'); ?>"></script>
 		<script src="<?php echo base_url('public/js/carrito.js'); ?>"></script>

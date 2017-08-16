@@ -30,7 +30,14 @@
 									</a>
 								</div>
 								<div class="col-md-2">
-									<img class="img-responsive" src="<?php echo base_url('assets/uploads/images/productos/' . $producto['imagen']); ?>">
+									<?php 
+									if ($producto['imagen'] == ''){
+										$imagenUrl = base_url("assets/uploads/images/productos/default.png");
+									} else {
+										$imagenUrl = base_url("assets/uploads/images/productos/".$producto['imagen']);
+									}
+									?>
+									<img class="img-responsive" src="<?php echo $imagenUrl; ?>">
 								</div>
 								<div class="col-md-3">
 									<a href="<?php echo base_url('producto/getProducto/' . $producto['id']); ?>"><?php echo $producto['nombre']; ?></a>

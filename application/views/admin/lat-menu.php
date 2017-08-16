@@ -20,6 +20,9 @@
 	                    </li>
 	                </ul>
                 </div>
+				<li>
+		            <a href="<?php echo base_url('subasta/subastas'); ?>"><i class="fa fa-gift" aria-hidden="true"></i> Subastas</a>
+		        </li>
 		        <li>
 		            <a href="<?php echo base_url('admin/logout'); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log out</a>
 		        </li>

@@ -1,0 +1,13 @@
+.contenedor > .row {
+    padding-left: 1vw;
+}
+
+.bold-text{
+	font-weight: bold;
+}
+
+.nota{
+    margin-top: 2vh;
+    font-size: 10px;
+
+}

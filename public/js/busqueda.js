@@ -1,3 +1,4 @@
+
 $('#botonBusqueda').on('click', function(){
 	terminoBusqueda = $('#terminoBusqueda').val();
 	if (terminoBusqueda != '') {
