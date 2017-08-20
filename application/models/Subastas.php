@@ -175,14 +175,16 @@
 		// función que elimina una subasta dado su id
 		public function eliminarSubasta($id_subasta)
 		{
-			if (!is_null($productoId)) {
-				$ofertas = $this->db->get_where('ofertasubasta', array('id' => $id_subasta));
+			if (!is_null($id_subasta)) {
+				$ofertas = $this->db->get_where('ofertasubasta', array('subasta' => $id_subasta));
 
 				foreach ($ofertas->result() as $fila) {
 					$this->db->delete('ofertasubasta', array('id' => $fila->id));
 				}
 				$this->db->delete('subasta', array('id' => $id_subasta));
 				return true;
+			}else{
+				return false;
 			}
 		}
 

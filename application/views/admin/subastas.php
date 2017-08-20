@@ -48,11 +48,11 @@
 
 						</div>
 						<div class="botones-subasta col col-md-3">
-							<button class="btn btn-info btn-subasta" type="button" name="ver">Ver detalle</button>
+							<button name="<?php echo $fila->id; ?>" class="btn btn-info btn-subasta" type="button" name="ver">Ver detalle</button>
 							<br>
-							<button class="btn btn-info btn-subasta" type="button" name="editar">Editar</button>
+							<button href="<?php echo base_url('subasta/eliminarSubasta'); ?>" name="<?php echo $fila->id; ?>" class="btn btn-info btn-subasta" type="button" name="editar">Editar</button>
 							<br>
-							<button class="btn btn-danger btn-subasta" type="button" name="eliminar">Eliminar</button>
+							<button name="<?php echo $fila->id; ?>" class="btn btn-danger btn-subasta" type="button" name="eliminar">Eliminar</button>
 						</div>
 					</div>
 					<hr>

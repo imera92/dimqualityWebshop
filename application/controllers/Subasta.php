@@ -33,8 +33,6 @@ class Subasta extends CI_Controller {
 		$config['total_rows'] = $subasta->num_subastas();
 		$config['per_page'] = $limite;
 
-		//$config['num_links'] = 2;
-
 		$config['full_tag_open'] = '<ul class="pagination">';
 		$config['full_tag_close'] = '</ul>';
 		$config['first_link'] = false;
@@ -70,9 +68,14 @@ class Subasta extends CI_Controller {
 
     }
 
-	function eliminar()
+	public function eliminar()
 	{
-		
+		$subasta = new Subastas();
+		$id_subasta = $this->uri->segment(3);
+		//echo $id_subasta;
+		$subasta->eliminarSubasta($id_subasta);
+		redirect('subasta/subastas');
+
 	}
 
 
