@@ -17,34 +17,61 @@ $('.bdate2').click(function(){
     });
 });
 
-$('.actualizar').click(function(){
-    pro=$('.producto').val()
-    FechaHoraInicio= $('.fh-i').val();
-    FechaHoraFin=$('.fh-f').val();
-    PrecioBase=$('.pb').val();
-    console.log(FechaHoraFin);
-    console.log(PrecioBase);
-    $.ajax({
-        type:"POST",
-        url:  base_url + "Subasta/ActualizarSubasta",
-        data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:pro,id:$('.id').val() },
-        dataType: 'text',
-        success: function(data){
-            if(data.localeCompare('La subasta se ha actualizado exitosamente')==0){
-                color='success';
-            }else{
-                color='danger';
+
+
+$('.subastaForm').validate({
+    debug: false,
+    rules: {
+        fhi: { 
+          required: true
+
+        } , 
+
+            fhf: { 
+             required:true
+            
+        },
+            preb:{
+                required:true
+        },
+        myselect: { required: true }
+    },
+messages:{
+        fhi: 'Ingrese una fecha de inicio',
+        fhf:'Ingrese una fecha de fin',
+        preb:'Ingrese un precio base',
+        myselect: "Debe seleccionar un producto"
+        }, errorElement : 'strong',
+        errorPlacement: function(error,element){
+            switch(element.attr("name")){
+                case 'fhi':
+                    error.insertAfter($('#box1'));
+                    break;
+                
+                case 'fhf':
+                    error.insertAfter($('.dt2'));
+                    break;
+                
+                case 'preb':
+                    error.insertAfter($('.pb'));
+                    break;
+                case 'myselect':
+                    error.insertAfter($('.box3'));
+                    break;
+                default:
+                  //nothing
             }
-            $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
-            +color}).append
-                (
-                    $('<strong>',{text: data}),
-                    $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
-                )
-            );  
-        }, 
-    });
-})
+        }
+    
+
+});
+
+//no permite que escriba campos alfanumericos en el precio base
+$(".pb").keypress(function(tecla){
+    if( tecla.charCode < 48 || tecla.charCode > 57){
+      return false;
+    }
+}); 
 
 $( ".categoria" ).on('click',function() {
     console.log('holi');
@@ -102,4 +129,37 @@ $(".marca").on("click", function(){
                     }
     });
     
+});
+$(document).ready(function() {
+    $('form').submit(function(){
+        pro=$('.producto').val()
+        FechaHoraInicio= $('.fh-i').val();
+        FechaHoraFin=$('.fh-f').val();
+        PrecioBase=$('.pb').val();
+        console.log(FechaHoraFin);
+        console.log(PrecioBase);
+        $.ajax({
+            type:$('.subastaForm').attr('method'),
+            url:  $('.subastaForm').attr('action'),
+            data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:pro,id:$('.id').val() },
+            dataType: 'text',
+            success: function(data){
+                console.log(data);
+                if((data).trim() != "subasta/crear/2"){
+                    color='danger';
+                    $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
+                    +color}).append
+                        (
+                            $('<strong>',{text: data}),
+                            $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
+                        )
+                    );  
+                    
+                }else{    
+                    window.location.href = base_url+ data;
+                }
+            }, 
+        });
+    event.preventDefault();
+    })
 });

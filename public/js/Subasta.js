@@ -1,12 +1,5 @@
-var cate, marc, produInfo;
-function obtenerFecha(){
-    var d = new Date();
-    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-    return strDate;
-}
-
-
-$("#SubastaForm").validate({
+$('.subastaForm').validate({
+    debug: false,
     rules: {
         fhi: { 
           required: true
@@ -18,57 +11,93 @@ $("#SubastaForm").validate({
             
         },
             preb:{
-                requiered:true
-        }
+                required:true
+        },
+        myselect: { required: true }
     },
 messages:{
-  contrasena: { 
-          required:"Password Requerido",
-          minlength: "Minimo 6 caracteres",
-          maxlength: "Maximo 10 caracteres"
-        },
-vContraseña: { 
-  equalTo: "El password debe ser igual al anterior",
-  minlength: "Minimo 6 caracteres",
-  maxlength: "Maximo 10 caracteres"
-}
-}
+        fhi: 'Ingrese una fecha de inicio',
+        fhf:'Ingrese una fecha de fin',
+        preb:'Ingrese un precio base',
+        myselect: "Debe seleccionar un producto"
+        }, errorElement : 'strong',
+        errorPlacement: function(error,element){
+            switch(element.attr("name")){
+                case 'fhi':
+                    error.insertAfter($('#box1'));
+                    break;
+                
+                case 'fhf':
+                    error.insertAfter($('.dt2'));
+                    break;
+                
+                case 'preb':
+                    error.insertAfter($('.pb'));
+                    break;
+                case 'myselect':
+                    error.insertAfter($('.box3'));
+                    break;
+                default:
+                  //nothing
+            }
+        }
+    
 
 });
+
+
+
+var cate=" ", marc, produInfo;
+function obtenerFecha(){
+    var d = new Date();
+    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+    return strDate;
+}
+
+
+
 
 
 $('.datetimepicker1').datetimepicker({
     minDate: obtenerFecha()
 });
 
-$( ".categoria" ).on('change',function() {
-    cate=$(this).val();
-    $('.marca-op').remove();
-    $.ajax({
-                    type:"GET",
-                    url:  base_url + "Subasta/obtenerMarca",
-                    data: {categoria:$(this).val()},
-                    dataType: 'json',
-                    success: function(data){
-                            $.each(data, function(key, value){   
-                                console.log(data[key].marca);     
-                                if(data[key].marca != ' '){
-                                    $('.marca').append
-                                        (
-                                                $('<option>',{text: data[key].marca, class:'marca-op'})   
-                                        )      
-                                }else{
-                                    $('.marca.op').remove();
-                                }
-                            })
-                    },
-                    error: function(data){
-                        console.log(data);
-                    }
-    });
+$(".pb").keypress(function(tecla){
+         if( tecla.charCode < 48 || tecla.charCode > 57){
+           return false;
+         }
+}); 
+$( ".categoria" ).on('click',function() {
+    if(cate != $(this).val()){
+        $('.product-op').remove();
+        cate=$(this).val();
+        $('.marca-op').remove();
+        $.ajax({
+                        type:"GET",
+                        url:  base_url + "Subasta/obtenerMarca",
+                        data: {categoria:$(this).val()},
+                        dataType: 'json',
+                        success: function(data){
+                                $.each(data, function(key, value){   
+                                    console.log(data[key].marca);     
+                                    if(data[key].marca != ' '){
+                                        $('.marca').append
+                                            (
+                                                    $('<option>',{text: data[key].marca, class:'marca-op'})   
+                                            )      
+                                    }else{
+                                        $('.marca.op').remove();
+                                    }
+                                })
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+        });
+    }
 });
 
-$(".marca").on("change", function(){
+$(".marca").on("click", function(){
     $('.product-op').remove();
     marc= $(this).val()
     $.ajax({
@@ -97,49 +126,50 @@ $(".marca").on("change", function(){
     
 });
 
-
-
-
-
-
-$( ".obtener" ).click(function() {
-    FechaHoraInicio= $('.fh-i').val();
-    FechaHoraFin=$('.fh-f').val();
-    PrecioBase=$('.pb').val();
-    $.each(produInfo, function(key, value){
-        producto=produInfo[key].nombre;
-        producto_selec=$('.producto').val();
-
-        if(producto.localeCompare(producto_selec)==0){
-            id_pro=produInfo[key].id;
-        }
-    });
-    $.ajax({
-                    type:"POST",
-                    url:  base_url + "Subasta/Guardar",
+$(document).ready(function() {
+    
+        $('form').submit(function(e){
+            FechaHoraInicio= $('.fh-i').val();
+            FechaHoraFin=$('.fh-f').val();
+            PrecioBase=$('.pb').val();
+            if(produInfo!=null ){
+                $.each(produInfo, function(key, value){
+                    producto=produInfo[key].nombre;
+                    producto_selec=$('.producto').val();
+        
+                    if(producto.localeCompare(producto_selec)==0){
+                        id_pro=produInfo[key].id;
+                    }
+                });
+                $.ajax({
+                    type:$('.subastaForm').attr('method'),
+                    url:  $('.subastaForm').attr('action'),
                     data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:id_pro },
-                    dataType: 'text',
                     success: function(data){
-                            if(data.localeCompare('La subasta se ha creado exitosamente')==0){
-                                color='success';
-                            }else{
+                            console.log(data);
+                            if((data).trim() != "subasta/crear/1"){
                                 color='danger';
+                                $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
+                                +color}).append
+                                    (
+                                        $('<strong>',{text: data}),
+                                        $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
+                                    )
+                                );  
+                            }else{
+                                window.location.href = base_url+ data;
                             }
-                            $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
-                            +color}).append
-                                (
-                                    $('<strong>',{text: data}),
-                                    $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
-                                )
-                            );  
                     },
                     error: function(data){
                         console.log(data);
                     }
-    });
+                });
+            }
+            event.preventDefault();
+            });    
 
+    
+    $('.cancelar').click(function(){
+        location.reload();
+    })
 });
-
-$('.cancelar').click(function(){
-    location.reload();
-})

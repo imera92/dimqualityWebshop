@@ -13,10 +13,18 @@ class Subasta extends CI_Controller {
 	}
     
     //Funcion para vista crear/Editar subastas
-    function Crear(){
+    function Crear($mensaje=0){
         if ($this->securityCheckAdmin()) {
-            $query = $this->db->get('categoriaproducto');
-            $dataBody['categorias']=$query->result();
+            $this->db->from('producto');
+            $this->db->select('categoria');
+            $this->db->distinct();
+            $dataBody['categorias']=$this->db->get()->result();
+            if($mensaje==1){
+                $dataBody['mensaje']="La subasta se ha creado exitosamente";
+            }elseif($mensaje==2){
+                $dataBody['mensaje']="La subasta se ha actualizado exitosamente";
+            }
+            
     		$titulo = "Dimquality::Admin - Subasta";
     		$dataHeader['titlePage'] = $titulo;
             $dataBody['Accion']='Crear';
@@ -33,6 +41,7 @@ class Subasta extends CI_Controller {
         $categoria=$this->input->get('categoria');
         $this->db->from('producto');
         $this->db->select('marca');
+        $this->db->distinct();
         $this->db->where('categoria', $categoria);
         $restaurar=$this->db->get()->result_array();
         $this->output->set_output(json_encode($restaurar));
@@ -73,7 +82,7 @@ class Subasta extends CI_Controller {
         if($producto != null && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
             if (strtotime($FechaHoraInicio) < time() )
             {   
-                echo 'Ha ocurrido un error. La Fecha de inicio no puede ser menor a la hora actual';
+                echo 'Ha ocurrido un error. La fecha y/o hora de inicio no puede ser menor a la fecha y/o hora actual';
             }
             elseif(strtotime($FechaHoraFin)< time()){
                 echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menos a la hora actual';
@@ -93,17 +102,11 @@ class Subasta extends CI_Controller {
                 'estado' => 1
                 );
                 $this->db->insert('subasta', $data);
-                echo 'La subasta se ha creado exitosamente';
+                echo "subasta/crear/1";
             }
         }else{
             if($FechaHoraFin==null){
-                echo 'Ha ocurrido un error. La fecha Fin de subasta es obligatoria';
-            }elseif($FechaHoraInicio==null){
-                echo 'Ha ocurrido un error. La fecha de inicio de subasta es obligatoria';
-            }elseif($precioBase==null){
-                echo 'Ha ocurrido un error. EL precio base es obligatorio';
-            }elseif($producto==null){
-                echo 'Ha ocurrido un error. El producto es obligatorio';
+                echo 'Ha ocurrido un error.Todos los campos son obligatorios';
             }
         }
     }
@@ -114,18 +117,18 @@ class Subasta extends CI_Controller {
         $FechaHoraFin=$this->input->post('Fhf');
         $precioBase=$this->input->post('PrecioBase');
         $producto=$this->input->post('product');
-        $this->db->from('producto');
-        $this->db->where('nombre',$producto);
-        $this->db->select('*');
-        $product=$this->db->get()->row();
-        $id_producto=$product->id;
-        if($id_producto != null && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
+        if($producto!=null  && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
+            $this->db->from('producto');
+            $this->db->where('nombre',$producto);
+            $this->db->select('*');
+            $product=$this->db->get()->row();
+            $id_producto=$product->id;
             if (strtotime($FechaHoraInicio) < time() )
             {   
                 echo 'Ha ocurrido un error. La Fecha de inicio no puede ser menor a la hora actual';
             }
             elseif(strtotime($FechaHoraFin)< time()){
-                echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menos a la hora actual';
+                echo 'Ha ocurrido un error. La Fecha de fin de subasta no puede ser menor a la hora actual';
             }elseif(strtotime($FechaHoraInicio)>strtotime($FechaHoraFin)){
                 echo 'Ha ocurrido un error. La fecha de inicio no puede ser mayor a la fecha final de una subasta';
             }
@@ -142,7 +145,7 @@ class Subasta extends CI_Controller {
                 );
                 $this->db->where('id',$id);
                 $this->db->update('subasta', $data);
-                echo 'La subasta se ha actualizado exitosamente';
+                echo "subasta/crear/2";
             }
         }else{
             echo 'Ha ocurrido un error. Todos los campos son requeridos ';
@@ -162,8 +165,10 @@ class Subasta extends CI_Controller {
         $dataBody['producto']= $this->db->get()->row();
         $dataBody['Accion']='Editar';
          if ($this->securityCheckAdmin()) {
-            $query = $this->db->get('categoriaproducto');
-            $dataBody['categorias']=$query->result();
+            $this->db->from('producto');
+            $this->db->select('categoria');
+            $this->db->distinct();
+            $dataBody['categorias']=$this->db->get()->result();
     		$titulo = "Dimquality::Admin - Subasta";
     		$dataHeader['titlePage'] = $titulo;
     		$this->load->view('admin/header', $dataHeader);
