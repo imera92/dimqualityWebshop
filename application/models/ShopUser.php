@@ -207,12 +207,12 @@
 	    }
 
 
-        public function newApiKey($level,$ignorelimits)
+        public function newApiKey($level,$ignorelimits, $user_id)
         {
             //generamos la key
             $key = $this->generateToken();
             //comprobamos si existe
-            $check_exists_key = $this->db->get_where("keys", array("key"   =>   $key));
+            $check_exists_key = $this->db->get_where("apikeys", array("key"   =>   $key));
 
             //mientras exista la clave en la base de datos buscamos otra
             while($check_exists_key->num_rows() > 0){
@@ -224,19 +224,23 @@
                 "key"           =>      $key,
                 "level"         =>      $level,
                 "ignore_limits" =>      $ignorelimits,
-                "date_created"=>      date('Y-m-d'),
+                "date_created"  =>      date('Y-m-d'),
+                "user_id"       =>      $user_id,              
             );
 
-            $this->db->insert("keys", $data);
+            $this->db->insert("apikeys", $data);
             return $key;
         }
 
-        function api_login_user($user, $password){
+        public function api_login_user($user, $password){
             // Buscamos el usuario en la DB
             $usuarioDB = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
-
             if ($usuarioDB) {
-                $aKey = $this->newApiKey($level = false,$ignore_limits = false,$is_private_key = false,$ip_addresses = "");
+                $regkey = $this->db->get_where("apikeys", array('user_id' => $usuarioDB->id));
+                if ($regkey){
+                    $this->db->delete("apikeys",  array("user_id" => $usuarioDB->id));
+                }
+                $aKey = $this->newApiKey($level = false,$ignore_limits = false,$user_id = $usuarioDB->id);
                 $data_user = array(
                     "id" => $usuarioDB->id,
                     "user" => $usuarioDB->user,
@@ -247,11 +251,7 @@
                     "direccion" => $usuarioDB->direccion,
                     "telefono" => $usuarioDB->telefono,
                     "key" => $aKey,
-                );
-                $dataKey = array(
-                    'usuario' => $usuarioDB->id,
-                    'apikey' => $aKey);
-                $this->db->insert("usuariokeys", $dataKey);
+                );                
                 return ($data_user);
             }
             else{
@@ -284,5 +284,28 @@
             }
             return $token;
         }
+
+        public function getUserData($user_id)
+        {
+            $usuarioDB = $this->db->get_where("usuario", array('id'=> $user_id))->row();
+            if ($usuarioDB) {                
+                $data_user = array(
+                    "id" => $usuarioDB->id,
+                    "user" => $usuarioDB->user,
+                );                
+                return ($data_user);
+            }
+            return false;
+        }
+
+        public function getApiKey($key)
+        {
+            $apikey = $this->db->get_where("apikeys", array('key' => $key))->row();
+            if ($apikey) {
+                return $apikey;
+            }
+            return false;
+        }
+
 	}
 ?>
