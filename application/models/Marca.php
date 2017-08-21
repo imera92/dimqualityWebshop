@@ -3,16 +3,17 @@
 
     /*
         Tabla:
-            categoriaproducto
+            marca
         Campos:
             id (Primary Key)
             nombre (varchar)
     */
 
-	class Categoria extends CI_Model
+	class Marca extends CI_Model
     {
         private $id;
-		private $nombre;
+        private $nombre;
+
 
         function __construct() {
             parent::__construct();
@@ -28,7 +29,8 @@
             return $this->id;
         }
 
-        public function getNombre(){
+        public function getNombre()
+        {
             return $this->nombre;
         }
 
@@ -48,21 +50,21 @@
         ///////////////////////////////////
         // Métodos
         ///////////////////////////////////
-        // Funcion para recuperar una categoria de la DB usando el ID
-        public function getCategoriaPorId($categoriaId)
+        // Funcion para recuperar una marca de la DB usando el ID
+        public function getMarcaPorId($marcaId)
         {
-            if (!is_null($categoriaId)) {
-                // Validamos que el Id de categoria proporcionado sea valido
-                if ($this->categoriaIdExists($categoriaId)) {
+            if (!is_null($marcaId)) {
+                // Validamos que el Id de marca proporcionado sea valido
+                if ($this->marcaIdExists($marcaId)) {
                     // Obtener instancia de CodeIgniter para manejo de la DB
                     $instanciaCI =& get_instance();
 
-                    // Obtentemos la categoria de la DB
-                    $categoriaDB = $instanciaCI->db->get_where('categoriaproducto', array('id' => $categoriaId))->last_row();
+                    // Obtentemos la marca de la DB
+                    $marcaDB = $instanciaCI->db->get_where('marca', array('id' => $marcaId))->last_row();
 
                     // Guardamos en la instancia los datos de producto traidos de la DB
-                    $this->id = $categoriaDB->id;
-                    $this->nombre = $categoriaDB->nombre;
+                    $this->id = $marcaDB->id;
+                    $this->nombre = $marcaDB->nombre;
                     
                     return true;
                 } else {
@@ -74,15 +76,15 @@
         }
 
         // Funcion para comprobar si un Id de marca existe en la DB
-        public function categoriaIdExists($categoriaId)
+        public function marcaIdExists($marcaId)
         {
-            if (!is_null($categoriaId)) {
+            if (!is_null($marcaId)) {
                 // Obtener instancia de CodeIgniter para manejo de la DB
                 $instanciaCI =& get_instance();
 
-                // Intentamos obtener la categoria de la DB
-                $categoriaDB = $instanciaCI->db->get_where('categoriaproducto', array('id' => $categoriaId))->last_row();
-                if (!is_null($categoriaDB)) {
+                // Intentamos obtener la marca de la DB
+                $marcaDB = $instanciaCI->db->get_where('marca', array('id' => $marcaId))->last_row();
+                if (!is_null($marcaDB)) {
                     return true;
                 } else {
                     return false;
@@ -92,20 +94,20 @@
             }
         }
 
-        // Metodo para obtener la ultima categoria anadida a la DB
-        public function getLastCategoria()
+        // Metodo para obtener la ultima marca anadida a la DB
+        public function getLastMarca()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
             $instanciaCI->db->select('*');
-            $instanciaCI->db->from('categoriaproducto');
+            $instanciaCI->db->from('marca');
             $instanciaCI->db->order_by('id', 'DESC');
             $instanciaCI->db->limit(1);
-            $categoriaDB = $instanciaCI->db->get()->row();
-            if (!is_null($categoriaDB)) {
-                $this->id = $categoriaDB->id;
-                $this->nombre = $categoriaDB->nombre;
+            $marcaDB = $instanciaCI->db->get()->row();
+            if (!is_null($marcaDB)) {
+                $this->id = $marcaDB->id;
+                $this->nombre = $marcaDB->nombre;
 
                 return true;
             } else {
@@ -113,15 +115,15 @@
             }
         }
 
-        // Metodo par obtener el ID de la ultima categoria anadida a la DB
-        // Retorna el ID si la operacion fue exitosa, NULL si no encontro categorias en la DB
-        public function getLastCategoriaId()
+        // Metodo par obtener el ID de la ultima marca anadida a la DB
+        // Retorna el ID si la operacion fue exitosa, NULL si no encontro marcas en la DB
+        public function getLastMarcaId()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
             $instanciaCI->db->select('id');
-            $instanciaCI->db->from('categoriaproducto');
+            $instanciaCI->db->from('marca');
             $instanciaCI->db->order_by('id', 'DESC');
             $instanciaCI->db->limit(1);
             $result = $instanciaCI->db->get()->row();
@@ -134,17 +136,17 @@
             return $lastId;
         }
 
-        // Metodo para guardar una nueva categoria en la DB
+        // Metodo para guardar una nueva marca en la DB
         // Retorna TRUE si la operacion fue exitosa, FALSE si hubo algun error
-        public function guardarNuevaCategoria()
+        public function guardarNuevaMarca()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
-            $this->setId($this->getLastCategoriaId() + 1);
+            $this->setId($this->getLastMarcaId() + 1);
 
             // Guardamos los datos de la nueva marca
-            $resultado = $instanciaCI->db->insert('categoriaproducto', array(
+            $resultado = $instanciaCI->db->insert('marca', array(
                 'id' => $this->id,
                 'nombre' => $this->nombre
             ));
@@ -153,48 +155,48 @@
         }
 
         // Metodo que devuelve un array con todas las marcas existentes en la DB
-        public static function categoriasArray()
+        public static function marcasArray()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
             $instanciaCI->db->select('*');
-            $instanciaCI->db->from('categoriaproducto');
+            $instanciaCI->db->from('marca');
             $result = $instanciaCI->db->get()->result();
 
-            $categoriasArray = Array();
+            $marcasArray = Array();
             if (!empty($result)) {
                 foreach ($result as $row) {
-                    $categoria = new Categoria();
-                    $categoria->setId($row->id);
-                    $categoria->setNombre($row->nombre);
-                    array_push($categoriasArray, $categoria);
+                    $marca = new Marca();
+                    $marca->setId($row->id);
+                    $marca->setNombre($row->nombre);
+                    array_push($marcasArray, $marca);
                 }
             }
 
-            return $categoriasArray;
+            return $marcasArray;
         }
 
-        public static function getCategoriasArrayPorNombre($nombre)
+        public static function getMarcasArrayPorNombre($nombre)
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
             $instanciaCI->db->select('id');
-            $instanciaCI->db->from('categoriaproducto');
+            $instanciaCI->db->from('marca');
             $instanciaCI->db->like('nombre', $nombre);
             $result = $instanciaCI->db->get()->result();
 
-            $categoriasArray = Array();
+            $marcasArray = Array();
             if (!empty($result)) {
                 foreach ($result as $row) {
-                    $categoria = new Categoria();
-                    $categoria->getCategoriaPorId($row->id);
-                    array_push($categoriasArray, $categoria);
+                    $marca = new Marca();
+                    $marca->getMarcaPorId($row->id);
+                    array_push($marcasArray, $marca);
                 }
             }
 
-            return $categoriasArray;
+            return $marcasArray;
         }
 	}
 ?>

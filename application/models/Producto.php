@@ -40,6 +40,8 @@
             // Helpers
             $this->load->database();
             $this->load->library('session');
+            $this->load->model('Marca');
+            $this->load->model('Categoria');
         }
 
         ///////////////////////////////////
@@ -235,8 +237,8 @@
         }
 
         // Funcion para buscar productos en base a un termino de busqueda enviado
-        static public function buscarProducto($terminoBusqueda, $categoria = '', $marca = '', $rango = '')
-        {
+        static public function buscarProducto($terminoBusqueda, $categoria = 0, $marca = 0, $rango = '')
+        {   
             // Obtener instancia de CodeIgniter para manejo de la DB
             $instanciaCI =& get_instance();
 
@@ -261,27 +263,41 @@
                 // die();
 
                 // Traemos de la DB todos los productos cuya marca coincida con el termino de busqueda
-                $instanciaCI->db->select('id');
-                $instanciaCI->db->from('producto');
-                $instanciaCI->db->like('marca', $keyword);
-                $result = $instanciaCI->db->get()->result_array();
-                foreach ($result as $index2 => $row) {
-                    $producto = new Producto();
-                    $producto->getProductoPorId($row['id']);
-                    array_push($productosDB, $producto);
+                $marcasDB = Marca::getMarcasArrayPorNombre($keyword);
+                if (!empty($marcasDB)) {
+                    foreach ($marcasDB as $marcaDB) {
+                        $instanciaCI->db->select('id');
+                        $instanciaCI->db->from('producto');
+                        $instanciaCI->db->where('marca', $marcaDB->getId());
+                        $result = $instanciaCI->db->get()->result();
+
+                        foreach ($result as $row) {
+                            $producto = new Producto();
+                            if ($producto->getProductoPorId($row->id)) {
+                                array_push($productosDB, $producto);
+                            }
+                        }
+                    }                    
                 }
                 // print_r($productosDB);
                 // die();
 
                 // Traemos de la DB todos los productos cuya categoria coincida con el termino de busqueda
-                $instanciaCI->db->select('id');
-                $instanciaCI->db->from('producto');
-                $instanciaCI->db->like('categoria', $keyword);
-                $result = $instanciaCI->db->get()->result_array();
-                foreach ($result as $index2 => $row) {
-                    $producto = new Producto();
-                    $producto->getProductoPorId($row['id']);
-                    array_push($productosDB, $producto);
+                $categoriasDB = Categoria::getCategoriasArrayPorNombre($keyword);
+                if (!empty($categoriasDB)) {
+                    foreach ($categoriasDB as $categoriaDB) {
+                        $instanciaCI->db->select('id');
+                        $instanciaCI->db->from('producto');
+                        $instanciaCI->db->where('categoria', $categoriaDB->getId());
+                        $result = $instanciaCI->db->get()->result();
+
+                        foreach ($result as $row) {
+                            $producto = new Producto();
+                            if ($producto->getProductoPorId($row->id)) {
+                                array_push($productosDB, $producto);
+                            }
+                        }
+                    }
                 }
                 // print_r($productosDB);
                 // die();
@@ -302,11 +318,11 @@
             }
 
             // Refinamos la busqueda para que no haya productos repetidos
-            foreach ($productosDB as $index => $productoDB) {
+            foreach ($productosDB as $productoDB) {
                 if (!empty($productosEncontrados)) {
                     $flag  = false;
-                    foreach ($productosEncontrados as $index3 => $producto) {
-                        if ($producto->id == $productoDB->id) {
+                    foreach ($productosEncontrados as $producto) {
+                        if ($producto->getId() == $productoDB->getId()) {
                             $flag = true;
                         }
                     }
@@ -324,7 +340,7 @@
             // FILTRADO DE PRODUCTOS
             // Si recibimos parametros de busqueda, filtramos el array de productos
             // Filtro por categoria
-            if ($categoria != '') {
+            if ($categoria != 0) {
                 foreach ($productosEncontrados as $index => $producto) {
                     if ($producto->getCategoria() != $categoria) {
                         unset($productosEncontrados[$index]);
@@ -332,7 +348,7 @@
                 }
             }
             // Filtro por marca
-            if ($marca != '') {
+            if ($marca != 0) {
                 foreach ($productosEncontrados as $index => $producto) {
                     if ($producto->getMarca() != $marca) {
                         unset($productosEncontrados[$index]);

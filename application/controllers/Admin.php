@@ -10,6 +10,8 @@ class Admin extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('grocery_CRUD');
         $this->load->model('SecurityUser');
+        $this->load->model('Marca');
+        $this->load->model('Categoria');
         date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -91,6 +93,8 @@ class Admin extends CI_Controller {
             $crud->display_as('categoria', 'Categoría');
             $crud->display_as('pvp', 'PVP');
             $crud->display_as('descripcion', 'Descripción');
+            $crud->set_relation('marca','marca','nombre');
+            $crud->set_relation('categoria','categoriaproducto','nombre');
             $crud->unset_export();
             $crud->unset_print();
             // $crud->unset_texteditor('descripcion','full_text');
@@ -223,42 +227,22 @@ class Admin extends CI_Controller {
                 }
 
                 // Obtenemos todas las marcas de la DB y las guardamos en un array
-                $this->db->select('nombre');
-                $this->db->from('marca');
-                $marcasDB = $this->db->get()->result_array();
+                $marcasDB = Marca::marcasArray();
 
                 // Obtenemos todas las categorias de la DB y las guaradmos en un array
-                $this->db->select('nombre');
-                $this->db->from('categoriaproducto');
-                $categoriasDB = $this->db->get()->result_array();
-
-                if (!empty($marcasDB)) {
-                    foreach ($marcasDB as $index => $row) {
-                        $marcasArray[] = $row['nombre'];
-                    }                    
-                } else {
-                    $marcasArray = array();
-                }
-
-                if (!empty($categoriasDB)) {
-                    foreach ($categoriasDB as $index => $row) {
-                        $categoriasArray[] = $row['nombre'];
-                    }                    
-                } else {
-                    $categoriasArray = array();
-                }
-
-                /*header('Content-type: application/json');
-                echo json_encode($return);
-                delete_files($path);
-                die();*/
+                $categoriasDB = Categoria::categoriasArray();
 
 
                 // Inicializamos las variables para evitar errores durance el proceso
-                $marca = '';
-                $categoria = '';
+                $marcaExcel = '';
+                $categoriaExcel = '';
                 $flag = 0;
-
+                // 0 = estamos en la celda que contiene la marca
+                // 1 = estamos en la celda que contiene la categoria
+                // 2 = estamos en la celda que contiene los datos del producto
+                $mensaje = '';
+                $success = 1;
+                
                 foreach ($return as $key1 => $row) {
                     if ($key1 > 1) {
                         if ((count($row) == 1)) {
@@ -270,30 +254,105 @@ class Admin extends CI_Controller {
 
                     // Empezamos a validar los datos del archivo
                     if ($flag == 0) {
-                        $marca = $return[$key1]['A'];
-                        if (!in_array($marca, $marcasArray)) {
-                            $data = array(
-                                    'nombre' => $marca
-                            );
+                        $marcaExcel = $return[$key1]['A'];
 
-                            $this->db->insert('marca', $data);
+                        // Validamos que haya marcas guardadas en la DB
+                        if (!empty($marcasDB)) {
+                            // Validamos si la marca actual se encuentra en la DB
+                            $encontradoFlag = false;
+                            foreach ($marcasDB as $marcaDB) {
+                                if ($marcaDB->getNombre() == $marcaExcel) {
+                                    $marcaActual = $marcaDB;
+                                    $flag++;
+                                    $encontradoFlag = true;
+                                    break;
+                                }
+                            }
+
+                            // Si no encontramos la marca actual en la DB, la creamos
+                            if ($encontradoFlag == false) {
+                                $marcaActual = new Marca();
+                                $marcaActual->setNombre($marcaExcel);
+
+                                // Validamos si hubo error al intentar guardar la marca
+                                if ($marcaActual->guardarNuevaMarca()) {
+                                    // Si se guardo la marca con exito, aumentamos el flag para continuar con el proceso
+                                    $flag++;
+                                } else {
+                                    // Si hubo error al intentar guardar la marca, creamos un mensaje de error y borramos el archivo
+                                    delete_files($path);
+                                    $success = 0;
+                                    $error = 1;
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Si no hay marcas guardadas en la DB, creamos una nueva
+                            $marcaActual = new Marca();
+                            $marcaActual->setNombre($marcaExcel);
+
+                            // Validamos si hubo error al intentar guardar la marca
+                            if ($marcaActual->guardarNuevaMarca()) {
+                                // Si se guardo la marca con exito, aumentamos el flag para continuar con el proceso
+                                $flag++;
+                            } else {
+                                // Si hubo error al intentar guardar la marca, creamos un mensaje de error y borramos el archivo
+                                delete_files($path);
+                                $success = 0;
+                                $error = 1;
+                                break;
+                            }
                         }
-                        $flag++;
                     } elseif ($flag == 1) {
-                        $categoria = $return[$key1]['A'];
-                        if (!in_array($categoria, $categoriasArray)) {
-                            $data = array(
-                                    'nombre' => $categoria
-                            );
+                        $categoriaExcel = $return[$key1]['A'];
 
-                            $this->db->insert('categoriaproducto', $data);
+                        // Validamos que haya categorias guardadas en la DB
+                        if (!empty($categoriasDB)) {
+                            // Validamos si la categoria actual se encuentra en la DB
+                            $encontradoFlag = false;
+                            foreach ($categoriasDB as $categoriaDB) {
+                                if ($categoriaDB->getNombre() == $categoriaExcel) {
+                                    $categoriaActual = $categoriaDB;
+                                    $encontradoFlag = true;
+                                    break;
+                                }
+                            }
+
+                            // Si la categoria actual no se encuentra en la DB, la creamos
+                            if ($encontradoFlag == false) {
+                                $categoriaActual = new Categoria();
+                                $categoriaActual->setNombre($categoriaExcel);
+
+                                // Validamos si hubo error al intentar guardar la categoria
+                                if (!$categoriaActual->guardarNuevaCategoria()) {
+                                    // Si hubo error al intentar guardar la categoria, creamos un mensaje de error y borramos el archivo
+                                    delete_files($path);
+                                    $success = 0;
+                                    $error = 2;
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Si no hay categorias guardadas en la DB, creamos una nueva
+                            $categoriaActual = new Categoria();
+                            $categoriaActual->setNombre($categoriaExcel);
+
+                            // Validamos si hubo error al intentar guardar la categoria
+                            if (!$categoriaActual->guardarNuevaCategoria()) {
+                                // Si hubo error al intentar guardar la categoria, creamos un mensaje de error y borramos el archivo
+                                delete_files($path);
+                                $success = 0;
+                                $error = 2;
+                                break;
+                            }
                         }
                     } elseif ($flag == 2) {
                         $codigoProducto = current($return[$key1]);
                         $nombreProducto = next($return[$key1]);
 
                         next($return[$key1]);
-                        $pvpProducto = next($return[$key1]);
+                        $pvpProductoString = str_replace(',', '', next($return[$key1]));
+                        $pvpProducto = floatval($pvpProductoString);
                         next($return[$key1]);
                         $stockProducto = next($return[$key1]);
                         $productoExistente = $this->db->get_where('producto', array('codigo' => $codigoProducto))->result_array();
@@ -301,8 +360,8 @@ class Admin extends CI_Controller {
                         if (empty($productoExistente)) {
                             $datosProducto = array(
                                 'nombre' => $nombreProducto,
-                                'marca' => $marca,
-                                'categoria' => $categoria,
+                                'marca' => $marcaActual->getId(),
+                                'categoria' => $categoriaActual->getId(),
                                 'codigo' => $codigoProducto,
                                 'imagen' => '',
                                 'pvp' => $pvpProducto,
@@ -316,8 +375,8 @@ class Admin extends CI_Controller {
                         } else {
                             $datosProducto = array(
                                 'nombre' => $nombreProducto,
-                                'marca' => $marca,
-                                'categoria' => $categoria,
+                                'marca' => $marcaActual->getId(),
+                                'categoria' => $categoriaActual->getId(),
                                 'imagen' => '',
                                 'pvp' => $pvpProducto,
                                 'descripcion' => '',
@@ -332,13 +391,33 @@ class Admin extends CI_Controller {
                     }
                 }
 
-                // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra
+                // Una vez que el archivo ha sido procesado, y la DB actualizada, el archivo se borra y se creamos un mensaje de exito
                 delete_files($path);
-                $titulo = "Dimquality::Admin - Actualizar Catalogo";
+
+                // Generamos un mensaje de exito o error dependiendo del resultado del proceso
+                switch ($success) {
+                    case 1:
+                        $mensaje = 'El catalogo se actualizó exitosamente.';
+                        break;
+                    
+                    default:
+                        switch ($error) {
+                            case 1:
+                                $mensaje = 'Error. Hubo un problema al intentar guardar la marca. Revise el log de errores.';
+                                break;
+                            
+                            case 2:
+                                $mensaje = 'Error. Hubo un problema al intentar guardar una categoria. Revise el log de errores.';
+                                break;
+                        }
+                        break;
+                }
+
+                $titulo = 'Dimquality::Admin - Actualizar Catalogo';
                 $dataHeader['titlePage'] = $titulo;
                 $this->load->view('admin/header', $dataHeader);
                 $this->load->view('admin/lat-menu');
-                $this->load->view('admin/catalogo', array('success' => 1, 'message' => 'El catalogo se actualizó exitosamente.'));
+                $this->load->view('admin/catalogo', array('success' => $success, 'message' => $mensaje));
                 $this->load->view('admin/footer');
             }
         } else {

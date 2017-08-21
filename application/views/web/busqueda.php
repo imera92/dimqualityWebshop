@@ -18,7 +18,7 @@
 							} ?>
 							<?php foreach ($categorias as $index => $categoria): ?>
 								<li>
-									<a href="<?php echo base_url('web/buscarProductos' . $filtoUrl . '&cat=' . $categoria['nombre']); ?>"><?php echo $categoria['nombre']; ?></a> <span class="filtro-cantidad"><?php echo "(" . $categoria['cantidad'] . ")"; ?></span>
+									<a href="<?php echo base_url('web/buscarProductos' . $filtoUrl . '&cat=' . $categoria['categoria']->getId()); ?>"><?php echo $categoria['categoria']->getNombre(); ?></a> <span class="filtro-cantidad"><?php echo "(" . $categoria['cantidad'] . ")"; ?></span>
 								</li>
 							<?php endforeach; ?>
 						</ul>
@@ -31,8 +31,8 @@
 								}
 							} ?>
 							<?php foreach ($marcas as $index => $marca): ?>
-								<li>
-									<a href="<?php echo base_url('web/buscarProductos' . $filtoUrl . '&m=' . $marca['nombre']); ?>"><?php echo $marca['nombre']; ?></a> <span class="filtro-cantidad"><?php echo "(" . $marca['cantidad'] . ")"; ?></span>
+								<li>	
+									<a href="<?php echo base_url('web/buscarProductos' . $filtoUrl . '&m=' . $marca['marca']->getId()); ?>"><?php echo $marca['marca']->getNombre(); ?></a> <span class="filtro-cantidad"><?php echo "(" . $marca['cantidad'] . ")"; ?></span>
 								</li>
 							<?php endforeach; ?>
 						</ul>
@@ -40,7 +40,7 @@
 						<ul>
 							<?php $filtoUrl = ''; ?>
 							<?php foreach ($parametros as $key => $value) {
-								if ($key != 'marca') {
+								if ($key != 'rangoPrecio') {
 									$filtoUrl .= $value;
 								}
 							} ?>

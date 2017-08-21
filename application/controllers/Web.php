@@ -15,6 +15,8 @@ class Web extends CI_Controller {
       $this->load->model('CarritoDeCompras');
       $this->load->model('Producto');
       $this->load->model('Transaccion');
+      $this->load->model('Marca');
+      $this->load->model('Categoria');
       date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -208,13 +210,13 @@ class Web extends CI_Controller {
     if ($this->input->get('cat') != null) {
       $categoriaInput = $this->input->get('cat');
     } else {
-      $categoriaInput = '';
+      $categoriaInput = 0;
     }
     $parametros['categoria'] = '&cat=' . $categoriaInput;
     if ($this->input->get('m') != null) {
       $marcaInput = $this->input->get('m');
     } else {
-      $marcaInput = '';
+      $marcaInput = 0;
     }
     $parametros['marca'] = '&m=' . $marcaInput;
     if ($this->input->get('r') != null) {
@@ -229,17 +231,19 @@ class Web extends CI_Controller {
       
       // Identificamos las categorias presentes en el array de productos
       $categoriasFront = array();
-      foreach ($productosEncontrados as $index => $producto) {
+      foreach ($productosEncontrados as $producto) {
         // Validamos si el array de categorias por enviar esta vacio
         if (empty($categoriasFront)) {
           // Si el array de categorias por enviar esta vacio, le anadimos una categoria nueva
-          array_push($categoriasFront, array('nombre' => $producto->getCategoria(), 'cantidad' => 1));
+          $categoria = new Categoria();
+          $categoria->getCategoriaPorId($producto->getCategoria());
+          array_push($categoriasFront, array('categoria' => $categoria, 'cantidad' => 1));
         } else {
           // Si el array de categorias por enviar no esta vacio, validamos si la categoria del producto de la actual iteracion esta presente
           $flag = false;
           $foundIndex = null;
-          foreach ($categoriasFront as $index1 => $categoria) {
-            if ($categoria['nombre'] == $producto->getCategoria()) {
+          foreach ($categoriasFront as $index1 => $categoriaFront) {
+            if ($categoriaFront['categoria']->getId() == $producto->getCategoria()) {
               $flag = true;
               $foundIndex = $index1;
             }
@@ -249,24 +253,28 @@ class Web extends CI_Controller {
             $categoriasFront[$foundIndex]['cantidad']++;
           } else {
             // Si la categoria del producto de la actual iteracion no esta presente, la anadimos
-            array_push($categoriasFront, array('nombre' => $producto->getCategoria(), 'cantidad' => 1));
+            $categoria = new Categoria();
+            $categoria->getCategoriaPorId($producto->getCategoria());
+            array_push($categoriasFront, array('categoria' => $categoria, 'cantidad' => 1));
           }
         }
       }
 
       // Identificamos las marcas presentes en el array de productos
       $marcasFront = array();
-      foreach ($productosEncontrados as $index => $producto) {
+      foreach ($productosEncontrados as $producto) {
         // Validamos si el array de categorias por enviar esta vacio
         if (empty($marcasFront)) {
           // Si el array de marcas por enviar esta vacio, le anadimos una marca nueva
-          array_push($marcasFront, array('nombre' => $producto->getMarca(), 'cantidad' => 1));
+          $marca = new Marca();
+          $marca->getMarcaPorId($producto->getMarca());
+          array_push($marcasFront, array('marca' => $marca, 'cantidad' => 1));
         } else {
           // Si el array de marcas por enviar no esta vacio, validamos si la marca del producto de la actual iteracion esta presente
           $flag = false;
           $foundIndex = null;
-          foreach ($marcasFront as $index1 => $marca) {
-            if ($marca['nombre'] == $producto->getMarca()) {
+          foreach ($marcasFront as $index1 => $marcaFront) {
+            if ($marcaFront['marca']->getId() == $producto->getMarca()) {
               $flag = true;
               $foundIndex = $index1;
             }
@@ -276,7 +284,9 @@ class Web extends CI_Controller {
             $marcasFront[$foundIndex]['cantidad']++;
           } else {
             // Si la marca del producto de la actual iteracion no esta presente, la anadimos
-            array_push($marcasFront, array('nombre' => $producto->getMarca(), 'cantidad' => 1));
+            $marca = new Marca();
+            $marca->getMarcaPorId($producto->getMarca());
+            array_push($marcasFront, array('marca' => $marca, 'cantidad' => 1));
           }
         }
       }
