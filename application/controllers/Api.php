@@ -6,7 +6,7 @@ Class Api extends REST_Controller{
 	function _construct(){
 		parent::__construct();
 		$this->load->model('ShopUser');
-
+		$this->load->model('Cita');
 
         $this->methods = [
         'login_post' => ['level' => 1, 'limit' => 100],];
@@ -96,6 +96,17 @@ Class Api extends REST_Controller{
 					);
 				$this->response($message, 400);
 			}
+		}
+		else{
+			$this->response("Unauthorized",401);
+		}
+	}
+
+	public function cita_get(){
+		$authUser = $this->auth_check();
+		if ($authUser) {
+			$this->load->model('Cita');
+			$this->response($this->Cita->getCitas($authUser["id"]));
 		}
 		else{
 			$this->response("Unauthorized",401);

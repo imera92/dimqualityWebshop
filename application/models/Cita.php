@@ -87,10 +87,6 @@
 						'cita'		=> $cita,
 						'result'	=> true,
 						'error'		=> false,
-						'fechai'	=> date("Y-m-d H:i:s", strtotime($fecha)-3600),
-						'fechaf'	=> date("Y-m-d H:i:s", strtotime($fecha)+3600),
-						'citaDB'	=> $citaUser,
-						'citas'		=> $citas,
 						);
 					return $message;
 				}
@@ -110,5 +106,15 @@
 				return $message;
 			}
 
+		}
+
+		public function getCitas($usuario)
+		{
+			$citas = $this->db->get_where('cita', array('usuario' => $usuario,));
+			$result = array(
+				'citas' => $citas->result_array(),
+				'usuario' => $usuario,
+			 );
+			return $result;
 		}
 	}
