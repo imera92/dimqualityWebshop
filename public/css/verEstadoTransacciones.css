@@ -1,0 +1,47 @@
+span[class~='pago-pendiente'] {
+	background-color: #c02929;
+	color: #FFF;
+	padding: 6px 12px;
+	display: inline-block;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+span[class~='pago-cancelado'] {
+	background-color: #41be44;
+	color: #FFF;
+	padding: 5px;
+	border-radius: 10px;
+}
+#tabla-transacciones {
+	text-align: center;
+}
+#tabla-transacciones thead{
+	font-weight: bold;
+}
+.row-eq-height {
+	/*Flex no funcion en IE 9 y anteriores*/
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+}
+.modal-body a{
+	font-size: 11px;
+}
+span[class~='modal-bodyLabel'] {
+	font-weight: bold;
+	color: #337ab7;
+}
+.modal-header {
+	border-bottom: none;
+}
+.modal-footer {
+	border-top: none;
+}

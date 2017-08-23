@@ -48,7 +48,7 @@
 
 		public function getFechaCompra()
 		{
-			return $this->fechaPago;
+			return $this->fechaCompra;
 		}
 
 		public function getFechaPago()
@@ -109,6 +109,11 @@
 		public function getDireccionEntrega()
 		{
 			return $this->direccionEntrega;
+		}
+
+		public function getItemsTransaccion()
+		{
+			return $this->itemsTransaccion;
 		}
 
 
@@ -186,9 +191,84 @@
 			$this->direccionEntrega = $direccionEntrega;
 		}
 
-		/*
-		Metodos
-		*/
+		///////////////////////////////////
+		// Métodos
+		///////////////////////////////////
+		// Funcion para recuperar una transaccion de la DB usando el ID
+		public function getTransaccionPorId($transaccionId)
+		{	
+			// Obtener instancia de CodeIgniter para manejo de la DB
+			$instanciaCI =& get_instance();
+
+		    if (!is_null($transaccionId)) {
+		        // Validamos que el Id de transaccion proporcionado sea valido
+		        if ($this->transaccionIdExists($transaccionId)) {
+		            // Obtentemos la transaccion de la DB
+		            $transaccionDB = $instanciaCI->db->get_where('transaccion', array('id' => $transaccionId))->last_row();
+		            $itemsTransaccionDB = $instanciaCI->db->get_where('itemtransaccion', array('transaccion' => $transaccionId))->result();
+
+		            // Guardamos en la instancia los datos de transaccion traidos de la DB
+		            $this->id = $transaccionDB->id;
+		            $fechaCompra = ($transaccionDB->fechaCompra != '') ? new DateTime($transaccionDB->fechaCompra) : '';
+		            $this->fechaCompra = $fechaCompra;
+		            $fechaPago = ($transaccionDB->fechaPago != '') ? new DateTime($transaccionDB->fechaPago) : '';
+		            $this->fechaPago = $fechaPago;
+		            $fechaEntrega = ($transaccionDB->fechaEntrega != '') ? new DateTime($transaccionDB->fechaEntrega) : '';
+		            $this->fechaEntrega = $fechaEntrega;
+		            $this->usuario = $transaccionDB->usuario;
+		            $this->total = $transaccionDB->total;
+		            $this->estado = $transaccionDB->estado;
+		            $this->formaPago = $transaccionDB->formaPago;
+		            $this->nombreFactura = $transaccionDB->nombreFactura;
+		            $this->cedulaFactura = $transaccionDB->cedulaFactura;
+		            $this->direccionFactura = $transaccionDB->direccionFactura;
+		            $this->tipoEntrega = $transaccionDB->tipoEntrega;
+		            $this->recibe = $transaccionDB->recibe;
+		            $this->direccionEntrega = $transaccionDB->direccionEntrega;
+	                $this->itemsTransaccion = array();
+
+		            if (!is_null($itemsTransaccionDB)) {
+		                foreach ($itemsTransaccionDB as $row) {
+		                    $productoDB = new Producto();
+		                    if ($productoDB->getProductoPorId($row->producto)) {
+		                        $itemTransaccion = new ItemTransaccion();
+		                        $itemTransaccion->setProducto($productoDB);
+		                        $itemTransaccion->setCantidad($row->cantidad);
+		                        $itemTransaccion->setTransaccion($row->transaccion);
+		                        $itemTransaccion->setSubtotal($row->subtotal);
+		                        array_push($this->itemsTransaccion, $itemTransaccion);
+		                    }
+		                }
+		            }
+		            
+		            return true;
+		        } else {
+		            return false;
+		        }
+		    } else {
+		        return false;
+		    }
+		}
+
+		// Funcion para comprobar si un Id de marca existe en la DB
+        public function transaccionIdExists($transaccionId)
+        {
+    		// Obtener instancia de CodeIgniter para manejo de la DB
+    		$instanciaCI =& get_instance();
+
+            if (!is_null($transaccionId)) {
+                // Intentamos obtener la marca de la DB
+                $transaccionDB = $instanciaCI->db->get_where('transaccion', array('id' => $transaccionId))->last_row();
+                if (!is_null($transaccionDB)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
 		public function loadCarrito($carrito)
 		{
 			$this->itemsTransaccion = array();
@@ -236,6 +316,26 @@
 			}
 			$this->db->trans_rollback();
 			return false;		
+		}
+
+		// Metodo que devuelve un array con todas las transacciones de un usuario
+		public static function getTransaccionesArrayPorUsuario($usuarioId)
+		{
+			// Obtener instancia de CodeIgniter para manejo de la DB
+			$instanciaCI =& get_instance();
+
+			$result = $instanciaCI->db->get_where('transaccion', array('usuario' => $usuarioId))->result();
+
+			$transaccionesArray = Array();
+			if (!empty($result)) {
+				foreach ($result as $row) {
+					$transaccion = new Transaccion();
+					$transaccion->getTransaccionPorId($row->id);
+					array_push($transaccionesArray, $transaccion);
+				}
+			}
+
+			return $transaccionesArray;
 		}
 	}
 ?>

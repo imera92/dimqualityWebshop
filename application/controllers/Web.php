@@ -11,17 +11,18 @@ class Web extends CI_Controller {
       $this->load->library('form_validation');
       $this->load->library('session');
       $this->load->library('encrypt');
-      $this->load->model('ShopUser');
       $this->load->model('CarritoDeCompras');
-      $this->load->model('Producto');
-      $this->load->model('Transaccion');
-      $this->load->model('Marca');
       $this->load->model('Categoria');
+      $this->load->model('Marca');
+      $this->load->model('Producto');
+      $this->load->model('ShopUser');
+      $this->load->model('Transaccion');
       date_default_timezone_set("America/Guayaquil");
 	}
 
 
-  public function index() {
+  public function index()
+  {
     $titulo = "Dimquality - Lo mejor en Tecnología y Electrodomésticos";
     $dataHeader['titlePage'] = $titulo;
     $productosRecientes = $this->Producto->productosRecientes(4);
@@ -370,7 +371,8 @@ class Web extends CI_Controller {
     $this->load->view('web/footer');
   }
 
-  private function loginCheck() {
+  private function loginCheck()
+  {
     $securityUser = new ShopUser();
     $usuario = $this->session->userdata('user');
     if($usuario == ""){
@@ -380,36 +382,38 @@ class Web extends CI_Controller {
     }
   }
 
-  public function recuperarContrasena(){
-      $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-      $dataHeader['titlePage'] = $titulo;
-      $this->load->view('web/header', $dataHeader);
-      $this->load->view('web/recuperarContrasena');
-      $this->load->view('web/footer');
+  public function recuperarContrasena()
+  {
+    $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+    $dataHeader['titlePage'] = $titulo;
+    $this->load->view('web/header', $dataHeader);
+    $this->load->view('web/recuperarContrasena');
+    $this->load->view('web/footer');
   }
 
-    public function ChangePassword($mensaje=0){
-      $token=$this->input->get('token');
-      $usuario= $this->input->get('idusuario');
-      $this->db->from('restaurarcontraseña');
-      $this->db->select('*');
-      $this->db->where('token', $token);
-      $restaurar= $this->db->get()->row();
-      if( $restaurar != null )
-      {
-        if ($usuario== sha1($restaurar->userId) && $token==$restaurar->token){
-          $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-          $dataBody['id']=$usuario;
-          $dataBody['token']=$token;
-          $dataHeader['titlePage'] = $titulo;
-          $this->load->view('web/header', $dataHeader);
-          $this->load->view('web/ChangePassword',$dataBody);
-          $this->load->view('web/footer');
-        }
-      }else{
-         redirect('cambiarContrasena');
+  public function ChangePassword($mensaje=0)
+  {
+    $token=$this->input->get('token');
+    $usuario= $this->input->get('idusuario');
+    $this->db->from('restaurarcontraseña');
+    $this->db->select('*');
+    $this->db->where('token', $token);
+    $restaurar= $this->db->get()->row();
+    if( $restaurar != null ) {
+      if ($usuario== sha1($restaurar->userId) && $token==$restaurar->token) {
+        $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+        $dataBody['id']=$usuario;
+        $dataBody['token']=$token;
+        $dataHeader['titlePage'] = $titulo;
+        $this->load->view('web/header', $dataHeader);
+        $this->load->view('web/ChangePassword',$dataBody);
+        $this->load->view('web/footer');
       }
+    }else{
+       redirect('cambiarContrasena');
+    }
   }
+
   public function ActualizarContrasena(){
     $token=$this->input->post('t');//token
     $user=$this->input->post('us');//user
@@ -444,125 +448,121 @@ class Web extends CI_Controller {
   }
   
   public function mensaje($mensaje){
-              $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
-              $dataBody['titlePage'] = $titulo;
-              $dataBody['msg'] ="Su contraseña ha sido cambiado con exito";
-              $this->load->view('web/password_reset', $dataBody);
+    $titulo = "Dimquality::WebShop -Recuperar tu contraseña";
+    $dataBody['titlePage'] = $titulo;
+    $dataBody['msg'] ="Su contraseña ha sido cambiado con exito";
+    $this->load->view('web/password_reset', $dataBody);
   }
   
   //funcion para generar un token para que el usuario pueda cambiar la contraseña
   public function GenerarToken($usuario){ 
-          $cadena=$usuario->nombre.$usuario->id.rand(1,9999999).date('Y-m-d');
-          $token=sha1($cadena);
-          $data = array(  
-            'userId' => $usuario->id,
-            'fecha' =>  date('Y-m-d'),
-            'token' => $token
-          );
-          $resultado=$this->db->insert('restaurarcontraseña', $data);
-          if($resultado){
-            $enlace=$enlace=base_url('/web/ChangePassword?idusuario='.sha1($usuario->id).'&token='.$token);
-            return $enlace;
-          }else{ 
-             return False;
-          }
+    $cadena=$usuario->nombre.$usuario->id.rand(1,9999999).date('Y-m-d');
+    $token=sha1($cadena);
+    $data = array(  
+      'userId' => $usuario->id,
+      'fecha' =>  date('Y-m-d'),
+      'token' => $token
+    );
+    $resultado=$this->db->insert('restaurarcontraseña', $data);
+    if($resultado){
+      $enlace=$enlace=base_url('/web/ChangePassword?idusuario='.sha1($usuario->id).'&token='.$token);
+      return $enlace;
+    }else{ 
+       return False;
+    }
   }
 
-  public function verificarCorreo(){
-      $email = $this->input->post('email');
-      $emailRegexResult = preg_match("/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/", $email);
-      if ($email != "" && $emailRegexResult){
-        $this->db->from('usuario');
-        $this->db->select('*');
-        $this->db->where('email', $email);
-        $usuario = $this->db->get()->row();
-        if( $usuario != null){
-              $this->db->from('restaurarcontraseña');
-              $this->db->select('*');
+  public function verificarCorreo()
+  {
+    $email = $this->input->post('email');
+    $emailRegexResult = preg_match("/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/", $email);
+    if ($email != "" && $emailRegexResult){
+      $this->db->from('usuario');
+      $this->db->select('*');
+      $this->db->where('email', $email);
+      $usuario = $this->db->get()->row();
+      if( $usuario != null){
+            $this->db->from('restaurarcontraseña');
+            $this->db->select('*');
+            $this->db->where('userId', $usuario->id);
+            $restaurar= $this->db->get()->row();
+            if( $restaurar == null )
+            { 
+              $enlace= $this->GenerarToken($usuario);
+              $this->enviarEmail($usuario->email,$enlace);
+            }else{
               $this->db->where('userId', $usuario->id);
-              $restaurar= $this->db->get()->row();
-              if( $restaurar == null )
-              { 
-                $enlace= $this->GenerarToken($usuario);
-                $this->enviarEmail($usuario->email,$enlace);
-              }else{
-                $this->db->where('userId', $usuario->id);
-                $this->db->delete('restaurarcontraseña');
-                $enlace= $this->GenerarToken($usuario);
-                $this->enviarEmail($usuario->email,$enlace);
-              }
-              echo 'Se le ha enviado un mensaje a su correo';
-        }else
-        {
-              echo 'La dirección de correo proporcionada no está vinculada a ninguna cuenta de usuario';
-        }
-      }else {
-          echo "Es necesario que ingrese un dirección de correo para recuperar su contraseña";
+              $this->db->delete('restaurarcontraseña');
+              $enlace= $this->GenerarToken($usuario);
+              $this->enviarEmail($usuario->email,$enlace);
+            }
+            echo 'Se le ha enviado un mensaje a su correo';
+      }else
+      {
+            echo 'La dirección de correo proporcionada no está vinculada a ninguna cuenta de usuario';
       }
+    }else {
+        echo "Es necesario que ingrese un dirección de correo para recuperar su contraseña";
+    }
   }
 
+  public function verEstadoTransacciones()
+  {
+    $titulo = 'Dimquality - Lo mejor en Tecnología y Electrodomésticos';
+    $dataHeader['titlePage'] = $titulo;
 
-
-  // funcion para enviar el correo al usuario 
-  /*  
-  function enviarEmail( $email, $enlace ){
-          $mensaje = '<html>
-            <head>
-                <title>Restablece tu contraseña</title>
-            </head>
-            <body>
-              <p>Hemos recibido una petición para restablecer la contraseña de tu cuenta.</p>
-              <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
-              <p>
-                <strong>Enlace para restablecer tu contraseña</strong><br>
-                <a href="'.$enlace.'"> Restablecer contraseña </a>
-              </p>
-            </body>
-            </html>';
-          $headers = 'From: webmaster@example.com' . "\r\n" .
-                      'Reply-To: webmaster@example.com' . "\r\n" .
-                      'X-Mailer: PHP/' . phpversion();
-          //Se envia el correo al usuario
-          mail($email, "Recuperar contraseña", $mensaje, $headers);
-    }*/
-
-     
-      function enviarEmail($email, $enlace){
-        $config = array();
-        $config['protocol'] = 'smtp';
-        $config['smtp_host'] = 'ssl://bh-27.webhostbox.net';
-        $config['smtp_port'] = '465';
-        $config['smtp_user'] = '_mainaccount@dimquality.com.ec';
-        $config['smtp_pass'] = 'dimQ2016';
-        $config['mailtype'] = 'html';
-        $config['charset']  = 'utf-8';
-        $config['newline']  = "\r\n";
-        $config['wordwrap'] = TRUE;
-
-        $mensaje = '<html>
-                     <head>
-                         <title>Restablece tu contraseña</title>
-                    </head>
-                    <body>
-                      <p>Hemos recibido una petición para restablecer la contraseña de tu cuenta.</p>
-                      <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
-                      <p>
-                        <strong>Enlace para restablecer tu contraseña</strong><br>
-                        <a href="'.$enlace.'"> Restablecer contraseña </a>
-                      </p>
-                    </body>
-                    </html>';
-        $this->load->library('email');
-        $this->email->initialize($config);
-        $this->email->from('info@dimquality.com.ec','Dimquality - Lo mejor en tecnología');
-        $this->email->to($email);
-        $this->email->subject('Cambio de Contraseña');
-        $this->email->message($mensaje);
-
-        if(!$this->email->send()) {
-          show_error($this->email->print_debugger());
-        }
+    if ($this->loginCheck()) {
+      $transacciones = $this->Transaccion->getTransaccionesArrayPorUsuario($this->session->id);
+      if (empty($transacciones)) {
+        $dataBody['mensaje'] = 'No hay datos para mostrar.';
+      } else {
+        $dataBody['transacciones'] = $transacciones;
       }
+      
+      $this->load->view('web/header', $dataHeader);
+      $this->load->view('web/transacciones', $dataBody);
+      $this->load->view('web/footer');
+    } else {
+      redirect('login');
+    }
+  }
+
+  function enviarEmail($email, $enlace){
+    $config = array();
+    $config['protocol'] = 'smtp';
+    $config['smtp_host'] = 'ssl://bh-27.webhostbox.net';
+    $config['smtp_port'] = '465';
+    $config['smtp_user'] = '_mainaccount@dimquality.com.ec';
+    $config['smtp_pass'] = 'dimQ2016';
+    $config['mailtype'] = 'html';
+    $config['charset']  = 'utf-8';
+    $config['newline']  = "\r\n";
+    $config['wordwrap'] = TRUE;
+
+    $mensaje = '<html>
+                 <head>
+                     <title>Restablece tu contraseña</title>
+                </head>
+                <body>
+                  <p>Hemos recibido una petición para restablecer la contraseña de tu cuenta.</p>
+                  <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
+                  <p>
+                    <strong>Enlace para restablecer tu contraseña</strong><br>
+                    <a href="'.$enlace.'"> Restablecer contraseña </a>
+                  </p>
+                </body>
+                </html>';
+    $this->load->library('email');
+    $this->email->initialize($config);
+    $this->email->from('info@dimquality.com.ec','Dimquality - Lo mejor en tecnología');
+    $this->email->to($email);
+    $this->email->subject('Cambio de Contraseña');
+    $this->email->message($mensaje);
+
+    if(!$this->email->send()) {
+      show_error($this->email->print_debugger());
+    }
+  }
     
     
 }

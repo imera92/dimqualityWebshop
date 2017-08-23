@@ -50,16 +50,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'web/index';
-$route['login'] = 'usuario/login';
-$route['admin'] = 'admin/index';
-$route['logout'] = 'usuario/logout';
-$route['registro'] = 'usuario/crearUsuario';
 $route['actualizar'] = 'usuario/actualizarUsuario';
-$route['producto/(:num)'] = 'producto/getProducto/$1';
+$route['admin'] = 'admin/index';
+$route['cambiarContrasena']='web/recuperarContrasena';
 $route['carrito'] = 'web/carrito';
 $route['comprar'] = 'web/comprarProductos';
 $route['exito'] = 'web/compraExitosa';
-$route['cambiarContrasena']='web/recuperarContrasena';
+$route['login'] = 'usuario/login';
+$route['logout'] = 'usuario/logout';
+$route['producto/(:num)'] = 'producto/getProducto/$1';
+$route['registro'] = 'usuario/crearUsuario';
+$route['subastas/(:num)'] = 'subastas/$1';
+$route['transacciones'] = 'web/verEstadoTransacciones';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['subastas/(:num)'] = 'subastas/$1';

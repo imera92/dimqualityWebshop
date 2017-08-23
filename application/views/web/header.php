@@ -41,6 +41,8 @@
 		<link href="<?php echo base_url('public/css/recuperarContasena.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'ChangePassword'): ?>
 		<link href="<?php echo base_url('public/css/changePassword.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'verEstadoTransacciones'): ?>
+		<link href="<?php echo base_url('public/css/verEstadoTransacciones.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
@@ -80,6 +82,7 @@
 										<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><?php echo $this->session->user; ?><span class="caret"></span></a>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 											<li><a href="<?php echo base_url('actualizar'); ?>">Actualizar Datos</a></li>
+											<li><a href="<?php echo base_url('transacciones'); ?>">Transacciones</a></li>
 				 							<li><a href="<?php echo base_url('logout'); ?>">Cerrar Sesión</a></li>
 										</ul>
 									<?php else: ?>
