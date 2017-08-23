@@ -529,27 +529,39 @@ class Web extends CI_Controller {
      
       function enviarEmail($email, $enlace){
         $config = array();
-        $config['useragent']           = "CodeIgniter";
-        $config['mailpath']            = "/usr/bin/sendmail"; // or "/usr/sbin/sendmail"
-        $config['protocol']            = "smtp";
-        $config['smtp_host']           = "localhost";
-        $config['smtp_port']           = "25";
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://bh-27.webhostbox.net';
+        $config['smtp_port'] = '465';
+        $config['smtp_user'] = '_mainaccount@dimquality.com.ec';
+        $config['smtp_pass'] = 'dimQ2016';
         $config['mailtype'] = 'html';
         $config['charset']  = 'utf-8';
         $config['newline']  = "\r\n";
         $config['wordwrap'] = TRUE;
-        
-          $this->load->library('email');      
-          $this->email->initialize($config);
-          $this->email->from('user@example.com','Your name');
-          $this->email->to($email);
-          $this->email->subject('Email Test');
-          $this->email->message('Testing the email class.');
-          if($this->email->send()) {
-            echo 'Enviado';
-          } else {
-            show_error($this->email->print_debugger());
-          }
+
+        $mensaje = '<html>
+                     <head>
+                         <title>Restablece tu contraseña</title>
+                    </head>
+                    <body>
+                      <p>Hemos recibido una petición para restablecer la contraseña de tu cuenta.</p>
+                      <p>Si hiciste esta petición, haz clic en el siguiente enlace, si no hiciste esta petición puedes ignorar este correo.</p>
+                      <p>
+                        <strong>Enlace para restablecer tu contraseña</strong><br>
+                        <a href="'.$enlace.'"> Restablecer contraseña </a>
+                      </p>
+                    </body>
+                    </html>';
+        $this->load->library('email');
+        $this->email->initialize($config);
+        $this->email->from('info@dimquality.com.ec','Dimquality - Lo mejor en tecnología');
+        $this->email->to($email);
+        $this->email->subject('Compra de productos');
+        $this->email->message($mensaje);
+
+        if(!$this->email->send()) {
+          show_error($this->email->print_debugger());
+        }
       }
     
     
