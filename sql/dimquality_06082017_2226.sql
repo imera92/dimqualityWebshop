@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generaciÃ³n: 07-08-2017 a las 05:25:34
--- VersiÃ³n del servidor: 10.1.16-MariaDB
--- VersiÃ³n de PHP: 5.6.24
+-- Tiempo de generación: 07-08-2017 a las 05:25:34
+-- Versión del servidor: 10.1.16-MariaDB
+-- Versión de PHP: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -597,10 +597,10 @@ CREATE TABLE `productocarrito` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `restaurarcontraseÃ±a`
+-- Estructura de tabla para la tabla `restaurarcontraseña`
 --
 
-CREATE TABLE `restaurarcontraseÃ±a` (
+CREATE TABLE `restaurarcontraseña` (
   `id` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
   `fecha` date NOT NULL,
@@ -707,7 +707,7 @@ INSERT INTO `usuario` (`id`, `user`, `password`, `nombre`, `apellido`, `email`, 
 (1, 'user', 'e10adc3949ba59abbe56e057f20f883e', 'nombres', 'apellidos', 'user@ejemplo.com', '0987654321', NULL, NULL, 'dasdasdasdas', '0998226076', 3);
 
 --
--- Ãndices para tablas volcadas
+-- Índices para tablas volcadas
 --
 
 --
@@ -769,9 +769,9 @@ ALTER TABLE `producto`
   ADD UNIQUE KEY `codigo` (`codigo`);
 
 --
--- Indices de la tabla `restaurarcontraseÃ±a`
+-- Indices de la tabla `restaurarcontraseña`
 --
-ALTER TABLE `restaurarcontraseÃ±a`
+ALTER TABLE `restaurarcontraseña`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `userId` (`userId`);
 
@@ -840,9 +840,9 @@ ALTER TABLE `ofertasubasta`
 ALTER TABLE `producto`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
--- AUTO_INCREMENT de la tabla `restaurarcontraseÃ±a`
+-- AUTO_INCREMENT de la tabla `restaurarcontraseña`
 --
-ALTER TABLE `restaurarcontraseÃ±a`
+ALTER TABLE `restaurarcontraseña`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT de la tabla `subasta`

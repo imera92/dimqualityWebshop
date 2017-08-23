@@ -11,11 +11,12 @@
 	<link href="<?php echo base_url('public/css/custom-bootstrap-margin-padding.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 	<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php if($this->router->method == "login"): ?>
 		<link href="<?php echo base_url('public/css/login.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif($this->router->method == "index" || $this->router->method=="product"): ?>
+	<?php elseif($this->router->method == "index" || $this->router->method=="product" || $this->router->method=="CrearEditar"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif($this->router->method == "subastas"): ?>
@@ -42,7 +43,6 @@
             return urlTmp;
         }
     </script>
-
 </head>
 <body>
 	<!-- <div id="wrapper"> -->

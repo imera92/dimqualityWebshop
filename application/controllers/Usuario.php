@@ -16,15 +16,18 @@ class Usuario extends CI_Controller {
         date_default_timezone_set("America/Guayaquil");
 	}
 
-  public function login () {
+  public function login ($mensaje=0) {
     if($this->ShopUser->securityCheckUser()) {
       redirect("web/index");
     } else {
       $titulo = 'Dimquality - Login';
       $dataHeader['titlePage'] = $titulo;
-
+      $dataBody= Array();
+      if ($mensaje==1){
+          $dataBody['mensaje']='La contraseña se ha actualizado sastifactoriamente';
+      }
       $this->load->view('web/header', $dataHeader);
-      $this->load->view('web/login');
+      $this->load->view('web/login', $dataBody);
       $this->load->view('web/footer');
     }
   }

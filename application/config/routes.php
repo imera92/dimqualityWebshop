@@ -59,6 +59,7 @@ $route['producto/(:num)'] = 'producto/getProducto/$1';
 $route['carrito'] = 'web/carrito';
 $route['comprar'] = 'web/comprarProductos';
 $route['exito'] = 'web/compraExitosa';
+$route['cambiarContrasena']='web/recuperarContrasena';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['subastas/(:num)'] = 'subastas/$1';
