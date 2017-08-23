@@ -556,7 +556,7 @@ class Web extends CI_Controller {
         $this->email->initialize($config);
         $this->email->from('info@dimquality.com.ec','Dimquality - Lo mejor en tecnología');
         $this->email->to($email);
-        $this->email->subject('Compra de productos');
+        $this->email->subject('Cambio de Contraseña');
         $this->email->message($mensaje);
 
         if(!$this->email->send()) {
