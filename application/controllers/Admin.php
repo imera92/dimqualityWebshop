@@ -173,14 +173,14 @@ class Admin extends CI_Controller {
                 $this->load->view('admin/catalogo', $dataBody);
                 $this->load->view('admin/footer');
             } else {
-                $this->load->library('phpexcel');
-                $this->load->library('PHPExcel/iofactory');
-                $this->load->library('PHPExcel/autoloader');
+                $this->load->library('PHPExcel');
+                $this->load->library('PHPExcel/IOFactory');
+                $this->load->library('PHPExcel/Autoloader');
                 $this->load->helper("file");
                 
                 $fileName = $this->upload->data()['file_name'];
-                $path = FCPATH."assets\uploads\\excel";
-                $filePath = FCPATH."assets\uploads\\excel\\".$fileName;
+                $path = FCPATH."assets/uploads/excel";
+                $filePath = FCPATH."assets/uploads/excel/".$fileName;
                 $excelReader = IOFactory::createReaderForFile($filePath);
 
                 $excelReader->setReadDataOnly();
