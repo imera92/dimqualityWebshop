@@ -198,6 +198,34 @@
             }
         }
 
+        // Funcion para recuperar todas las marcas segun la categoria
+        public function getMarcasPorCategoria($categoriaId)
+        {
+            if (!is_null($categoriaId)) {
+                $categoria = new Categoria();
+                if ($categoria->categoriaIdExists($categoriaId)) {
+                    $marcasArray = Array();
+
+                    // Obtener instancia de CodeIgniter para manejo de la DB
+                    $instanciaCI =& get_instance();
+
+                    $instanciaCI->db->select('marca');
+                    $instanciaCI->db->from('producto');
+                    $instanciaCI->db->distinct();
+                    $instanciaCI->db->where('categoria', $categoriaId);
+                    $resultado = $instanciaCI->db->get()->result();
+
+                    foreach ($resultado as $row) {
+                        $marca = new Marca();
+                        $marca->getMarcaPorId($row->marca);
+                        array_push($marcasArray, $marca);
+                    }
+
+                    return $marcasArray;
+                }
+            }
+        }
+
         // Funcion para comprobar si un producto está destacado
         public function isDestacado()
         {

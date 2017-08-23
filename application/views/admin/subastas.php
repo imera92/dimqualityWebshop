@@ -11,10 +11,8 @@
 	            </div>
 				<br>
 				<div class="row">
-					<div class="form-group">
-						<div class="col-sm-12">
-							<input type="submit" value="Crear Subasta" class="btn btn-crear"/>
-						</div>
+					<div class="col-xs-12">
+						<a href="<?php echo base_url('subasta/crear'); ?>" class="btn btn-crear">Crear Subasta</a>
 					</div>
 				</div>
 				<hr>
@@ -50,7 +48,7 @@
 						<div class="botones-subasta col col-md-3">
 							<button name="<?php echo $fila->id; ?>" class="btn btn-info btn-subasta" type="button" name="ver">Ver detalle</button>
 							<br>
-							<button href="<?php echo base_url('subasta/eliminarSubasta'); ?>" name="<?php echo $fila->id; ?>" class="btn btn-info btn-subasta" type="button" name="editar">Editar</button>
+							<a href="<?php echo base_url('subasta/actualizar?id=' . $fila->id); ?>" class="btn btn-info btn-subasta" type="button" name="editar">Editar</a>
 							<br>
 							<button name="<?php echo $fila->id; ?>" class="btn btn-danger btn-subasta" type="button" name="eliminar">Eliminar</button>
 						</div>

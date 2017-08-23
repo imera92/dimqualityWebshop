@@ -74,32 +74,34 @@ $(".pb").keypress(function(tecla){
 }); 
 
 $( ".categoria" ).on('click',function() {
-    console.log('holi');
-    cate=$(this).val();
-    $('.product-op').remove();
-    $('.marca-op').remove();
-    $.ajax({
-                    type:"GET",
-                    url:  base_url + "Subasta/obtenerMarca",
-                    data: {categoria:$(this).val()},
-                    dataType: 'json',
-                    success: function(data){
-                            $.each(data, function(key, value){   
-                                console.log(data[key].marca);     
-                                if(data[key].marca != ' '){
-                                    $('.marca').append
-                                        (
-                                                $('<option>',{text: data[key].marca, class:'marca-op'})   
-                                        )      
-                                }else{
-                                    $('.marca.op').remove();
-                                }
-                            })
-                    },
-                    error: function(data){
-                        console.log(data);
-                    }
-    });
+    if(cate != $(this).val()){
+        $('.product-op').remove();
+        cate=$(this).val();
+        $('.marca-op').remove();
+        $.ajax({
+                        type:"GET",
+                        url:  base_url + "Subasta/obtenerMarca",
+                        data: {categoria:$(this).val()},
+                        dataType: 'json',
+                        success: function(data){
+                                console.log(data);
+                                $.each(data, function(key, value){
+                                    // console.log(data[key]['nombre']);
+                                    if(data[key]['id'] != ''){
+                                        $('.marca').append
+                                            (
+                                                $('<option>', {text: data[key]['nombre'], class:'marca-op', value: data[key]['id']})
+                                            )      
+                                    }else{
+                                        $('.marca.op').remove();
+                                    }
+                                })
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+        });
+    }
 });
 
 $(".marca").on("click", function(){
@@ -130,6 +132,9 @@ $(".marca").on("click", function(){
     });
     
 });
+$('.cancelar').click(function(){
+    window.location.replace(base_url + 'subasta/subastas');
+})
 $(document).ready(function() {
     $('form').submit(function(){
         pro=$('.producto').val()

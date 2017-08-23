@@ -542,6 +542,11 @@ ALTER TABLE `tipo_entrega`
 ALTER TABLE `transaccion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `transaccion`
+--
+ALTER TABLE `subasta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT de la tabla `itemtransaccion`
 --
 ALTER TABLE `itemtransaccion`

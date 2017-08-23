@@ -10,8 +10,9 @@ class Subasta extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('grocery_CRUD');
         $this->load->model('SecurityUser');
-        $this->load->model('Subastas');
+        $this->load->model('Categoria');
 		$this->load->model('Producto');
+        $this->load->model('Subastas');
         date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -80,12 +81,10 @@ class Subasta extends CI_Controller {
 	}
     
     //Funcion para vista crear/Editar subastas
-    function Crear($mensaje=0){
+    function crear($mensaje=0){
         if ($this->securityCheckAdmin()) {
-            $this->db->from('producto');
-            $this->db->select('categoria');
-            $this->db->distinct();
-            $dataBody['categorias']=$this->db->get()->result();
+            $dataBody['categorias'] = $this->Categoria->categoriasArray();
+
             if($mensaje==1){
                 $dataBody['mensaje']="La subasta se ha creado exitosamente";
             }elseif($mensaje==2){
@@ -106,11 +105,11 @@ class Subasta extends CI_Controller {
 
     function obtenerMarca(){
         $categoria=$this->input->get('categoria');
-        $this->db->from('producto');
-        $this->db->select('marca');
-        $this->db->distinct();
-        $this->db->where('categoria', $categoria);
-        $restaurar=$this->db->get()->result_array();
+        $restaurar = Array();
+        $marcasArray = $this->Producto->getMarcasPorCategoria($categoria);
+        foreach ($marcasArray as $marca) {
+            array_push($restaurar, array('id' => $marca->getId(), 'nombre' => $marca->getNombre()));
+        }
         $this->output->set_output(json_encode($restaurar));
     }
 
@@ -222,22 +221,42 @@ class Subasta extends CI_Controller {
     
     //funcion que carga la vista de actualizar subasta a partir de un id 
     function Actualizar(){
-        $id=$this->input->get('id');
-        $this->db->from('subasta');
-        $this->db->where('id', $id);
-        $this->db->select('*');
-        $subasta=$this->db->get()->row();
-        $dataBody['subasta']=$subasta;
-        $this->db->from('producto');
-        $this->db->where('id',$subasta->producto);
-        $this->db->select('*');
-        $dataBody['producto']= $this->db->get()->row();
-        $dataBody['Accion']='Editar';
          if ($this->securityCheckAdmin()) {
-            $this->db->from('producto');
+            $id=$this->input->get('id');
+
+            /*$this->db->from('subasta');
+            $this->db->where('id', $id);
+            $this->db->select('*');
+            $subasta=$this->db->get()->row();*/
+            $subasta = new Subastas();
+            $subasta->getSubastaPorId($id);
+            $dataBody['subasta'] = $subasta;
+
+            /*$this->db->from('producto');
+            $this->db->where('id',$subasta->producto);
+            $this->db->select('*');
+            $dataBody['producto']= $this->db->get()->row();*/
+            $producto = new Producto();
+            $producto->getProductoPorId($subasta->getProducto());
+
+            $categoria = new Categoria();
+            $categoria->getCategoriaPorId($producto->getCategoria());
+            $producto->SetCategoria($categoria);
+
+            $marca = new Marca();
+            $marca->getMarcaPorId($producto->getMarca());
+            $producto->setMarca($marca);
+
+            $dataBody['producto']= $producto;
+            
+            $dataBody['Accion']='Editar';
+
+            /*$this->db->from('producto');
             $this->db->select('categoria');
             $this->db->distinct();
-            $dataBody['categorias']=$this->db->get()->result();
+            $dataBody['categorias']=$this->db->get()->result();*/
+            $dataBody['categorias'] = $this->Categoria->categoriasArray();
+
     		$titulo = "Dimquality::Admin - Subasta";
     		$dataHeader['titlePage'] = $titulo;
     		$this->load->view('admin/header', $dataHeader);

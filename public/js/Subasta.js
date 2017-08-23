@@ -78,12 +78,13 @@ $( ".categoria" ).on('click',function() {
                         data: {categoria:$(this).val()},
                         dataType: 'json',
                         success: function(data){
-                                $.each(data, function(key, value){   
-                                    console.log(data[key].marca);     
-                                    if(data[key].marca != ' '){
+                                console.log(data);
+                                $.each(data, function(key, value){
+                                    // console.log(data[key]['nombre']);
+                                    if(data[key]['id'] != ''){
                                         $('.marca').append
                                             (
-                                                    $('<option>',{text: data[key].marca, class:'marca-op'})   
+                                                $('<option>', {text: data[key]['nombre'], class:'marca-op', value: data[key]['id']})
                                             )      
                                     }else{
                                         $('.marca.op').remove();
@@ -170,6 +171,6 @@ $(document).ready(function() {
 
     
     $('.cancelar').click(function(){
-        location.reload();
+        window.location.replace(base_url + 'subasta/subastas');
     })
 });
