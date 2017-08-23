@@ -30,6 +30,9 @@
 	        <link rel="stylesheet" type="text/css" href="<?php echo $file; ?>" />
 	    <?php endforeach; ?>
 	<?php endif; ?>
+	<?php if($this->router->method == "transacciones"): ?>
+		<link href="<?php echo base_url('public/css/admin-transacciones.css'); ?>" rel="stylesheet" type="text/css">
+	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
 

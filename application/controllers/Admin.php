@@ -15,7 +15,8 @@ class Admin extends CI_Controller {
         date_default_timezone_set("America/Guayaquil");
 	}
 
-	public function login() {
+	public function login()
+    {
         if($this->securityCheckAdmin()){
             redirect("admin/index");
         }else{
@@ -28,7 +29,8 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function index() {
+    public function index()
+    {
     	if ($this->securityCheckAdmin()) {
     		$titulo = "Dimquality::Admin - Inicio";
 
@@ -43,7 +45,8 @@ class Admin extends CI_Controller {
     	}
     }
 
-	public function logout() {
+	public function logout()
+    {
         if($this->securityCheckAdmin()){
             $securityUser = new SecurityUser();
             $securityUser->logout();
@@ -53,21 +56,8 @@ class Admin extends CI_Controller {
         }
     }
 
-	public function auth() {
-        $user = $this->input->post("user");
-        $password = $this->input->post("password");
-
-        $securityUser = new SecurityUser();
-        $securityUser->login_admin($user, $password);
-
-        if($this->session->userdata('user') != "" && $this->session->userdata('tipo') == "admin"){
-            redirect("admin/index");
-        }else{
-            redirect("admin/login");
-        }
-    }
-
-    public function productos() {
+    public function productos()
+    {
         if ($this->securityCheckAdmin()) {
             $titulo = "Productos";
 
@@ -145,9 +135,10 @@ class Admin extends CI_Controller {
     public function know_date($post_array){
         $post_array['fechaCreacion'] = date("Y-m-d");
         return $post_array;
-    }  
+    }
 
-    public function actualizarCatalogo() {
+    public function actualizarCatalogo()
+    {
         if ($this->securityCheckAdmin()) {
             $titulo = "Dimquality::Admin - Actualizar Catalogo";
 
@@ -162,7 +153,8 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function subirExcel() {
+    public function subirExcel()
+    {
         // RECORDAR: ES NECESARIO QUE LOS VALORES SUPERIORES A 999 NO TENGAN SEPARADOR DE MILES
         if ($this->securityCheckAdmin()) {
 
@@ -425,18 +417,105 @@ class Admin extends CI_Controller {
         }
     }
 
+    public function transacciones()
+    {
+        if ($this->securityCheckAdmin()) {
+            $titulo = 'Transacciones';
+
+            $crud=new grocery_CRUD();
+            $crud->set_subject($titulo);
+            $crud->set_table('transaccion');
+            $crud->columns('id', 'estado', 'fechaCompra', 'usuario', 'total', 'fechaPago', 'formaPago', 'fechaEntrega', 'tipoEntrega', 'nombreFactura', 'cedulaFactura', 'direccionFactura', 'recibe', 'direccionEntrega');
+            $crud->required_fields('estado', 'formaPago', 'tipoEntrega', 'nombreFactura', 'cedulaFactura', 'direccionFactura', 'recibe');
+            $crud->edit_fields('estado', 'fechaPago', 'formaPago', 'fechaEntrega', 'tipoEntrega', 'nombreFactura', 'cedulaFactura', 'direccionFactura', 'recibe', 'direccionEntrega');
+            $crud->set_relation('estado','estado_transaccion','estado');
+            $crud->set_relation('formaPago','forma_pago','nombre');
+            $crud->set_relation('tipoEntrega','tipo_entrega','nombre');
+            $crud->callback_column('usuario', array($this, '_callback_nombreTransaccion'));
+            $crud->display_as('id', 'Código');
+            $crud->display_as('fechaCompra', 'Fecha de Compra');
+            $crud->display_as('fechaCompra', 'Fecha de Pago');
+            $crud->display_as('fechaEntrega', 'Fecha de Entrega');
+            $crud->display_as('formaPago', 'Forma de Pago');
+            $crud->display_as('nombreFactura', 'Nombre (Factura)');
+            $crud->display_as('cedulaFactura', 'Cédula o RUC (Factura)');
+            $crud->display_as('direccionFactura', 'Dirección (Factura)');
+            $crud->display_as('tipoEntrega', 'Tipo de Entrega');
+            $crud->display_as('recibe', 'Recibe');
+            $crud->display_as('direccionEntrega', 'Dirección de Entrega');   
+            $crud->unset_add();         
+            $crud->unset_export();
+            $crud->unset_print();
+            $crud->set_language('spanish');
+            // $crud->callback_before_insert(array($this,'know_date'));
+            $output=$crud->render();
+
+            $dataHeader['titlePage'] = 'Dimquality::Admin - Transacciones';
+            $dataHeader['titleCRUD'] = $titulo;
+            $dataHeader['css_files']=$output->css_files;
+            $dataFooter['js_files']=$output->js_files;
+            $this->load->view('admin/header', $dataHeader);
+            $this->load->view('admin/lat-menu');
+            $this->load->view('admin/blank',(array)$output);
+            $this->load->view('admin/footer-gc', $dataFooter);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
+    public function _callback_nombreTransaccion($value, $row)
+    {
+        $nombre = '';
+
+        $this->db->select('nombre');
+        $this->db->from('usuario');
+        $this->db->where('id', $value);
+        $resultado = $this->db->get()->first_row();
+
+        if (!is_null($resultado)) {
+            $nombre .= $resultado->nombre;
+        }
+
+        $this->db->select('apellido');
+        $this->db->from('usuario');
+        $this->db->where('id', $value);
+        $resultado = $this->db->get()->first_row();
+
+        if (!is_null($resultado)) {
+            $nombre .= ' ';
+            $nombre .= $resultado->apellido;
+        }
+
+        return $nombre;
+    }
+
     function securityCheckAdmin() {
         $securityUser = new SecurityUser();
         $usuario = $this->session->userdata('user');
         if($usuario == ""){
             return false;
         }else{
-            if ($this->session->userdata('tipo') == "admin") {
+            if ($this->session->userdata('tipo') == 'admin') {
                 return true;
             }else{
                 $securityUser->logout();
                 return false;
             }
+        }
+    }
+
+    public function auth()
+    {
+        $user = $this->input->post("user");
+        $password = $this->input->post("password");
+
+        $securityUser = new SecurityUser();
+        $securityUser->login_admin($user, $password);
+
+        if($this->session->userdata('user') != "" && $this->session->userdata('tipo') == "admin"){
+            redirect("admin/index");
+        }else{
+            redirect("admin/login");
         }
     }
 

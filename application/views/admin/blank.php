@@ -10,7 +10,7 @@
 		                                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;<?php echo $titleCRUD; ?>
 		                            </h2>
 		                        </div>
-		                        <div class="box-content">
+		                        <div class="box-content pl-0">
 		                            <?php echo $output; ?>
 		                        </div>
 		                    <?php else: ?>
