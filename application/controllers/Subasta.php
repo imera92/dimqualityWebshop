@@ -283,4 +283,18 @@ class Subasta extends CI_Controller {
             }
         }
     }
+
+    public function cambiarEstado()
+    {
+        $result = $this->db->get_where('subasta', array('estado' => 1))->result();
+
+        foreach ($result as $row) {
+            $fechaSubasta = new DateTime($row->fechaFin);
+            $fechaActual = new DateTime(date('Y-m-d H:i:s'));
+            if ($fechaSubasta <= $fechaActual) {
+                $this->db->where('id', $row->id);
+                $this->db->update('subasta', array('estado' => 2));
+            }
+        }
+    }
 }
