@@ -1,0 +1,15 @@
+.index-box{
+	background: 	#87CEEB;
+	padding: 10px 10px;
+	color:black;
+    border: 2px solid #4682B4;
+    border-radius: 10px;
+
+}
+
+.oferta{
+    color:#4682B4;
+}
+.req{
+    color:red;
+}

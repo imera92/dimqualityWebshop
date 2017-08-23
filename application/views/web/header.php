@@ -41,8 +41,13 @@
 		<link href="<?php echo base_url('public/css/recuperarContasena.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'ChangePassword'): ?>
 		<link href="<?php echo base_url('public/css/changePassword.css'); ?>" rel="stylesheet" type="text/css">
+<<<<<<< HEAD
 	<?php elseif ($this->router->method == 'verEstadoTransacciones'): ?>
 		<link href="<?php echo base_url('public/css/verEstadoTransacciones.css'); ?>" rel="stylesheet" type="text/css">
+=======
+		<?php elseif ($this->router->method == 'ofertarsubasta'): ?>
+		<link href="<?php echo base_url('public/css/subasta.css'); ?>" rel="stylesheet" type="text/css">
+>>>>>>> karen
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
