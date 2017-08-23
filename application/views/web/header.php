@@ -11,8 +11,12 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="<?php echo base_url('public/css/bootstrap.min.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/custom-bootstrap-margin-padding.css'); ?>" rel="stylesheet" type="text/css">
+	<?php if ($this->router->method == 'compraExitosa'): ?>
+		<link href="<?php echo base_url('public/css/footer-bottom.css'); ?>" rel="stylesheet" type="text/css">
+	<?php else: ?>
+		<link href="<?php echo base_url('public/css/footer.css'); ?>" rel="stylesheet" type="text/css">
+	<?php endif; ?>
 	<link href="<?php echo base_url('public/css/header.css'); ?>" rel="stylesheet" type="text/css">
-	<link href="<?php echo base_url('public/css/footer.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css">
 	<?php if ($this->router->method == 'index'): ?>
 		<link href="<?php echo base_url('public/css/index.css'); ?>" rel="stylesheet" type="text/css">
@@ -22,6 +26,8 @@
 		<link href="<?php echo base_url('public/css/actualizarUsuario.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'comprarProductos'): ?>
 		<link href="<?php echo base_url('public/css/comprarProductos.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'compraExitosa'): ?>
+		<link href="<?php echo base_url('public/css/compraExitosa.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'crearUsuario'): ?>
 		<link href="<?php echo base_url('public/css/crearUsuario.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'carrito'): ?>

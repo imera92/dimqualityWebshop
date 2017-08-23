@@ -32,6 +32,7 @@ class Web extends CI_Controller {
     $this->load->view('web/index', $dataBody);
     $this->load->view('web/footer');
   }
+
   public function carrito()
   {
     $titulo = "Dimquality::Admin - Shopping Cart";
@@ -106,13 +107,14 @@ class Web extends CI_Controller {
     $this->load->view('web/footer');
   }
   
-  public function comprarProductos(){
-    $titulo = "Dimquality::WebShop - Comprar Productos";    
+  public function comprarProductos()
+  {
+    $titulo = "Dimquality - Comprar Productos";    
     $dataHeader['titlePage'] = $titulo; 
 
     // Validamos si hay un usuario logueado
     if ($this->loginCheck()) {
-      if($this->input->post('submit')){
+      if($this->input->post('submit')) {
         $this->form_validation->set_rules('formaPago', 'Forma de Pago', 'required');
         $this->form_validation->set_rules('datosEntrega', 'Datos de Entrega', 'required');
         $this->form_validation->set_rules('nombre', 'Nombre de Facturación', 'required');
@@ -129,27 +131,59 @@ class Web extends CI_Controller {
           $compraIns->setFechaCompra(date(DATE_ATOM));
           $compraIns->setUsuario($this->session->userdata('id'));
           $compraIns->setTotal($carritoDB->getSubtotal());
-          $compraIns->setEstado(0);
+          $compraIns->setEstado(1); // 1 = Pendiente, 2 = Pagado
           $compraIns->setFormaPago($this->input->post('formaPago'));
           $compraIns->setNombreFactura($this->input->post('nombre'));
           $compraIns->setCedulaFactura($this->input->post('cedula'));
           $compraIns->setDireccionFactura($this->input->post('direccion'));
-          $compraIns->setEntregaDomicilio($this->input->post('datosEntrega') == '');
-          $compraIns->setNombreEntrega($this->input->post('nombreEntrega'));
-          $compraIns->setDireccionEntrega($this->input->post('direccionEntrega'));
+          $compraIns->setTipoEntrega($this->input->post('datosEntrega'));
+          $compraIns->setRecibe($this->input->post('nombreEntrega'));
+          $compraIns->setDireccionEntrega(($this->input->post('datosEntrega') == 1) ? '' : $this->input->post('direccionEntrega'));
           $compraExito = $compraIns->insertarDB();
           if ($compraExito) {
             $carritoDB->vaciarCarrito();
             $carritoDB->actualizarCarrito();
+
+            // Preparamos el envio del correo
+            $config = array();
+            $config['protocol'] = 'smtp';
+            $config['smtp_host'] = 'ssl://bh-27.webhostbox.net';
+            $config['smtp_port'] = '465';
+            $config['smtp_user'] = '_mainaccount@dimquality.com.ec';
+            $config['smtp_pass'] = 'dimQ2016';
+            $config['mailtype'] = 'html';
+            $config['charset']  = 'utf-8';
+            $config['newline']  = "\r\n";
+            $config['wordwrap'] = TRUE;
+
+            $mensaje = '<html>
+                         <head>
+                             <title>Compra exitosa</title>
+                        </head>
+                        <body>
+                          <p>Hemos guardado tu transaccion. Ponte en contacto con el administrador</p>
+                        </body>
+                        </html>';
+
+            $this->load->library('email');
+            $this->email->initialize($config);
+            $this->email->from('info@dimquality.com.ec','Your name');
+            $this->email->to($this->session->correo);
+            $this->email->subject('Dimquality - Compra');
+            $this->email->message($mensaje);
+
+            if(!$this->email->send()) {
+              show_error($this->email->print_debugger());
+            }
+
             redirect('exito');
           }
-          else
-          {
-             $dataBody['mensaje'] = 'Ocurrió un error al procesar su compra. Por favor vuelva a intentar mas tarde.';
+          else {
+            $dataBody['mensaje'] = 'Ocurrió un error al procesar su compra. Por favor vuelva a intentar mas tarde.';
           }          
-        }
-        
+        } 
       }
+
       // Obtenemos el ID del carrito perteneciente al usuario logueado
       $carritoId = $this->session->userdata('carritoId');
       $carritoDB = new CarritoDeCompras();
@@ -162,23 +196,16 @@ class Web extends CI_Controller {
       } else {
         // Guardamos los datos de todos los productos del carrito temporal en un arreglo para enviar al frontend
         $productosCarrito = array();
-        foreach ($carritoDB->getProductosCarrito() as $index => $productoCarrito) {
-          array_push($productosCarrito, array(
-            'id' => $productoCarrito->getProducto()->getId(),
-            'cantidad' => $productoCarrito->getCantidad(),
-            'pvp' => $productoCarrito->getProducto()->getPVP(),
-            'nombre' => $productoCarrito->getProducto()->getNombre(),
-            'imagen' => $productoCarrito->getProducto()->getImagen()
-            ));        
+        foreach ($carritoDB->getProductosCarrito() as $productoCarrito) {
+            array_push($productosCarrito, $productoCarrito);
         }
         $dataBody['subtotal'] = $carritoDB->getSubtotal();
-        $dataBody['productosCarrito'] = $productosCarrito;        
+        $dataBody['productosCarrito'] = $productosCarrito;
         $dataBody['user'] = $this->session->userdata;
       }
     } else {
       redirect("login");
     }
-    $user = $this->session->userdata;
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/comprarProductos', $dataBody);
     $this->load->view('web/footer');
@@ -186,7 +213,7 @@ class Web extends CI_Controller {
 
   public function compraExitosa()
   {
-    $titulo = "Dimquality::WebShop - Comprar Exitosa";    
+    $titulo = "Dimquality::WebShop - Comprar Exitosa";
     $dataHeader['titlePage'] = $titulo; 
     $this->load->view('web/header', $dataHeader);
     $this->load->view('web/compraExitosa');

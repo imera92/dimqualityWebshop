@@ -236,6 +236,30 @@
             }
         }
 
+        // Funcion para reducir el stock de un producto
+        // Retorna TRUE si la operacion fue exitosa, FALSE si hubo algun error
+        public function reducirStock($cantidad=1)
+        {
+            if (!is_null($cantidad)) {
+                if ($this->stock > 0) {
+                    // Obtener instancia de CodeIgniter para manejo de la DB
+                    $instanciaCI =& get_instance();
+
+                    // Reducimos el stock de la instancia de producto
+                    $this->stock = $this->stock - $cantidad;
+
+                    // Guardamos el stock actualizado en la DB
+                    $resultado = $instanciaCI->db->update('producto', array('stock' => $this->stock), array('id' => $this->id));
+
+                    return $resultado;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
         // Funcion para buscar productos en base a un termino de busqueda enviado
         static public function buscarProducto($terminoBusqueda, $categoria = 0, $marca = 0, $rango = '')
         {   

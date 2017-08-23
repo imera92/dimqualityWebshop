@@ -17,8 +17,8 @@
 		private $nombreFactura;
 		private $cedulaFactura;
 		private $direccionFactura;
-		private $entregaDomicilio;
-		private $nombreEntrega;
+		private $tipoEntrega;
+		private $recibe;
 		private $direccionEntrega;
 		private $itemsTransaccion;
 		
@@ -96,14 +96,14 @@
 			return $this->direccionFactura;
 		}
 
-		public function getEntregaDomicilio()
+		public function getTipoEntrega()
 		{
-			return $this->entregaDomicilio;
+			return $this->tipoEntrega;
 		}
 
-		public function getNombreEntrega()
+		public function getRecibe()
 		{
-			return $this->nombreEntrega;
+			return $this->recibe;
 		}
 
 		public function getDireccionEntrega()
@@ -171,14 +171,14 @@
 			$this->direccionFactura = $direccionFactura;
 		}
 
-		public function setEntregaDomicilio($entregaDomicilio)
+		public function setTipoEntrega($tipoEntrega)
 		{
-			$this->entregaDomicilio = $entregaDomicilio;
+			$this->tipoEntrega = $tipoEntrega;
 		}
 
-		public function setNombreEntrega($nombreEntrega)
+		public function setRecibe($recibe)
 		{
-			$this->nombreEntrega = $nombreEntrega;
+			$this->recibe = $recibe;
 		}
 
 		public function setDireccionEntrega($direccionEntrega)
@@ -196,7 +196,7 @@
 			foreach ($prodsCarrito as $prodC) {
 				$itemT = new ItemTransaccion();
 				$itemT->setProducto($prodC->getProducto());
-				$itemT->setCantidad($prodC->getCantidad());				
+				$itemT->setCantidad($prodC->getCantidad());
 				$itemT->setSubtotal($prodC->getCosto());
 				array_push($this->itemsTransaccion, $itemT);
 			}
@@ -211,13 +211,13 @@
 				'usuario' => $this->usuario,
 				'total' => $this->total,
 				'estado' => $this->estado,
-				'FormaPago' => $this->formaPago,
-				'NombreFactura' => $this->nombreFactura,
-				'CedulaFactura' => $this->cedulaFactura,
-				'DireccionFactura' => $this->direccionFactura,
-				'EntregaDomicilio' => $this->entregaDomicilio,
-				'NombreEntrega' => $this->nombreEntrega,
-				'DireccionEntrega' => $this->direccionEntrega
+				'formaPago' => $this->formaPago,
+				'nombreFactura' => $this->nombreFactura,
+				'cedulaFactura' => $this->cedulaFactura,
+				'direccionFactura' => $this->direccionFactura,
+				'tipoEntrega' => $this->tipoEntrega,
+				'recibe' => $this->recibe,
+				'direccionEntrega' => $this->direccionEntrega
 			);
 			$this->db->trans_begin();
 			$insert = $this->db->insert('transaccion', $data);

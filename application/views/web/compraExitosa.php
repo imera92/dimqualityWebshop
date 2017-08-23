@@ -1,7 +1,7 @@
-<div class="row">
+<div class="row mt-50">
 	<div class="center text-center">
-		<h2>COMPRA EXITOSA</h2>
+		<h1 class="main-title">COMPRA EXITOSA</h1>
 		<p>La compra ha sido completada con exito</p>	
-		<p>Esta View es temporal. Deberia redirigirse a Historial de compras, pero esa vista no existe todavia. =)</p>
+		<a href="<?php echo base_url(); ?>">Regresar a la tienda</a>
 	</div>
 </div>

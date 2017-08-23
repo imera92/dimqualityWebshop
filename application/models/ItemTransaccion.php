@@ -84,6 +84,9 @@
                 // Obtener instancia de CodeIgniter para manejo de la DB
                 $instanciaCI =& get_instance();
 
+                // Reducimos el stock del producto en la DB
+                $this->producto->reducirStock($this->cantidad);
+
                 // Guardamos el item de transaccion en la DB
                 $data = array(
                         'producto' => $this->producto->getId(),
