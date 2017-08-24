@@ -9,6 +9,7 @@ class Subasta extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('grocery_CRUD');
         $this->load->model('SecurityUser');
+        $this->load->model('ShopUser');
         date_default_timezone_set("America/Guayaquil");
 	}
     
@@ -181,8 +182,35 @@ class Subasta extends CI_Controller {
         
 
     }
+    //vista para que el usuario oferte en una subasta
+    function OfertarSubasta(){
+        if ($this->loginCheck()) {
+            $id=$this->input->get('id');
+            $this->db->from('subasta');
+            $this->db->where('id', $id);
+            $this->db->select('*');
+            $subasta=$this->db->get()->row();
+            $dataBody=array();
+            if($subasta !=null){
+                $this->db->from('producto');
+                $this->db->where('id', $subasta->producto);
+                $this->db->select('*');
+                $producto= $this->db->get()->row();
+                $dataBody['subasta']=$subasta;
+                $dataBody['producto']=$producto;
+            }
+            $titulo = "Dimquality::WebShop -Ofertar Subasta";
+            $dataHeader['titlePage'] = $titulo;
+            $this->load->view('web/header', $dataHeader);
+            $this->load->view('web/ofertarsubasta', $dataBody);
+            $this->load->view('web/footer');
+        }else{
+            redirect("usuario/login");
+        }
+    }
+
     //Aseguhar que el Administrador este logeado
-    function securityCheckAdmin() {
+     private function securityCheckAdmin() {
         $securityUser = new SecurityUser();
         $usuario = $this->session->userdata('user');
         if($usuario == ""){
@@ -196,6 +224,16 @@ class Subasta extends CI_Controller {
             }
         }
     }
+
+    private function loginCheck() {
+        $securityUser = new ShopUser();
+        $usuario = $this->session->userdata('user');
+        if($usuario == ""){
+          return false;
+        }else{
+          return true;
+        }
+      }
 }
 ?>
 
