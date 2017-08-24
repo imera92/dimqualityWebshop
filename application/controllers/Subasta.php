@@ -184,7 +184,7 @@ class Subasta extends CI_Controller {
     }
     //vista para que el usuario oferte en una subasta
     function OfertarSubasta(){
-        if ($this->loginCheck()) {
+       // if ($this->loginCheck()) {
             $id=$this->input->get('id');
             $this->db->from('subasta');
             $this->db->where('id', $id);
@@ -196,6 +196,14 @@ class Subasta extends CI_Controller {
                 $this->db->where('id', $subasta->producto);
                 $this->db->select('*');
                 $producto= $this->db->get()->row();
+                $this->db->from('ofertasubasta');
+                $this->db->where('subasta', $subasta->id);
+                $this->db->select('*');
+                $ofertas=$this->db->get()->result();
+                $this->db->select_max('monto');
+                $this->db->from('ofertasubasta');
+                $dataBody['mayor']=$this->db->get()->row();
+                $dataBody['ofertas']=$ofertas;
                 $dataBody['subasta']=$subasta;
                 $dataBody['producto']=$producto;
             }
@@ -204,13 +212,34 @@ class Subasta extends CI_Controller {
             $this->load->view('web/header', $dataHeader);
             $this->load->view('web/ofertarsubasta', $dataBody);
             $this->load->view('web/footer');
-        }else{
+       /* }else{
             redirect("usuario/login");
-        }
+        }*/
     }
-
+    function guardarOferta(){
+        $valor=$this->input->post('valor');
+        if ($valor !=0){
+            $subasta=$this->input->post('id');
+            //$usuario = $this->session->userdata('user');
+            $fecha=date("Y-m-d")." ".date("H:i:s");
+            $data = array(
+                'fecha' => $fecha,
+                'subasta' =>$subasta,
+                'monto' => $valor,
+                'usuario'=>2
+            );
+            $this->db->insert('ofertasubasta', $data);
+            $cadena = str_replace(' ', '',"subasta/ofertarsubasta?id=".$subasta);
+            echo $cadena;
+        }else if($valor=" "){
+            echo "error2";
+        }else{
+            echo "error1";
+        }        
+        
+    }
     //Aseguhar que el Administrador este logeado
-     private function securityCheckAdmin() {
+     function securityCheckAdmin() {
         $securityUser = new SecurityUser();
         $usuario = $this->session->userdata('user');
         if($usuario == ""){

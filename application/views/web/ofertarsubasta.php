@@ -12,15 +12,18 @@
                                 <hr>
                                 <div class="equalHeightBox">
                                         <img class="img-responsive col-md-6" src="<?php echo base_url('assets/uploads/images/productos/'.$producto->imagen ); ?>">   
-                                        <div class="info del producto col-md-6">
+                                        <div class="infodelproducto col-md-6">
                                             <h3>Precio Base:  $<?php echo $subasta->precioBase;?> </h3>
-                                            <h2 class="oferta"> Mayor oferta:</h2>
+                                            <h2 class="oferta"> Mayor oferta: <?php echo $mayor->monto;?></h2>
                                             <p><strong> Inicia: </strong>  <?php echo $subasta->fechaInicio;?></p>
                                             </p><strong> Termina:</strong>  <?php echo $subasta->fechaFin;?></p>
-                                            <input type="text">
-                                            <button type="submit" class="btn btn-success ">Ofertar</button>        
+                                            <input type="text" class="valor">
+                                            <input type="hidden" class="si" value=" <?php echo $subasta->id;?>" >
+                                            <button type="submit" class="btn btn-success ofertar">Ofertar</button>        
                                         </div>
                                 </div>
+                            </div>
+                            <div class="col-md-12 msg">
                             </div>
                             <div class="col-md-12 mt-30">
                                 <ul class="nav nav-tabs">
@@ -29,7 +32,27 @@
                                 </ul>
                                 <div class="tab-content ">
                                     <div class="tab-pane active" id="1">
-                                        <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Hora</th>
+                                                    <th>Cantidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    
+                                                    <?php foreach ($ofertas as  $oferta): ?>
+                                                        <tr>
+                                                            <td><?php  $FechaHora = explode(" ", $oferta->fecha); echo $FechaHora[0] ;?></td>
+                                                            <td><?php  $FechaHora = explode(" ", $oferta->fecha); echo $FechaHora[1] ;?></td>
+                                                            <td><?php echo  $oferta->monto;?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                    
+                                            </tbody>
+    
+                                        </table>
                                     </div>
                                     <div class="tab-pane" id="2">
                                         <h3>Holi camaron con coli</h3>
