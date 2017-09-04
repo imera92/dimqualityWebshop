@@ -306,7 +306,8 @@ CREATE TABLE `subasta` (
   `fechaFin` datetime NOT NULL,
   `producto` int(11) NOT NULL,
   `precioBase` decimal(8,2) NOT NULL,
-  `estado` int(1) NOT NULL
+  `estado` int(1) NOT NULL,
+  'ganador' int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -314,7 +315,7 @@ CREATE TABLE `subasta` (
 --
 
 INSERT INTO `subasta` (`id`, `fechaInicio`, `fechaFin`, `producto`, `precioBase`, `estado`) VALUES
-(0, '2017-08-17 00:00:00', '2017-08-31 05:00:00', 13, '20.00', 1);
+(1, '2017-08-17 00:00:00', '2017-08-31 05:00:00', 13, '20.00', 1);
 
 -- --------------------------------------------------------
 
@@ -542,9 +543,14 @@ ALTER TABLE `tipo_entrega`
 ALTER TABLE `transaccion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT de la tabla `transaccion`
+-- AUTO_INCREMENT de la tabla `subasta`
 --
 ALTER TABLE `subasta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `ofertasubasta`
+--
+ALTER TABLE `ofertasubasta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `itemtransaccion`

@@ -5,23 +5,19 @@ $('.ofertar').click(function(){
         type:"Post",
         url:  base_url + "Subasta/guardarOferta",
         data: {valor:valor, id: id},
-        dataType: 'text',
+        dataType: 'json',
         success: function(data){
-            if(data.trim()!="error1" &&  data.trim()!="error2"){
-                $.trim(data);
-                window.location.href = base_url+ data;  
-            }else if(data.trim()=="error1"){
-                color="danger";
-                $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
-                +color}).append
-                    (
-                        $('<strong>',{text: "Ha ocurrido un error. El valor de la oferta no puede ser 0"}),
-                        $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
-                    )
-                );  
-            }else{
-                $('.infodelproducto').append($('<strong class="req">ingrese un valor</strong>'));
-                console.log("here");
+            // console.log(data);
+            if(data[0].success == 1){
+                $.trim(data['url']);
+                window.location.href = base_url+ data[0].url;
+            } else {
+                if ($('#no-data-alert').length > 0) {
+                    $('#no-data-alert').remove();
+                }
+                // $(".alert").alert();
+                // $(".alert").alert('close');
+                $('#info-box .infodelproducto').append($('<div id="no-data-alert" class="row mt-20"><div class="col-xs-12"><div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">' + '&times;' + '</span></button>' + data[0].msg + '</div></div></div>'));
             }
         }
 });

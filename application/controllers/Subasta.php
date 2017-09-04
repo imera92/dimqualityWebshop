@@ -272,28 +272,39 @@ class Subasta extends CI_Controller {
     //vista para que el usuario oferte en una subasta
     function OfertarSubasta(){
        // if ($this->loginCheck()) {
-            $id=$this->input->get('id');
-            $this->db->from('subasta');
+            $id = $this->input->get('id');
+
+            /*$this->db->from('subasta');
             $this->db->where('id', $id);
             $this->db->select('*');
-            $subasta=$this->db->get()->row();
+            $subasta=$this->db->get()->row();*/
+            $subasta = new Subastas();
+            $subasta->getSubastaPorId($id);
+
             $dataBody=array();
-            if($subasta !=null){
-                $this->db->from('producto');
+
+            if($subasta != null){
+                /*$this->db->from('producto');
                 $this->db->where('id', $subasta->producto);
                 $this->db->select('*');
-                $producto= $this->db->get()->row();
+                $producto= $this->db->get()->row();*/
+                $producto = new Producto();
+                $producto->getProductoPorId($subasta->getProducto());
+
                 $this->db->from('ofertasubasta');
-                $this->db->where('subasta', $subasta->id);
+                $this->db->where('subasta', $subasta->getId());
                 $this->db->select('*');
                 $ofertas=$this->db->get()->result();
+
                 $this->db->select_max('monto');
                 $this->db->from('ofertasubasta');
+
                 $dataBody['mayor']=$this->db->get()->row();
                 $dataBody['ofertas']=$ofertas;
                 $dataBody['subasta']=$subasta;
                 $dataBody['producto']=$producto;
             }
+
             $titulo = "Dimquality::WebShop -Ofertar Subasta";
             $dataHeader['titlePage'] = $titulo;
             $this->load->view('web/header', $dataHeader);
@@ -305,26 +316,50 @@ class Subasta extends CI_Controller {
     }
     
     function guardarOferta(){
+        $resultado = array();
         $valor=$this->input->post('valor');
         if ($valor !=0){
-            $subasta=$this->input->post('id');
-            //$usuario = $this->session->userdata('user');
-            $fecha=date("Y-m-d")." ".date("H:i:s");
-            $data = array(
-                'fecha' => $fecha,
-                'subasta' =>$subasta,
-                'monto' => $valor,
-                'usuario'=>2
-            );
-            $this->db->insert('ofertasubasta', $data);
-            $cadena = str_replace(' ', '',"subasta/ofertarsubasta?id=".$subasta);
-            echo $cadena;
-        }else if($valor=" "){
-            echo "error2";
+            $this->db->select_max('monto');
+            $this->db->from('ofertasubasta');
+            $mayorOferta=$this->db->get()->row();
+
+            if ( $valor > $mayorOferta->monto) {
+                $subasta=$this->input->post('id');
+                $usuario = $this->session->id;
+                $fecha=date("Y-m-d")." ".date("H:i:s");
+                $data = array(
+                    'fecha' => $fecha,
+                    'subasta' =>$subasta,
+                    'monto' => $valor,
+                    'usuario' => $usuario
+                );
+                $this->db->insert('ofertasubasta', $data);
+                $cadena = str_replace(' ', '',"subasta/ofertarsubasta?id=".$subasta);
+
+                array_push($resultado, array(
+                    'success' => 1,
+                    'url' => $cadena
+                ));
+            } else {
+                array_push($resultado, array(
+                    'success' => 0,
+                    'msg' => 'El valor ingresado debe ser mayor al de la mayor oferta.'
+                ));
+            }
+        }else if($valor=""){
+            array_push($resultado, array(
+                'success' => 0,
+                'msg' => 'Es necesario que ingrese un valor.'
+            ));
         }else{
-            echo "error1";
-        }        
-        
+            array_push($resultado, array(
+                'success' => 0,
+                'msg' => 'El valor de la oferta debe ser mayor a 0.'
+            ));
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
     }
 
     //Aseguhar que el Administrador este logeado
@@ -365,6 +400,46 @@ class Subasta extends CI_Controller {
             if ($fechaSubasta <= $fechaActual) {
                 $this->db->where('id', $row->id);
                 $this->db->update('subasta', array('estado' => 2));
+
+                $this->db->select_max('monto');
+                $this->db->from('ofertasubasta');
+                $this->db->where('subasta', $row->id);
+                $userId = $this->db->get()->last_row();
+
+                $this->db->select('email');
+                $this->db->from('usuario');
+                $this->db->where('id', $userId);
+                $correoUser = $this->db->get()->result();
+
+                $config = array();
+                $config['protocol'] = 'smtp';
+                $config['smtp_host'] = 'ssl://bh-27.webhostbox.net';
+                $config['smtp_port'] = '465';
+                $config['smtp_user'] = '_mainaccount@dimquality.com.ec';
+                $config['smtp_pass'] = 'dimQ2016';
+                $config['mailtype'] = 'html';
+                $config['charset']  = 'utf-8';
+                $config['newline']  = "\r\n";
+                $config['wordwrap'] = TRUE;
+
+                $mensaje = '<html>
+                             <head>
+                                 <title>Restablece tu contraseña</title>
+                            </head>
+                            <body>
+                                <p>Acaba de ganar la subasta.</p>
+                            </body>
+                            </html>';
+                $this->load->library('email');
+                $this->email->initialize($config);
+                $this->email->from('info@dimquality.com.ec','Dimquality - Lo mejor en tecnología');
+                $this->email->to($correoUser->correo);
+                $this->email->subject('GANO LA SUBASTA');
+                $this->email->message($mensaje);
+
+                if(!$this->email->send()) {
+                  show_error($this->email->print_debugger());
+                }
             }
         }
     }
