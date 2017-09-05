@@ -9,10 +9,12 @@ class Usuario extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->library('form_validation');
-		    $this->load->library('session');
+		$this->load->library('session');
         $this->load->model('CarritoDeCompras');
         $this->load->model('ShopUser');
         $this->load->model('Producto');
+		$this->load->model('Categoria');
+        $this->load->model('Subastas');
         date_default_timezone_set("America/Guayaquil");
 	}
 
@@ -75,7 +77,7 @@ class Usuario extends CI_Controller {
       if($this->form_validation->run() == true){
         // Creamos un carrito de compras vacio, que le sera asignado al usuario
         $nuevoCarrito = new CarritoDeCompras();
-        
+
         // Verificamos si existe un carrito temporal en sesion
         $carritoSesion = $this->session->carritoSesion;
         if (!is_null($carritoSesion)) {
@@ -180,7 +182,7 @@ class Usuario extends CI_Controller {
     if (!is_numeric($str)){
       $this->form_validation->set_message('cedula_check', 'Formato de cédula no valido (10 o 13 digitos).');
       return false;
-    }    
+    }
     $con['returnType'] = 'count';
     $con['conditions'] = array('cedula'=>$str);
     $checkCedula = $this->ShopUser->getRows($con);
@@ -356,7 +358,7 @@ class Usuario extends CI_Controller {
     if (!is_numeric($str)){
       $this->form_validation->set_message('cedula_update_check', 'Su número de cédula debe tener 10 dígitos y su RUC debe tener 13 dígitos.');
       return false;
-    }    
+    }
     $con['returnType'] = 'count';
     $con['conditions'] = array('cedula'=>$str);
     $checkCedula = $this->ShopUser->getRows($con);
@@ -366,5 +368,58 @@ class Usuario extends CI_Controller {
     } else {
       return TRUE;
     }
+  }
+
+  public function subastas($pagina = FALSE)
+  {
+	  $inicio = 0;
+	  $limite = 5;
+
+	  if ($pagina){
+		  $inicio = ($pagina -1) * $limite; //corrige elemento repetido en ultima página
+	  }
+
+	  $subasta = new Subastas();
+	  $titulo = "Subastas";
+	  $dataHeader['titlePage'] = 'Dimquality - Subastas';
+
+	  $this->load->library('pagination');
+
+	  $config['base_url'] = base_url().'usuario/subastas';
+	  $config['total_rows'] = $subasta->num_subastas();
+	  $config['per_page'] = $limite;
+
+	  $config['full_tag_open'] = '<ul class="pagination">';
+	  $config['full_tag_close'] = '</ul>';
+	  $config['first_link'] = false;
+	  $config['last_link'] = false;
+	  $config['first_tag_open'] = '<li>';
+	  $config['first_tag_close'] = '</li>';
+	  $config['prev_link'] = '&laquo';
+	  $config['prev_tag_open'] = '<li class="prev">';
+	  $config['prev_tag_close'] = '</li>';
+	  $config['next_link'] = '&raquo';
+	  $config['next_tag_open'] = '<li>';
+	  $config['next_tag_close'] = '</li>';
+	  $config['last_tag_open'] = '<li>';
+	  $config['last_tag_close'] = '</li>';
+	  $config['cur_tag_open'] = '<li class="active"><a href="#">';
+	  $config['cur_tag_close'] = '</a></li>';
+	  $config['num_tag_open'] = '<li>';
+	  $config['num_tag_close'] = '</li>';
+
+	  $this->pagination->initialize($config);
+
+	  $result = $subasta->obtener_paginacion($inicio, $limite);
+
+	  $data['consulta'] = $result;
+	  $data['pagination'] = $this->pagination->create_links();
+	  $data['actuales'] = $subasta->obtenerSubastas();
+	  $data['num_subastas'] = $subasta->num_subastas();
+
+	  $this->load->view('web/header', $dataHeader);
+	  $this->load->view('web/subastas', $data);
+	  $this->load->view('web/footer');
+
   }
 }

@@ -307,7 +307,7 @@ CREATE TABLE `subasta` (
   `producto` int(11) NOT NULL,
   `precioBase` decimal(8,2) NOT NULL,
   `estado` int(1) NOT NULL,
-  'ganador' int(11) NOT NULL
+  `ganador` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
