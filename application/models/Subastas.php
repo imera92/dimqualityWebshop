@@ -140,36 +140,31 @@
 
 		// ontiene las subastas según la paginación
 		public function obtener_paginacion($inicio, $limite){
-			if ($this->securityCheckAdmin()) {
-				return $this->db->get('subasta', $limite, $inicio)->result();
-			} else {
-	            redirect("admin/login");
-	        }
+
+			return $this->db->get('subasta', $limite, $inicio)->result();
+
 		}
 
 		// obtiene un array con la informacion de los productos que
 		// están en subasta: nombre, código, imagen, ofertas realizadas
 		public function obtenerSubastas()
 		{
-			if ($this->securityCheckAdmin()) {
-				$subastas = $this->db->get('subasta');
+			$subastas = $this->db->get('subasta');
 
-				$actuales = [];
-				// para cada registro de la tabla subasta se obtiene la información del producto correspondiente
-				foreach ($subastas->result() as $fila) {
-					$actual = $this->db->get_where('producto', array('id' => $fila->producto));
-					$ofertas = $this->db->get_where('ofertasubasta', array('subasta' => $fila->id))->num_rows();
-					$nombre = $actual->row()->nombre;
-					$imagen = $actual->row()->imagen;
-					$codigo = $actual->row()->codigo;
-					$id_producto = $fila->producto;
-					$datos = ['nombre' => $nombre, 'imagen' => $imagen, 'codigo' => $codigo, 'ofertas' => $ofertas];
-					$actuales[$id_producto] = $datos;
-				}
-				return $actuales;
-			} else {
-				redirect("admin/login");
+			$actuales = [];
+			// para cada registro de la tabla subasta se obtiene la información del producto correspondiente
+			foreach ($subastas->result() as $fila) {
+				$actual = $this->db->get_where('producto', array('id' => $fila->producto));
+				$ofertas = $this->db->get_where('ofertasubasta', array('subasta' => $fila->id))->num_rows();
+				$nombre = $actual->row()->nombre;
+				$imagen = $actual->row()->imagen;
+				$codigo = $actual->row()->codigo;
+				$id_producto = $fila->producto;
+				$datos = ['nombre' => $nombre, 'imagen' => $imagen, 'codigo' => $codigo, 'ofertas' => $ofertas];
+				$actuales[$id_producto] = $datos;
 			}
+			return $actuales;
+
 		}
 
 		// función que elimina una subasta dado su id

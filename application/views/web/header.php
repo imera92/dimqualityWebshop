@@ -43,6 +43,8 @@
 		<link href="<?php echo base_url('public/css/changePassword.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'verEstadoTransacciones'): ?>
 		<link href="<?php echo base_url('public/css/verEstadoTransacciones.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'subastas'): ?>
+		<link href="<?php echo base_url('public/css/subastas.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'ofertarsubasta'): ?>
 		<link href="<?php echo base_url('public/css/subasta.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
@@ -59,7 +61,7 @@
             return urlTmp;
         }
     </script>
-	
+
 </head>
 <body>
 	<div class="container-fluid">
@@ -95,6 +97,8 @@
 										</ul>
 									<?php endif; ?>
 								</li>
+								<li><a href="<?php echo base_url('usuario/subastas'); ?>"><span  class="glyphicon glyphicon-gift"></span> SUBASTAS</a></li>
+
 								<li><a href="<?php echo base_url('carrito'); ?>"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
 							</ul>
 						</div>
@@ -124,7 +128,7 @@
 						</div>
 						<div class="col-md-5">
 							<h4>CONTACTENOS: 04)292-2763</h4>
-						</div>                    
+						</div>
 					</div>
 				</div>
 			</div>

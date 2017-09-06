@@ -1,0 +1,18 @@
+.subasta{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.info-subasta{
+    padding-left: 5%;
+}
+
+.disponible{
+    color: limegreen;
+    font-weight: bold;
+}
+
+.no-disponible{
+    color: #c9302c;
+    font-weight: bold;
+}
