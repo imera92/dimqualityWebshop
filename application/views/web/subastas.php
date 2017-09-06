@@ -38,7 +38,7 @@
 
 						</div>
 						<div class="botones-subasta col col-md-3">
-							<button name="<?php echo $fila->id; ?>" class="btn btn-info btn-subasta" type="button" name="ver">Ofertar</button>
+							<a href="<?php echo base_url('subasta/ofertarSubasta?id=' . $fila->id); ?>" class="btn btn-info btn-subasta">Ofertar</a>
 						</div>
 					</div>
 					<hr>
