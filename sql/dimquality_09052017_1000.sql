@@ -132,7 +132,7 @@ CREATE TABLE `cita` (
   `asunto` varchar(200) NOT NULL,
   `estado` int(1) NOT NULL DEFAULT '0',
   `fechaFin` datetime DEFAULT NULL,
-  `fechaCreacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCreacion` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `categoria` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
@@ -146,7 +146,7 @@ CREATE TABLE `citamensajes` (
   `id` int(11) NOT NULL,
   `cita` int(11) NOT NULL,
   `mensaje` varchar(500) NOT NULL,
-  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fecha` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

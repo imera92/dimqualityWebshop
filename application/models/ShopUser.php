@@ -100,22 +100,22 @@
 
         function login_user($user, $password){
             // Buscamos el usuario en la DB
-        	$usuarioDB = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
+        	$usuario_db = $this->db->get_where("usuario", array('user'=> $user , 'password' => md5($password)))->row();
 
-        	if ($usuarioDB) {
+        	if ($usuario_db) {
                 // Cargamos el carrito de compras del usuario
                 $carritoUsuario = new CarritoDeCompras();
 
                 $data_user = array(
-                    "id" => $usuarioDB->id,
-                    "user" => $usuarioDB->user,
-                    "nombre" => $usuarioDB->nombre,
-                    "apellido" => $usuarioDB->apellido,
-                    "correo" => $usuarioDB->email,
-                    "cedula" => $usuarioDB->cedula,
-                    "direccion" => $usuarioDB->direccion,
-                    "telefono" => $usuarioDB->telefono,
-                    "carritoId" => $usuarioDB->carrito,
+                    "id" => $usuario_db->id,
+                    "user" => $usuario_db->user,
+                    "nombre" => $usuario_db->nombre,
+                    "apellido" => $usuario_db->apellido,
+                    "correo" => $usuario_db->email,
+                    "cedula" => $usuario_db->cedula,
+                    "direccion" => $usuario_db->direccion,
+                    "telefono" => $usuario_db->telefono,
+                    "carritoId" => $usuario_db->carrito,
                     "tipo" => "user"
                 );
                 $this->session->set_userdata($data_user);

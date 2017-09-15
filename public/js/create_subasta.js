@@ -1,24 +1,3 @@
-var cate, marc, produInfo;
-function obtenerFecha(){
-    var d = new Date();
-    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-    return strDate;
-}
-
-$('.bdate1').click(function(){
-    $('.dt1').datetimepicker({
-        minDate: obtenerFecha()
-    });
-});
-
-$('.bdate2').click(function(){
-    $('.dt2').datetimepicker({
-        minDate: obtenerFecha()
-    });
-});
-
-
-
 $('.subastaForm').validate({
     debug: false,
     rules: {
@@ -66,13 +45,28 @@ messages:{
 
 });
 
-//no permite que escriba campos alfanumericos en el precio base
-$(".pb").keypress(function(tecla){
-    if( tecla.charCode < 48 || tecla.charCode > 57){
-      return false;
-    }
-}); 
 
+
+var cate=" ", marc, produInfo;
+function obtenerFecha(){
+    var d = new Date();
+    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+    return strDate;
+}
+
+
+
+
+
+$('.datetimepicker1').datetimepicker({
+    minDate: obtenerFecha()
+});
+
+$(".pb").keypress(function(tecla){
+         if( tecla.charCode < 48 || tecla.charCode > 57){
+           return false;
+         }
+}); 
 $( ".categoria" ).on('click',function() {
     if(cate != $(this).val()){
         $('.product-op').remove();
@@ -132,39 +126,51 @@ $(".marca").on("click", function(){
     });
     
 });
-$('.cancelar').click(function(){
-    window.location.replace(base_url + 'subasta/subastas');
-})
+
 $(document).ready(function() {
-    $('form').submit(function(){
-        pro=$('.producto').val()
-        FechaHoraInicio= $('.fh-i').val();
-        FechaHoraFin=$('.fh-f').val();
-        PrecioBase=$('.pb').val();
-        console.log(FechaHoraFin);
-        console.log(PrecioBase);
-        $.ajax({
-            type:$('.subastaForm').attr('method'),
-            url:  $('.subastaForm').attr('action'),
-            data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:pro,id:$('.id').val() },
-            dataType: 'text',
-            success: function(data){
-                console.log(data);
-                if((data).trim() != "subasta/crear/2"){
-                    color='danger';
-                    $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
-                    +color}).append
-                        (
-                            $('<strong>',{text: data}),
-                            $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
-                        )
-                    );  
-                    
-                }else{    
-                    window.location.href = base_url+ data;
-                }
-            }, 
-        });
-    event.preventDefault();
+    
+        $('form').submit(function(e){
+            FechaHoraInicio= $('.fh-i').val();
+            FechaHoraFin=$('.fh-f').val();
+            PrecioBase=$('.pb').val();
+            if(produInfo!=null ){
+                $.each(produInfo, function(key, value){
+                    producto=produInfo[key].nombre;
+                    producto_selec=$('.producto').val();
+        
+                    if(producto.localeCompare(producto_selec)==0){
+                        id_pro=produInfo[key].id;
+                    }
+                });
+                $.ajax({
+                    type:$('.subastaForm').attr('method'),
+                    url:  $('.subastaForm').attr('action'),
+                    data: {Fhi:FechaHoraInicio, Fhf:FechaHoraFin, PrecioBase:PrecioBase, product:id_pro },
+                    success: function(data){
+                            console.log(data);
+                            if((data).trim() != "subasta/create_subasta/1"){
+                                color='danger';
+                                $('.msg').append($('<div>',{class:'mt-10 alert  alert-dismissable'+" "+'alert-'
+                                +color}).append
+                                    (
+                                        $('<strong>',{text: data}),
+                                        $('<button>',{ class: 'close', text :'x', 'data-dismiss':'alert', 'arial-label': 'close'}), 
+                                    )
+                                );  
+                            }else{
+                                window.location.href = base_url+ data;
+                            }
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+            }
+            event.preventDefault();
+            });    
+
+    
+    $('.cancelar').click(function(){
+        window.location.replace(base_url + 'subasta/administrar_subastas');
     })
 });

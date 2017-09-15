@@ -19,7 +19,7 @@
 	<?php elseif($this->router->method == "index" || $this->router->method=="product" || $this->router->method=="CrearEditar"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif($this->router->method == "subastas"): ?>
+	<?php elseif($this->router->method == "administrar_subastas"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/subastas-admin.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>

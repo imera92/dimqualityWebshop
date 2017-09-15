@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-8 mt-50 col-md-offset-2 msg">
                 <div class="well">
-                    <h2 class="pl-10 pb-20"> <?php echo $Accion;?> Subastas</h2>
+                    <h2 class="pl-10 pb-20"> <?php echo $accion;?> Subastas</h2>
                     <?php if (isset($subasta)): ?>
                     <form class="subastaForm"  action="<?php echo base_url('subasta/ActualizarSubasta') ?>" method="POST">
                     <?php else: ?>

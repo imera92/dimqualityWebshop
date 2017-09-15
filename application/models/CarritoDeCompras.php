@@ -123,7 +123,7 @@
             }
         }
 
-        // Funcion para obtener el ID del utlimo carrito anadido a la DB
+        // Método para obtener el ID del útlimo carrito insertado en la DB
         public function getLastCarritoId()
         {
             // Obtener instancia de CodeIgniter para manejo de la DB
@@ -262,7 +262,7 @@
             $lastId = $this->getLastCarritoId();
             $this->id = $lastId + 1;
             $this->subtotal = 0.00;
-            $this->productosCarrito = array();   
+            $this->productosCarrito = array();
         }
         // RECORDAR: la instancia del Carrito es una interfaz entre la aplicacion y la DB. Primero modificamos la instancia de carrito, luego utilizamos este metodo para propagar los cambios a la DB
         public function guardarNuevoCarrito()

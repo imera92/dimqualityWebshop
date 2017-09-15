@@ -175,6 +175,38 @@
             return $categoriasArray;
         }
 
+        // Metodo que devuelve un array con todas las marcas existentes en la DB que tienen productos disponibles
+        public static function get_categorias_activas_array()
+        {
+            // Obtener instancia de CodeIgniter para manejo de la DB
+            $instancia_CI =& get_instance();
+
+            // Obtenemos los ID de las categorias de productos activos
+            $instancia_CI->db->select('categoria');
+            $instancia_CI->db->from('producto');
+            $instancia_CI->db->distinct();
+            $instancia_CI->db->where(array(
+                'estado' => 1,
+                'stock>' => 0
+            ));
+            $result = $instancia_CI->db->get()->result();
+
+            /*$instanciaCI->db->select('*');
+            $instanciaCI->db->from('categoriaproducto');
+            $result = $instanciaCI->db->get()->result();*/
+
+            $categorias_array = Array();
+            if (!empty($result)) {
+                foreach ($result as $row) {
+                    $categoria = new Categoria();
+                    $categoria->getCategoriaPorId($row->categoria);
+                    array_push($categorias_array, $categoria);
+                }
+            }
+            
+            return $categorias_array;
+        }
+
         public static function getCategoriasArrayPorNombre($nombre)
         {
             // Obtener instancia de CodeIgniter para manejo de la DB

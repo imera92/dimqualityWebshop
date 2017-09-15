@@ -9,20 +9,20 @@
 			<?php foreach($js_files as $file): ?>
     			<script src="<?php echo $file; ?>"></script>
 			<?php endforeach; ?>
-	<?php elseif ($this->router->method =='crear'): ?>
+	<?php elseif ($this->router->method =='create_subasta'): ?>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
-		<script src="<?php echo base_url('public/js/Subasta.js'); ?>"></script>
-	<?php elseif ($this->router->method =='actualizar'): ?>
+		<script src="<?php echo base_url('public/js/create_subasta.js'); ?>"></script>
+	<?php elseif ($this->router->method =='update_subasta'): ?>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/
 		bootstrap-datetimepicker.min.js"></script>
 		<script src="<?php echo base_url('public/js/jquery.validate.min.js'); ?>"></script>
-		<script src="<?php echo base_url('public/js/actualizar.js'); ?>"></script>
+		<script src="<?php echo base_url('public/js/update_subasta.js'); ?>"></script>
 	<?php endif; ?>
-	<?php if($this->router->method == "subastas"): ?>
-		<script src="<?php echo base_url('public/js/subastas.js'); ?>"></script>
+	<?php if($this->router->method == 'administrar_subastas'): ?>
+		<script src="<?php echo base_url('public/js/administrar_subastas.js'); ?>"></script>
 	<?php endif; ?>
 </body>
 </html>

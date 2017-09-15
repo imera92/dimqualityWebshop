@@ -6,7 +6,10 @@
     border-radius: 10px;
 
 }
-
+.no-bid{
+	font-size: 16px;
+	color: #666;
+}
 .oferta{
     color:#4682B4;
 }

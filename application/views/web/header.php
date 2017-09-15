@@ -43,10 +43,10 @@
 		<link href="<?php echo base_url('public/css/changePassword.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif ($this->router->method == 'verEstadoTransacciones'): ?>
 		<link href="<?php echo base_url('public/css/verEstadoTransacciones.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif ($this->router->method == 'subastas'): ?>
-		<link href="<?php echo base_url('public/css/subastas.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif ($this->router->method == 'ofertarsubasta'): ?>
-		<link href="<?php echo base_url('public/css/subasta.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'subastas_disponibles'): ?>
+		<link href="<?php echo base_url('public/css/subastas_disponibles.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif ($this->router->method == 'ofertar_subasta'): ?>
+		<link href="<?php echo base_url('public/css/ofertar_subasta.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
@@ -97,7 +97,7 @@
 										</ul>
 									<?php endif; ?>
 								</li>
-								<li><a href="<?php echo base_url('usuario/subastas'); ?>"><span  class="glyphicon glyphicon-gift"></span> SUBASTAS</a></li>
+								<li><a href="<?php echo base_url('subasta/subastas_disponibles'); ?>"><span  class="glyphicon glyphicon-gift"></span> SUBASTAS</a></li>
 
 								<li><a href="<?php echo base_url('carrito'); ?>"><span  class="glyphicon glyphicon-shopping-cart"></span> CARRITO</a></li>
 							</ul>
