@@ -22,6 +22,11 @@
 	<?php elseif($this->router->method == "subastas"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/subastas-admin.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif($this->router->method == "citas"): ?>
+		<link href="<?php echo base_url('assets/fullcalendar/fullcalendar.min.css'); ?>" rel="stylesheet" type="text/css">
+		<link href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.min.css'); ?>" rel='stylesheet' media='print' />
+
+		<link href="<?php echo base_url('public/css/citas.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<!-- <link href="<?php //echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css"> -->
 	<?php if (isset($css_files)): ?>
