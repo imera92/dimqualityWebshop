@@ -1,14 +1,5 @@
 $(document).ready(function() {
 
-    function obtenerFecha(){
-        var d = new Date();
-        var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-        return strDate;
-    }
-
-    
-
-
     $('.btn-modal-trigger').on('click', function(e){
         $.ajax({
             type:"POST",

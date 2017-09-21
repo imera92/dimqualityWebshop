@@ -19,14 +19,15 @@
 	<?php elseif($this->router->method == "index" || $this->router->method=="product" || $this->router->method=="CrearEditar"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
-	<?php elseif($this->router->method == "subastas"): ?>
+	<?php elseif($this->router->method == "administrar_subastas"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/subastas-admin.css'); ?>" rel="stylesheet" type="text/css">
 	<?php elseif($this->router->method == "citas"): ?>
 		<link href="<?php echo base_url('assets/fullcalendar/fullcalendar.min.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.min.css'); ?>" rel='stylesheet' media='print' />
-
 		<link href="<?php echo base_url('public/css/citas.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif($this->router->method == "solicitudes"): ?>
+		<link href="<?php echo base_url('public/css/solicitudes.css'); ?>" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 	<!-- <link href="<?php //echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css"> -->
 	<?php if (isset($css_files)): ?>
@@ -40,12 +41,10 @@
 	<?php endif; ?>
 	<script type="text/javascript">
         var base_url = '<?php echo base_url(); ?>';
-
         var js_site_url = function( urlText ){
             var urlTmp = "<?php echo site_url('" + urlText + "'); ?>";
             return urlTmp;
         }
-
         var js_base_url = function( urlText ){
             var urlTmp = "<?php echo base_url('" + urlText + "'); ?>";
             return urlTmp;
@@ -53,4 +52,4 @@
     </script>
 </head>
 <body>
-	<!-- <div id="wrapper"> -->
+<!-- <div id="wrapper"> -->

@@ -1,4 +1,4 @@
-	<div id="wrapper">
+<div id="wrapper">
 		<!-- Sidebar -->
 		<div id="sidebar-wrapper">
 		    <ul class="sidebar-nav">
@@ -24,14 +24,17 @@
 		            <a href="<?php echo base_url('admin/transacciones'); ?>"><i class="fa fa-money" aria-hidden="true"></i> Transacciones</a>
 		        </li>
 				<li>
-		            <a href="<?php echo base_url('cita/citas'); ?>"><i class="fa fa-calendar" aria-hidden="true"></i> Citas</a>
-		        </li>
+					<a href="<?php echo base_url('cita/solicitudes'); ?>"><i class="fa fa-calendar" aria-hidden="true"></i> Solicitudes</a>
+				</li>
 				<li>
-		            <a href="<?php echo base_url('subasta/subastas'); ?>"><i class="fa fa-gift" aria-hidden="true"></i> Subastas</a>
+					<a href="<?php echo base_url('cita/citas'); ?>"><i class="fa fa-calendar" aria-hidden="true"></i> Citas</a>
+				</li>
+				<li>
+		            <a href="<?php echo base_url('subasta/administrar_subastas'); ?>"><i class="fa fa-gift" aria-hidden="true"></i> Subastas</a>
 		        </li>
 		        <li>
 		            <a href="<?php echo base_url('admin/logout'); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log out</a>
 		        </li>
 		    </ul>
 		</div>
-		<!-- /#sidebar-wrapper -->
+<!-- /#sidebar-wrapper -->
