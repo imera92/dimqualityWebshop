@@ -25,7 +25,7 @@
 									<td><?php echo $solicitud->getId(); ?></td>
 									<td><?php echo $solicitud->getUsuario(); ?></td>
 									<td><?php echo $solicitud->getFecha_creac(); ?></td>
-									<!-- <td><?php echo $solicitud->getFecha_cita(); ?></td> -->
+
 									<td><?php echo $solicitud->getAsunto(); ?></td>
 									<td><?php echo $solicitud->getUbicacion(); ?></td>
 									<td><?php echo $solicitud->getEstado(); ?></td>
@@ -56,26 +56,26 @@
 				<div class="modal-body">
 					<div class="row">
 	            		<div class="col-xs-12">
-	            			<p>
-	            				<span class="bold-text">Usuario: </span> <span id="modal_usuario"></span>
+	            			<p class="row">
+	            				<span class="col-xs-3 bold-text">Usuario: </span> <span class="col-xs-9" id="modal_usuario"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Cédula: </span> <span id="modal_cedula"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Cédula: </span> <span class="col-xs-9" id="modal_cedula"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Email: </span> <span id="modal_correo"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Email: </span> <span class="col-xs-9" id="modal_correo"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Fecha de Solicitud: </span> <span id="modal_fechaSolic"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Fecha de Solicitud: </span> <span class="col-xs-9" id="modal_fechaSolic"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Fecha de Cita: </span> <span id="modal_fechaCita"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Fecha de Cita: </span> <span class="col-xs-9" id="modal_fechaCita"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Ubicación: </span> <span id="modal_ubicacion"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Ubicación: </span> <span class="col-xs-9" id="modal_ubicacion"></span>
 	            			</p>
-							<p>
-	            				<span class="bold-text">Estado: </span> <span id="modal_estado"></span>
+							<p class="row">
+	            				<span class="col-xs-3 bold-text">Estado: </span> <span class="col-xs-9" id="modal_estado"></span>
 	            			</p>
 	            		</div>
 	            	</div>

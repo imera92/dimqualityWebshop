@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    
     $('.btn-modal-trigger').on('click', function(e){
         $.ajax({
             type:"POST",

@@ -6,7 +6,10 @@
 						<h1><i class="fa fa-calendar" aria-hidden="true"></i> Citas</h1>
 					</div>
 				</div>
-				
+
+				<?php foreach ($citas as $cita): ?>
+
+				<?php endforeach ?>
 				<div id="calendar"></div>
 
 

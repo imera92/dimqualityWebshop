@@ -30,6 +30,7 @@ class Cita extends CI_Controller {
 			redirect('admin/login');
 		}
     }
+
 	public function leer_solicitud_por_id()
 	{
 		$solicitud_id = $this->input->post('solicitud_id');
@@ -48,13 +49,19 @@ class Cita extends CI_Controller {
 		$response['estado'] = $solicitud->getEstado();
 		$this->output->set_output(json_encode($response));
 	}
+	
 	public function citas()
 	{
 		if ($this->securityCheckAdmin()) {
+			$cita = new Citas();
+			$num_citas = $cita->count_citas();
+			$data['num_solicitudes'] = $num_citas;
+			$citas = $cita->obtenerCitas();
+			$data['citas'] = $citas;
 			$dataHeader['titlePage'] = 'Dimquality::Admin - Citas';
 			$this->load->view('admin/header', $dataHeader);
 			$this->load->view('admin/lat-menu');
-			$this->load->view('admin/citas');
+			$this->load->view('admin/citas', $data);
 			$this->load->view('admin/footer');
 		}else{
 			redirect('admin/login');

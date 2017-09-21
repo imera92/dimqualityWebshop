@@ -86,6 +86,22 @@
         ///////////////////////////////////
         // Métodos
         ///////////////////////////////////
+		// Método para obtener todas las citas
+		public function obtenerCitas()
+		{
+			$citas_arr = array();
+            // Recuperamos los registros de citas de la DB
+            $citas_db = $this->db->get('cita2')->result();
+            // Creamos las instancias de las citas y las metemos en el arreglo
+            foreach ($citas_db as $row) {
+                $cita = new Citas();
+                $cita->getCitaPorId($row->id);
+                array_push($citas_arr, $cita);
+            }
+
+            return $citas_arr;
+
+		}
 
 		public function citaIdExists($citaId)
 		{

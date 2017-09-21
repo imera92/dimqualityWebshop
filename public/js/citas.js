@@ -12,19 +12,14 @@ $(document).ready(function() {
         eventLimit: true, // allow "more" link when too many events
         events: [
             {
-                title: 'All Day Event',
+                title: 'tablet dañada, pnatalla no responde',
                 start: '2017-09-01'
             },
             {
-                title: 'Long Event',
-                start: '2017-09-07',
-                end: '2017-09-10'
-            },
-            {
-                title: 'Click for Google',
-                url: 'http://google.com/',
-                start: '2017-09-28'
+                title: 'Cita a domicilio - repacración aire',
+                start: '2017-09-07'
             }
+
         ]
     });
 
