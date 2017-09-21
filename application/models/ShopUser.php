@@ -2,7 +2,7 @@
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
     /*
-        Tabla: 
+        Tabla:
             usuario
         Campos:
             id
@@ -190,7 +190,16 @@
         //return fetched data
             return $result;
         }
+		function getUsuarioPorId($usuario_id)
+		{
+			$usuarioDB = $this->db->get_where('usuario', array('id' => $usuario_id))->last_row();
 
+			// Guardamos en la instancia los datos de cita traidos de la DB
+			$this->id = $usuarioDB->id;
+			$this->cedula = $usuarioDB->cedula;
+			$this->email = $usuarioDB->email;
+			return true;
+		}
 		function securityCheckUser() {
 	        $securityUser = new ShopUser();
 	        $usuario = $this->session->userdata('user');
