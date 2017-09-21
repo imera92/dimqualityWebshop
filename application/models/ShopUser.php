@@ -2,7 +2,7 @@
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
     /*
-        Tabla: 
+        Tabla:
             usuario
         Campos:
             id
@@ -206,6 +206,18 @@
 	        }
 	    }
 
+
+		public function getUsuarioPorId($usuario_Id)
+        {
+            // Obtentemos la subasta de la DB
+			$usuarioBD = $this->db->get_where('usuario', array('id' => $usuario_Id))->last_row();
+            // Guardamos en la instancia los datos del usuario traidos de la DB
+            $this->id = $usuarioBD->id;
+			$this->cedula = $usuarioBD->cedula;
+			$this->email = $usuarioBD->email;
+			return true;
+        }
+
         // API MOVIL
 
         //función que genera una clave segura de 40 carácteres, este será nuestro generador de keys para la api
@@ -250,7 +262,7 @@
                 "level"         =>      $level,
                 "ignore_limits" =>      $ignorelimits,
                 "date_created"  =>      date('Y-m-d'),
-                "user_id"       =>      $user_id,              
+                "user_id"       =>      $user_id,
             );
             $this->db->insert("apikeys", $data);
             return $key;
@@ -274,22 +286,22 @@
                     "direccion" => $usuarioDB->direccion,
                     "telefono" => $usuarioDB->telefono,
                     "key" => $aKey,
-                );                
+                );
                 return ($data_user);
             }
             else{
                 return false;
             }
         }
-        
+
         public function getUserData($user_id)
         {
             $usuarioDB = $this->db->get_where("usuario", array('id'=> $user_id))->row();
-            if ($usuarioDB) {                
+            if ($usuarioDB) {
                 $data_user = array(
                     "id" => $usuarioDB->id,
                     "user" => $usuarioDB->user,
-                );                
+                );
                 return ($data_user);
             }
             return false;

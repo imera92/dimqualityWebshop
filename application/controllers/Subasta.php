@@ -41,7 +41,7 @@ class Subasta extends CI_Controller {
         $subastas_activas_num = $subasta->count_subastas_activas();
 
         // Especificamos la configuración de la paginación
-        $this->load->library('pagination');        
+        $this->load->library('pagination');
         $config['base_url'] = base_url('subasta/subastas_disponibles');
         $config['total_rows'] = $subastas_activas_num;
         $config['per_page'] = $limite;
@@ -221,7 +221,7 @@ class Subasta extends CI_Controller {
         $subastas_activas_num = $subasta->count_subastas();
 
         // Especificamos la configuración de la paginación
-        $this->load->library('pagination');        
+        $this->load->library('pagination');
         $config['base_url'] = base_url() . 'subasta/administrar_subastas';
         $config['total_rows'] = $subastas_activas_num;
         $config['per_page'] = $limite;
@@ -270,7 +270,7 @@ class Subasta extends CI_Controller {
             } elseif($mensaje==2) {
                 $dataBody['mensaje']="La subasta se ha actualizado exitosamente";
             }
-            
+
             $dataHeader['titlePage'] = 'Dimquality::Admin - Subasta';
             $dataBody['accion']='Crear';
             $this->load->view('admin/header', $dataHeader);
@@ -318,7 +318,7 @@ class Subasta extends CI_Controller {
                 'hora' => $subasta_datetime->format('H:i'),
                 'usuario_nombre' => $oferta->get_usuario()->nombre . ' ' . $oferta->get_usuario()->apellido,
                 'usuario_cedula' => $oferta->get_usuario()->cedula
-            ));            
+            ));
         }
 
         $this->output->set_output(json_encode($response));
@@ -368,7 +368,7 @@ class Subasta extends CI_Controller {
 		$subasta->eliminarSubasta($id_subasta);
 		redirect('subasta/administrar_subastas');
 	}
-    
+
 
     function obtenerMarca(){
         $categoria=$this->input->get('categoria');
@@ -380,7 +380,7 @@ class Subasta extends CI_Controller {
         $this->output->set_output(json_encode($restaurar));
     }
 
-    
+
     function obtenerProductos(){
         $marca=$this->input->get('marca');
         $categoria=$this->input->get('categoria');
@@ -396,7 +396,7 @@ class Subasta extends CI_Controller {
         $this->output->set_output(json_encode($restaurar));
     }
 
-    //funcion que verifique que ese producto ya no esta siendo subastado    
+    //funcion que verifique que ese producto ya no esta siendo subastado
     function verificarProducto($id){
         $this->db->from('subasta');
         $this->db->where('producto',$id);
@@ -416,7 +416,7 @@ class Subasta extends CI_Controller {
         $producto=$this->input->post('product');
         if($producto != null && $FechaHoraFin != null && $precioBase != null && $FechaHoraInicio!= null){
             if (strtotime($FechaHoraInicio) < time() )
-            {   
+            {
                 echo 'Ha ocurrido un error. La fecha y/o hora de inicio no puede ser menor a la fecha y/o hora actual';
             }
             elseif(strtotime($FechaHoraFin)< time()){
@@ -464,7 +464,7 @@ class Subasta extends CI_Controller {
             $product=$this->db->get()->row();
             $id_producto=$product->id;
             if (strtotime($FechaHoraInicio) < time() )
-            {   
+            {
                 echo 'Ha ocurrido un error. La Fecha de inicio no puede ser menor a la hora actual';
             }
             elseif(strtotime($FechaHoraFin)< time()){
@@ -473,7 +473,7 @@ class Subasta extends CI_Controller {
                 echo 'Ha ocurrido un error. La fecha de inicio no puede ser mayor a la fecha final de una subasta';
             }
             else{
-                
+
                 $FechaHoraInicio=date("Y-m-d H:i:s", strtotime($FechaHoraInicio));
                 $FechaHoraFin=date("Y-m-d H:i:s", strtotime($FechaHoraFin));
                 $data = array(

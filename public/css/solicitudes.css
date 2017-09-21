@@ -1,0 +1,7 @@
+.tituloModal{
+    background-color: rgba(51, 204, 51, 0.5);
+}
+
+textarea {
+   resize: none;
+}

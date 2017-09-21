@@ -3,18 +3,18 @@
 
     /*
         Tabla:
-            Subasta
+            cita2
         Campos:
 			id
-			fechaInicio
-			fechaFin
-			producto
-			precioBase
+			usuario
+			fecha
+			ubicacion
+			descripcion
 			estado
 
     */
 
-	class Subastas extends CI_Model{
+	class Citas extends CI_Model{
         private $id;
 		private $fechaInicio;
         private $fechaFin;
@@ -30,11 +30,9 @@
             // Helpers
             $this->load->database();
             $this->load->library('session');
-            $this->userTbl = 'subasta';
+            $this->userTbl = 'cita2';
 
-			// Modelos
-			$this->load->model('Oferta');
-			$this->load->model('Producto');
+
 			$this->load->model('SecurityUser');
         }
 
@@ -155,7 +153,7 @@
             }
         }
 
-        // Devuelve el total de subastas en la base
+        // Devuelve el total de subastas activas en la base
         public function count_subastas()
         {
             $this->db->select('*');

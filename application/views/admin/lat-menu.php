@@ -24,6 +24,12 @@
 		            <a href="<?php echo base_url('admin/transacciones'); ?>"><i class="fa fa-money" aria-hidden="true"></i> Transacciones</a>
 		        </li>
 				<li>
+					<a href="<?php echo base_url('cita/solicitudes'); ?>"><i class="fa fa-calendar" aria-hidden="true"></i> Solicitudes</a>
+				</li>
+				<li>
+					<a href="<?php echo base_url('cita/citas'); ?>"><i class="fa fa-calendar" aria-hidden="true"></i> Citas</a>
+				</li>
+				<li>
 		            <a href="<?php echo base_url('subasta/administrar_subastas'); ?>"><i class="fa fa-gift" aria-hidden="true"></i> Subastas</a>
 		        </li>
 		        <li>
