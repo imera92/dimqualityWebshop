@@ -18,6 +18,8 @@
 	<?php elseif($this->router->method == "index" || $this->router->method=="product"): ?>
 		<link href="<?php echo base_url('public/css/lat-menu.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="<?php echo base_url('public/css/admin-index.css'); ?>" rel="stylesheet" type="text/css">
+	<?php elseif($this->router->method == "transcciones"): ?>
+		
 	<?php endif; ?>
 	<!-- <link href="<?php //echo base_url('public/css/misc.css'); ?>" rel="stylesheet" type="text/css"> -->
 	<?php if (isset($css_files)): ?>

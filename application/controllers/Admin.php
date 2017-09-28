@@ -103,7 +103,18 @@ class Admin extends CI_Controller {
      }
 
   
-
+    public function transacciones(){
+        if($this->securityCheckAdmin()){
+            $titulo="Dimquality::Admin-transacciones"
+            $dataHeader['tittlePage']=$titulo
+            $this->load->view('admin/header',$dataHeader);
+            $this->load->view('admin/lat-menu');
+            $this->load->view('admin/transacciones.php');
+            $this->load->view('admin/footer');
+        }else{
+             redirect("admin/login")
+        }
+    }
     public function actualizarCatalogo() {
         if ($this->securityCheckAdmin()) {
             $titulo = "Dimquality::Admin - Actualizar Catalogo";
